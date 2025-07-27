@@ -24,11 +24,11 @@ const Header = () => {
 
   return (
     <div className="header  backdrop-blur-3xl  w-full flex flex-col items-center">
-      <div className="primary-nav flex justify-between py-5 border-b-2 border-transparent w-custom ">
-        <p className="text-3xl font-bold">
+      <div className="primary-nav flex justify-between py-5 border-b-2 border-transparent w-custom  items-center">
+        <p className="text-4xl font-bold">
           Swift<span className="text-primary">Cart</span>
         </p>
-        <div className="w-1/2 border-2  border-primary outline-none flex justify-center  rounded-md px-5">
+        <div className="w-1/2 border-2  border-primary outline-none flex justify-center  rounded-md px-5 py-2">
           <input
             type="text"
             placeholder="Search for Products"
@@ -46,7 +46,7 @@ const Header = () => {
       </div>
       <div className="secondary-nav bg-primary w-full flex justify-center ">
         <div className="w-custom flex justify-between  text-white font-semibold">
-          <div className="text-dark ">
+          <div className="text-dark py-1">
             <DropdownMenu className="outline-none ">
               <DropdownMenuTrigger asChild className="w-[200px] ">
                 <Button
@@ -84,7 +84,7 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <ul className="flex gap-12 py-4 ">
+          <ul className="flex gap-12 py-5 ">
             <li>
               <Link to="/" className="relative inline-block group">
                 <span className="relative z-10">Home</span>
@@ -116,7 +116,7 @@ const Header = () => {
               </Link>
             </li>
           </ul>
-          <div className="flex gap-5 py-4  ">
+          <div className="flex gap-5 py-5  ">
             <Heart />
             <ShoppingCart />
             <CircleUserRound />
