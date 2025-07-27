@@ -3,7 +3,7 @@ import Header from "./components/Header";
 
 const App = () => {
   return (
-    <div className="bg-background min-h-screen w-full">
+    <div className="bg-background min-h-screen w-full ">
       <Header />
       <Outlet />
     </div>
