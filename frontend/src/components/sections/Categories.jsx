@@ -12,7 +12,7 @@ import CategoryImage8 from "../../assets/images/category-8.png";
 const Categories = () => {
   return (
     <section className="w-custom m-auto">
-      <p className="text-center text-4xl font-bold tracking-wide my-16">
+      <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         Product Categories
       </p>
       <div className="grid grid-cols-5 gap-4">
