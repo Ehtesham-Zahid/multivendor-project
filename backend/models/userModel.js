@@ -29,8 +29,11 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    verificationToken: {
+    verifiedToken: {
       type: String,
+    },
+    verifiedTokenExpires: {
+      type: Date,
     },
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
