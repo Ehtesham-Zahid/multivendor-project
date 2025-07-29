@@ -1,0 +1,31 @@
+const asyncHandler = require("express-async-handler");
+const cloudinary = require("../config/cloudinary");
+
+const uploadAvatar = asyncHandler(async (filePath, userId) => {
+  const uploadResult = await cloudinary.uploader.upload(filePath, {
+    folder: "avatars", // optional folder
+    public_id: `avatar_${userId}`, // unique identifier
+  });
+
+  // Optimize delivery by resizing and applying auto-format and auto-quality
+  const optimizeUrl = cloudinary.url(`avatar_${userId}`, {
+    fetch_format: "auto",
+    quality: "auto",
+  });
+
+  // Transform the image: auto-crop to square aspect_ratio
+  const autoCropUrl = cloudinary.url(`avatar_${userId}`, {
+    crop: "auto",
+    gravity: "auto",
+    width: 500,
+    height: 500,
+  });
+
+  return {
+    original: uploadResult.secure_url,
+    optimized: optimizeUrl,
+    cropped: autoCropUrl,
+  };
+});
+
+module.exports = uploadAvatar;

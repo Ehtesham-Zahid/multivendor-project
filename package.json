@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Ehtesham-Zahid/multivendor-project#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -31,7 +32,8 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.18.0",
-    "mongoose": "^8.16.5"
+    "mongoose": "^8.16.5",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"

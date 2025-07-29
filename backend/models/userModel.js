@@ -1,6 +1,4 @@
-const { timeStamp } = require("console");
 const mongoose = require("mongoose");
-const { type } = require("os");
 
 const userSchema = mongoose.Schema(
   {
@@ -19,7 +17,6 @@ const userSchema = mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      //   required: [true, "Please upload an image"],
       default:
         "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg",
     },
@@ -32,6 +29,9 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    verificationToken: {
+      type: String,
+    },
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
@@ -39,3 +39,5 @@ const userSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+module.exports = mongoose.model("User", userSchema);
