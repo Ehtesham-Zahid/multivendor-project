@@ -119,7 +119,9 @@ const Header = () => {
           <div className="flex gap-5 py-5  ">
             <Heart />
             <ShoppingCart />
-            <CircleUserRound />
+            <Link to="/auth/login">
+              <CircleUserRound />
+            </Link>
           </div>
         </div>
       </div>
