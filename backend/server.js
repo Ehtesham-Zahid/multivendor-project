@@ -8,19 +8,27 @@ const userRouter = require("./routes/userRoutes");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
+const User = require("./models/userModel");
 const port = process.env.PORT || 8000;
 
 connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // frontend origin
+    credentials: true, // required to allow cookies
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Runs every hour
 cron.schedule("0 * * * *", async () => {
+  console.log("[CRON] Running cleanup job..."); // this should show hourly
+
   const oneHourAgo = new Date(Date.now() - 1000 * 60 * 60);
 
   try {

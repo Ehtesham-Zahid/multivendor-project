@@ -11,6 +11,7 @@ const generateToken = (id, expire) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullname, email, password } = req.body;
+  console.log(req);
 
   if (!fullname?.trim() || !email?.trim() || !password?.trim()) {
     res.status(400);
@@ -31,11 +32,13 @@ const registerUser = asyncHandler(async (req, res) => {
   // Create User
   const user = await User.create({ fullname, email, password: hashedPassword });
 
+  console.log("MAIN BAHIR HU");
   if (req.file) {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     const dataURI = `data:${req.file.mimetype};base64,${b64}`;
     const { original } = await uploadAvatar(dataURI, user._id);
     user.imageUrl = original;
+    console.log("MAIN ANDER HU");
   }
 
   const verifiedToken = generateToken(user._id, "1h");
@@ -44,7 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  const tokenLink = `https://yourapp.com/verify-email?token=${verifiedToken}`;
+  const tokenLink = `http://localhost:5173/auth/verify-email/${verifiedToken}`;
 
   const emailDetails = {
     to: user.email,
@@ -64,15 +67,13 @@ const registerUser = asyncHandler(async (req, res) => {
   await POST(emailDetails);
 
   res.status(201).json({
-    _id: user._id,
-    fullname: user.fullname,
-    email: user.email,
-    imageUrl: user.imageUrl,
+    message: "Account created. Please verify your email address to continue.",
   });
 });
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password, rememberMe } = req.body;
+  console.log(req.body);
 
   if (!email?.trim() || !password?.trim()) {
     res.status(400);
@@ -91,22 +92,23 @@ const loginUser = asyncHandler(async (req, res) => {
     if (rememberMe) {
       res.cookie("token", token, {
         httpOnly: true,
-        // secure: true, // set this only if using HTTPS
-        sameSite: "strict",
+        secure: true, // set this only if using HTTPS
+        sameSite: "None",
         maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days in ms
       });
     } else {
       res.cookie("token", token, {
         httpOnly: true,
-        // secure: true,
-        sameSite: "strict",
+        secure: true,
+        sameSite: "None",
         // No maxAge → session cookie → deleted when browser closes
       });
     }
 
     res.json({
-      name: user.fullname,
+      fullname: user.fullname,
       email: user.email,
+      imageUrl: user.imageUrl,
     });
   } else {
     res.status(400);
@@ -131,7 +133,9 @@ const verifyToken = asyncHandler(async (req, res) => {
   user.verifiedTokenExpires = null;
   await user.save();
 
-  res.redirect("/auth/login");
+  res.status(201).json({
+    message: "Token Verified Successfully",
+  });
 });
 
-module.exports = { registerUser, verifyToken };
+module.exports = { registerUser, loginUser, verifyToken };

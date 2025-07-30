@@ -1,20 +1,78 @@
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn/button";
-import { CircleUserRound } from "lucide-react";
+import { CircleUserRound, Loader2 } from "lucide-react";
 import { Link } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  registerUser,
+  loginUser,
+  resetError,
+} from "../features/auth/authSlice";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const AuthForm = ({ page }) => {
-  const onSubmit = (data) => console.log(data);
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.auth);
+  const [preview, setPreview] = useState(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    reset,
   } = useForm();
+
+  const avatarFile = watch("avatar");
+
+  useEffect(() => {
+    if (avatarFile && avatarFile.length > 0) {
+      const file = avatarFile[0];
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
+
+      // Clean up memory
+      return () => URL.revokeObjectURL(previewUrl);
+    }
+  }, [avatarFile]);
+
+  const onSubmit = async (data) => {
+    let formData = data;
+    if (page === "register") {
+      formData = new FormData();
+      // Append text fields
+      formData.append("fullname", data.fullname); // example field
+      formData.append("email", data.email); // example field
+      formData.append("password", data.password); // example field
+
+      // Append file
+      if (data.avatar && data.avatar[0]) {
+        formData.append("image", data.avatar[0]);
+      }
+    }
+
+    const resultAction = await dispatch(
+      page === "register" ? registerUser(formData) : loginUser(formData)
+    );
+
+    if (page === "register" && registerUser.fulfilled.match(resultAction)) {
+      toast.success("Verification Email sent. Please verify to continue!");
+    } else if (page === "login" && loginUser.fulfilled.match(resultAction)) {
+      toast.success("Logged in successfully!");
+    }
+
+    reset();
+  };
+
+  useEffect(() => {
+    dispatch(resetError());
+  }, [page]);
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
+      encType="multipart/form-data"
       className="shadow-2xl rounded-md p-5 w-1/4 py-10 shadow-zinc-500"
     >
       <Link to="/" className="flex items-center justify-center">
@@ -101,7 +159,15 @@ const AuthForm = ({ page }) => {
         <div className="flex flex-col mt-5">
           <label className="text-sm font-bold text-zinc-600 mb-1">Avatar</label>
           <div className="flex items-center gap-5">
-            <CircleUserRound size={"28px"} />
+            {preview ? (
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ) : (
+              <CircleUserRound size={"28px"} />
+            )}
             <label
               for="file-input"
               className="p-1.5 px-2   rounded-md border-2 border-zinc-300 w-[116px] cursor-pointer"
@@ -112,23 +178,29 @@ const AuthForm = ({ page }) => {
                 accept=".jpg,.jpeg,.png"
                 class="sr-only"
                 type="file"
-                {...register("avatar", { required: true })}
+                {...register("avatar")}
               ></input>
             </label>
           </div>
-          {errors.avatar && (
-            <span className="text-red-500 text-sm font-semibold">
-              This field is required
-            </span>
-          )}
         </div>
       ) : null}
 
+      {error ? (
+        <p className="text-center text-danger font-bold text-sm mt-2">
+          {error}
+        </p>
+      ) : null}
+
       <Button
+        disabled={isLoading}
         type="submit"
         className={"text-white text-md cursor-pointer w-full mt-8"}
       >
-        Submit
+        {isLoading ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <p>Submit</p>
+        )}
       </Button>
       {page === "register" ? (
         <p className="text-center  font-normal mt-3">

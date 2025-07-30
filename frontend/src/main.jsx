@@ -8,6 +8,12 @@ import Auth from "./pages/Auth.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Provider } from "react-redux";
+import { store } from "./app/store.js";
+import VerifyEmail from "./pages/VerifyEmail.jsx";
+
 let router = createBrowserRouter([
   {
     path: "/",
@@ -20,14 +26,17 @@ let router = createBrowserRouter([
     children: [
       { path: "login", Component: Login },
       { path: "register", Component: Register },
+      { path: "verify-email/:token", Component: VerifyEmail },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
+  <Provider store={store}>
     <RouterProvider router={router}>
       <App />
     </RouterProvider>
-  </StrictMode>
+  </Provider>
+  // </StrictMode>
 );
