@@ -47,7 +47,7 @@ cron.schedule("0 * * * *", async () => {
 });
 
 app.use("/api/users", userRouter);
-app.use("/api/shop", shopRouter);
+app.use("/api/shops", shopRouter);
 
 app.use(errorHandler);
 

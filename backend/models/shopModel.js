@@ -29,6 +29,9 @@ const shopSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
+    // ratings: {
+    //   type: Number,
+    // },
     orders: [
       {
         type: mongoose.Schema.Types.ObjectId,

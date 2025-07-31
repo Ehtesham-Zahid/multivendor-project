@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn/button";
 import { CircleUserRound, Loader2 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import {
   registerUser,
@@ -10,11 +10,14 @@ import {
 } from "../features/auth/authSlice";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { createShopThunk } from "../features/shop/shopSlice";
 
 const CreateShopForm = ({ page }) => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.auth);
+  const { isLoading, error } = useSelector((state) => state.shop);
   const [preview, setPreview] = useState(null);
+
+  let navigate = useNavigate();
 
   const {
     register,
@@ -38,26 +41,24 @@ const CreateShopForm = ({ page }) => {
   }, [avatarFile]);
 
   const onSubmit = async (data) => {
-    let formData = data;
-    if (page === "register") {
-      formData = new FormData();
-      // Append text fields
-      formData.append("fullname", data.fullname); // example field
+    const formData = new FormData();
+    // Append text fields
+    formData.append("shopName", data.shopName); // example field
+    formData.append("phoneNumber", data.phoneNumber); // example field
+    formData.append("address", data.address); // example field
+    formData.append("zipCode", data.zipCode); // example field
 
-      // Append file
-      if (data.avatar && data.avatar[0]) {
-        formData.append("image", data.avatar[0]);
-      }
+    // Append file
+    if (data.avatar && data.avatar[0]) {
+      formData.append("image", data.avatar[0]);
     }
 
-    const resultAction = await dispatch(
-      page === "register" ? registerUser(formData) : loginUser(formData)
-    );
+    const resultAction = await dispatch(createShopThunk(formData));
 
-    if (page === "register" && registerUser.fulfilled.match(resultAction)) {
-      toast.success("Verification Email sent. Please verify to continue!");
-    } else if (page === "login" && loginUser.fulfilled.match(resultAction)) {
-      toast.success("Logged in successfully!");
+    if (createShopThunk.fulfilled.match(resultAction)) {
+      console.log("HEMLO G");
+      toast.success("Shop Created Successfully!");
+      navigate("/dashboard");
     }
 
     reset();

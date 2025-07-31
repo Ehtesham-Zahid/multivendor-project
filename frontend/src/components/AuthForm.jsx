@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn/button";
 import { CircleUserRound, Loader2 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import {
   registerUser,
@@ -15,6 +15,8 @@ const AuthForm = ({ page }) => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.auth);
   const [preview, setPreview] = useState(null);
+
+  let navigate = useNavigate();
 
   const {
     register,
@@ -60,6 +62,7 @@ const AuthForm = ({ page }) => {
       toast.success("Verification Email sent. Please verify to continue!");
     } else if (page === "login" && loginUser.fulfilled.match(resultAction)) {
       toast.success("Logged in successfully!");
+      navigate("/");
     }
 
     reset();

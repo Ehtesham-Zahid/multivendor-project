@@ -7,6 +7,6 @@ const upload = require("../middlewares/uploadMiddleware.js");
 const { protect } = require("../middlewares/authMiddleware.js");
 
 router.post("/create-shop", protect, upload.single("image"), createShop);
-router.get("/", protect, getShop);
+router.get("/:shopId", protect, getShop);
 
 module.exports = router;
