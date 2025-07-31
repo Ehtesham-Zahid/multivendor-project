@@ -13,3 +13,9 @@ export const login = async (loginData) => {
 export const verifyToken = async (token) => {
   return await API.get(`/users/verify-token/${token}`);
 };
+
+export const getMe = async () => {
+  return await API.get(`/users/me`, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};

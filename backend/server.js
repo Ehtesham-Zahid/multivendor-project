@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
 const cron = require("node-cron");
+const cookieParser = require("cookie-parser");
 
 const userRouter = require("./routes/userRoutes");
 
@@ -24,6 +25,8 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
 
 // Runs every hour
 cron.schedule("0 * * * *", async () => {

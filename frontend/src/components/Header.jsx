@@ -40,9 +40,9 @@ const Header = () => {
             <Search strokeWidth={3} color="#1f2937" />
           </button>
         </div>
-        <button className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5">
+        <Link className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5">
           Become Seller <ArrowRight />
-        </button>
+        </Link>
       </div>
       <div className="secondary-nav bg-primary w-full flex justify-center ">
         <div className="w-custom flex justify-between  text-white font-semibold">

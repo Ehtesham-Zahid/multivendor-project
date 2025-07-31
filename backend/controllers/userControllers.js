@@ -138,4 +138,8 @@ const verifyToken = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { registerUser, loginUser, verifyToken };
+const me = asyncHandler(async (req, res) => {
+  res.status(200).json(req.user);
+});
+
+module.exports = { registerUser, loginUser, verifyToken, me };

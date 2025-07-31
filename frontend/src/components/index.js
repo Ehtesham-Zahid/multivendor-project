@@ -1,4 +1,5 @@
 import Header from "./Header";
+import Footer from "./Footer";
 import Dropdown from "./Dropdown";
 import Slider from "./Slider";
 import AuthForm from "./AuthForm";
@@ -9,6 +10,7 @@ import FeaturedProducts from "./sections/FeaturedProducts";
 
 export {
   Header,
+  Footer,
   Dropdown,
   Slider,
   Categories,
