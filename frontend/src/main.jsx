@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from "./app/store.js";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
+import CreateShop from "./pages/CreateShop.jsx";
 
 let router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ let router = createBrowserRouter([
       { path: "verify-email/:token", Component: VerifyEmail },
     ],
   },
+  { path: "create-shop", Component: CreateShop },
 ]);
 
 createRoot(document.getElementById("root")).render(

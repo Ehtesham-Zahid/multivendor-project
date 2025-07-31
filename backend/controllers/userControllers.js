@@ -36,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (req.file) {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     const dataURI = `data:${req.file.mimetype};base64,${b64}`;
-    const { original } = await uploadAvatar(dataURI, user._id);
+    const { original } = await uploadAvatar(dataURI, user._id, "user_logos");
     user.imageUrl = original;
     console.log("MAIN ANDER HU");
   }

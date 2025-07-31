@@ -35,9 +35,14 @@ const userSchema = mongoose.Schema(
     verifiedTokenExpires: {
       type: Date,
     },
-    shopId: {
+    hasShop: {
+      type: Boolean,
+      default: false,
+    },
+    shop: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
+      default: null,
     },
   },
   { timestamps: true }

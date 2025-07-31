@@ -6,6 +6,7 @@ const cron = require("node-cron");
 const cookieParser = require("cookie-parser");
 
 const userRouter = require("./routes/userRoutes");
+const shopRouter = require("./routes/shopRoutes");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -46,6 +47,7 @@ cron.schedule("0 * * * *", async () => {
 });
 
 app.use("/api/users", userRouter);
+app.use("/api/shop", shopRouter);
 
 app.use(errorHandler);
 

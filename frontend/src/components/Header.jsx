@@ -18,16 +18,18 @@ import {
 } from "@/shadcn/dropdown-menu";
 import { useState } from "react";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { user } = useSelector((state) => state.auth);
   const [category, setCategory] = useState("bottom");
 
   return (
     <div className="header  backdrop-blur-3xl  w-full flex flex-col items-center">
       <div className="primary-nav flex justify-between py-5 border-b-2 border-transparent w-custom  items-center">
-        <p className="text-4xl font-bold">
+        <Link className="text-5xl font-black" to="/">
           Swift<span className="text-primary">Cart</span>
-        </p>
+        </Link>
         <div className="w-1/2 border-2  border-primary outline-none flex justify-center  rounded-md px-5 py-2">
           <input
             type="text"
@@ -40,9 +42,30 @@ const Header = () => {
             <Search strokeWidth={3} color="#1f2937" />
           </button>
         </div>
-        <Link className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5">
-          Become Seller <ArrowRight />
-        </Link>
+        {user ? (
+          user.hasShop ? (
+            <Link
+              className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5"
+              to="/shop/:id"
+            >
+              Go To Shop <ArrowRight />
+            </Link>
+          ) : (
+            <Link
+              className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5"
+              to="/create-shop"
+            >
+              Become Seller <ArrowRight />
+            </Link>
+          )
+        ) : (
+          <Link
+            className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5"
+            to="/auth/login"
+          >
+            Become Seller <ArrowRight />
+          </Link>
+        )}
       </div>
       <div className="secondary-nav bg-primary w-full flex justify-center ">
         <div className="w-custom flex justify-between  text-white font-semibold">

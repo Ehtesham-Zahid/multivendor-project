@@ -76,7 +76,7 @@ const AuthForm = ({ page }) => {
       className="shadow-2xl rounded-md p-5 w-1/4 py-10 shadow-zinc-500"
     >
       <Link to="/" className="flex items-center justify-center">
-        <p className="text-4xl font-bold">
+        <p className="text-5xl font-black">
           Swift<span className="text-primary">Cart</span>
         </p>
       </Link>
