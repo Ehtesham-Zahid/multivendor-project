@@ -3,8 +3,6 @@ const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
 const Shop = require("../models/shopModel");
 const uploadAvatar = require("../utils/cloudinary");
-// const uploadAvatar = require("../utils/cloudinary");
-// const POST = require("../utils/email");
 
 const generateToken = (id, expire) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: expire });
@@ -14,7 +12,6 @@ const createShop = asyncHandler(async (req, res) => {
   const { shopName, phoneNumber, address, zipCode } = req.body;
 
   const shopExists = await Shop.findOne({ shopName });
-
   if (shopExists) {
     res.status(401);
     throw new Error("Shop Name already registered");
@@ -32,7 +29,7 @@ const createShop = asyncHandler(async (req, res) => {
     phoneNumber,
     address,
     zipCode,
-    owner: userId,
+    ownerId: userId, // renamed
   });
 
   if (req.file) {
@@ -40,7 +37,6 @@ const createShop = asyncHandler(async (req, res) => {
     const dataURI = `data:${req.file.mimetype};base64,${b64}`;
     const { original } = await uploadAvatar(dataURI, shop._id, "shop_logos");
     shop.imageUrl = original;
-    console.log("MAIN ANDER HU");
   }
 
   await shop.save();
@@ -62,8 +58,7 @@ const createShop = asyncHandler(async (req, res) => {
 const getShop = asyncHandler(async (req, res) => {
   const { shopId } = req.params;
 
-  const shop = await Shop.findById({ _id: shopId });
-
+  const shop = await Shop.findById(shopId);
   if (!shop) {
     res.status(401);
     throw new Error("Invalid Shop Id");
@@ -72,7 +67,65 @@ const getShop = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
+const updateShop = asyncHandler(async (req, res) => {
+  const { shopId } = req.params;
+  const updates = req.body;
+
+  const shop = await Shop.findById(shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+
+  if (shop.ownerId.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("Not authorized to update this shop");
+  }
+
+  Object.assign(shop, updates);
+
+  if (req.file) {
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+    const { original } = await uploadAvatar(dataURI, shop._id, "shop_logos");
+    shop.imageUrl = original;
+  }
+
+  await shop.save();
+  res.status(200).json(shop);
+});
+
+const deleteShop = asyncHandler(async (req, res) => {
+  const { shopId } = req.params;
+
+  const shop = await Shop.findById(shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+
+  if (shop.ownerId.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("Not authorized");
+  }
+
+  await shop.deleteOne();
+  req.user.hasShop = false;
+  req.user.shop = null;
+  await req.user.save();
+
+  res.status(200).json({ message: "Shop deleted" });
+});
+
+const getAllShops = asyncHandler(async (req, res) => {
+  const shops = await Shop.find({}).populate("owner", "name email");
+  res.status(200).json(shops);
+});
+
 module.exports = {
   createShop,
   getShop,
+  updateShop,
+  deleteShop,
+  getAllShops,
 };

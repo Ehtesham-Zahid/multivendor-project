@@ -8,15 +8,16 @@ const shopSchema = mongoose.Schema(
       unique: [true, "Shop Name already exist"],
     },
     phoneNumber: {
-      type: Number,
-      required: [true, "Please add an phone number"],
+      type: String,
+      required: [true, "Please add a phone number"],
     },
+
     address: {
       type: String,
       required: [true, "Please add a address"],
     },
     zipCode: {
-      type: Number,
+      type: String,
       required: [true, "Please add a zip code"],
     },
     imageUrl: {
@@ -24,14 +25,16 @@ const shopSchema = mongoose.Schema(
       default:
         "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg",
     },
-    owner: {
+    ownerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    // ratings: {
-    //   type: Number,
-    // },
+    averageRating: {
+      type: Number,
+      default: 0, // ✅ recommended
+    },
+
     orders: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -41,7 +44,7 @@ const shopSchema = mongoose.Schema(
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Prodcut",
+        ref: "Product",
       },
     ],
     events: [
