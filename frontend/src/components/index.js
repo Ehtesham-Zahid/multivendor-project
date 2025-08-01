@@ -8,6 +8,8 @@ import EmailVerification from "./EmailVerification";
 import Categories from "./sections/Categories";
 import BestSelling from "./sections/BestSelling";
 import FeaturedProducts from "./sections/FeaturedProducts";
+import AllProducts from "./sections/AllProducts";
+import AllEvents from "./sections/AllEvents";
 
 export {
   Header,
@@ -17,7 +19,9 @@ export {
   Categories,
   BestSelling,
   FeaturedProducts,
+  AllProducts,
   AuthForm,
   EmailVerification,
   CreateShopForm,
+  AllEvents,
 };

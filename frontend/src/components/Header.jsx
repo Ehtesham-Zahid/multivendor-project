@@ -19,6 +19,7 @@ import {
 import { useState } from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
+import CartSheet from "./CartSheet";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
@@ -115,25 +116,25 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link to="/" className="relative inline-block group">
+              <Link to="/best-selling" className="relative inline-block group">
                 <span className="relative z-10  transition">Best Selling</span>
                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </li>
             <li>
-              <Link to="/" className="relative inline-block group">
+              <Link to="/all-products" className="relative inline-block group">
                 <span className="relative z-10  transition">Products</span>
                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </li>
             <li>
-              <Link to="/" className="relative inline-block group">
+              <Link to="/all-events" className="relative inline-block group">
                 <span className="relative z-10  transition">Events</span>
                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </li>
             <li>
-              <Link to="/" className="relative inline-block group">
+              <Link to="/faqs" className="relative inline-block group">
                 <span className="relative z-10  transition">Faqs</span>
                 <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
               </Link>
@@ -141,7 +142,7 @@ const Header = () => {
           </ul>
           <div className="flex gap-5 py-5  ">
             <Heart />
-            <ShoppingCart />
+            <CartSheet />
             <Link to="/auth/login">
               <CircleUserRound />
             </Link>

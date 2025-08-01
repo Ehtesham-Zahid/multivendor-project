@@ -1,6 +1,7 @@
 import { Eye, Heart, ShoppingCart, Star } from "lucide-react";
 import ProductImage from "../assets/images/category-1.jpg";
 import { Badge } from "../shadcn/badge";
+import ProductDialog from "./ProductDialog";
 
 const ProductCard = () => {
   return (
@@ -10,10 +11,7 @@ const ProductCard = () => {
           className="bg-white rounded-sm p-1 hover:bg-orange-300 "
           size={"28px"}
         />
-        <Eye
-          className="bg-white rounded-sm p-1 hover:bg-orange-300 "
-          size={"28px"}
-        />
+        <ProductDialog />
         <ShoppingCart
           className="bg-white rounded-sm p-1 hover:bg-orange-300 "
           size={"28px"}

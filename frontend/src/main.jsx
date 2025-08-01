@@ -14,12 +14,20 @@ import { Provider } from "react-redux";
 import { store } from "./app/store.js";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import CreateShop from "./pages/CreateShop.jsx";
+import BestSellingPage from "./pages/BestSellingPage.jsx";
+import AllProductsPage from "./pages/AllProductsPage.jsx";
+import AllEventsPage from "./pages/AllEventsPage.jsx";
 
 let router = createBrowserRouter([
   {
     path: "/",
     Component: App, // This will act as a layout for its children
-    children: [{ index: true, Component: Home }],
+    children: [
+      { index: true, Component: Home },
+      { path: "best-selling", Component: BestSellingPage },
+      { path: "all-products", Component: AllProductsPage },
+      { path: "all-events", Component: AllEventsPage },
+    ],
   },
   {
     path: "auth",

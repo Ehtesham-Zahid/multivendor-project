@@ -1,11 +1,11 @@
 const express = require("express");
+const router = express.Router();
 const {
   createReview,
   updateReview,
   deleteReview,
 } = require("../controllers/reviewControllers");
 const { protect } = require("../middlewares/authMiddleware");
-const router = express.router();
 
 router.post("/", protect, createReview);
 router.patch("/:reviewId", protect, updateReview);
