@@ -2,14 +2,18 @@ import { Eye, Heart, ShoppingCart, Star } from "lucide-react";
 import ProductImage from "../assets/images/category-1.jpg";
 import { Badge } from "../shadcn/badge";
 import ProductDialog from "./ProductDialog";
+import { useState } from "react";
 
 const ProductCard = () => {
+  const [isWished, setIsWished] = useState(false);
   return (
     <div className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300 cursor-pointer relative hover:shadow-2xl hover:shadow-zinc-400 ">
       <div className="flex flex-col absolute right-5 top-5 gap-y-2 z-10">
         <Heart
           className="bg-white rounded-sm p-1 hover:bg-orange-300 "
           size={"28px"}
+          fill={isWished ? "red" : "white"}
+          onClick={() => setIsWished((prev) => !prev)}
         />
         <ProductDialog />
         <ShoppingCart

@@ -6,7 +6,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shadcn/dialog";
-import { Eye, Heart } from "lucide-react";
+import {
+  Eye,
+  Heart,
+  MessageCircleCode,
+  MessageCircleCodeIcon,
+  MessageCircleIcon,
+  MessageCirclePlus,
+  Phone,
+} from "lucide-react";
 import { Button } from "../shadcn/button";
 
 import ProductImage from "../assets/images/category-1.jpg";
@@ -24,63 +32,66 @@ const ProductDialog = ({ title, description }) => {
             size={"28px"}
           />
         </DialogTrigger>
-        <DialogContent className="rounded-lg w-screen h-1/2 grid grid-cols-2 gap-10">
-          <div className="flex justify-between items-center flex-col gap-y-8">
-            <img src={ProductImage} className="w- rounded-lg shadow-2xl" />
-            <div className="flex gap-5 w-full items-center">
-              <img
-                src={Logo}
-                className="rounded-full w-16 h-16 border-secondary border-2 object-contain"
-              />
-              <div className="flex flex-col">
-                <p className="font-bold">Hyper Products</p>
-                <p>5 Ratings</p>
-              </div>
-            </div>
-            <Button
-              className="text-white w-full bg-secondary text-md cursor-pointer hover:bg-orange-400"
-              size={"lg"}
-            >
-              Contact Seller
-            </Button>
-            {/* <p className="text-center font-bold text-primary">99 in Stock</p> */}
+        <DialogContent className="rounded-lg w-screen    grid grid-cols-2 gap-10">
+          <div className="flex justify-center  items-center ">
+            <img
+              src={ProductImage}
+              className="w-full h-full  object-cover rounded-md"
+            />
           </div>
-          <div className="flex justify-between items-center flex-col gap-y-8">
-            <div className="flex flex-col gap-2">
-              <p className="text-3xl font-bold text-blue-800">
+          <div>
+            <div className="border-b-2 border-zinc-400 pb-5">
+              <p className="text-3xl font-bold text-sky-700  ">
                 HyperX Cloud Stinger Core
               </p>
-              <p className="">
-                HyperX Cloud Stinger Core Wireless Gaming Headset for
-                PlayStation OPEN BOX Lightweight Comfort Durable steels Sliders
-                Swivel-to-mute noise cancelling mic Compatible with PS5™, PS4™
-                & PC
-              </p>
-              <div className="flex justify-between mt-3">
-                <p className="font-bold text-3xl">110$</p>
+              <div className="flex justify-between  mt-3">
+                <p className="font-bold text-2xl">110$</p>
                 <Badge variant="default" className="text-white bg-secondary">
                   120 Sold
                 </Badge>
               </div>
-              <div className="mt-3 flex items-center gap-x-5">
-                <QuantityCounter />
-                <Heart size={"28px"} className="cursor-pointer" />
-              </div>
             </div>
-            <Button
-              className="text-white w-full  text-md cursor-pointer"
-              size={"lg"}
-            >
-              Add To Cart
-            </Button>
+            <div className="border-b-2 border-zinc-400 pb-5 flex  items-center justify-between mt-5">
+              {/* <QuantityCounter /> */}
+              <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
+                <p className="px-2.5 py-0.5">-</p>
+                <p className="px-2.5 py-0.5">10</p>
+                <p className="px-2.5 py-0.5">+</p>
+              </div>
+              <p className="text-lg ml-1">
+                <strong>100</strong> items left
+              </p>
+            </div>
+            <div className="flex justify-between gap-5 w-full items-center border-b-2 border-zinc-400 py-3">
+              <div className="flex gap-5 items-center">
+                <img
+                  src={Logo}
+                  className="rounded-md w-16 h-16  object-contain border-2 "
+                />
+                <div className="flex flex-col">
+                  <p className="font-bold">Hyper Products</p>
+                  <p>5 Ratings</p>
+                </div>
+              </div>
+              <Button className="text-white cursor-pointer">
+                <MessageCirclePlus /> Contact
+              </Button>
+            </div>
+            <div className="flex py-5 gap-5">
+              <Button
+                className=" text-white w-48  bg-secondary text-md cursor-pointer hover:bg-amber-400"
+                size={"lg"}
+              >
+                View Full Details
+              </Button>
+              <Button
+                className=" text-white w-48  text-md cursor-pointer"
+                size={"lg"}
+              >
+                Add To Cart
+              </Button>
+            </div>
           </div>
-          {/* <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
-          </DialogHeader> */}
         </DialogContent>
       </Dialog>
     </div>
@@ -88,3 +99,56 @@ const ProductDialog = ({ title, description }) => {
 };
 
 export default ProductDialog;
+
+//  {/* <DialogContent className="rounded-lg w-screen h-1/2 grid grid-cols-2 gap-10">
+//           <div className="flex justify-between items-center flex-col gap-y-8">
+//             <img src={ProductImage} className="w- rounded-lg shadow-2xl" />
+//             <div className="flex gap-5 w-full items-center">
+//               <img
+//                 src={Logo}
+//                 className="rounded-full w-16 h-16 border-secondary border-2 object-contain"
+//               />
+//   <div className="flex flex-col">
+//     <p className="font-bold">Hyper Products</p>
+//     <p>5 Ratings</p>
+//   </div>
+//             </div>
+// <Button
+//   className="text-white w-full bg-secondary text-md cursor-pointer hover:bg-orange-400"
+//   size={"lg"}
+// >
+//   Contact Seller
+// </Button>
+//             {/* <p className="text-center font-bold text-primary">99 in Stock</p> */}
+//           </div>
+//           <div className="flex justify-between items-center flex-col gap-y-8">
+//             <div className="flex flex-col gap-2">
+//   <p className="text-3xl font-bold text-blue-800">
+//     HyperX Cloud Stinger Core
+//   </p>
+//   <p className="">
+//     HyperX Cloud Stinger Core Wireless Gaming Headset for
+//     PlayStation OPEN BOX Lightweight Comfort Durable steels Sliders
+//     Swivel-to-mute noise cancelling mic Compatible with PS5™, PS4™
+//     & PC
+//   </p>
+//   <div className="flex justify-between mt-3">
+//     <p className="font-bold text-3xl">110$</p>
+//     <Badge variant="default" className="text-white bg-secondary">
+//       120 Sold
+//     </Badge>
+//   </div>
+//               <div className="mt-3 flex items-center gap-x-5">
+//                 <QuantityCounter />
+//                 <Heart size={"28px"} className="cursor-pointer" />
+//               </div>
+//             </div>
+//             <Button
+//   className="text-white w-full  text-md cursor-pointer"
+//   size={"lg"}
+//             >
+//               Add To Cart
+//             </Button>
+//           </div>
+
+//         </DialogContent> */}

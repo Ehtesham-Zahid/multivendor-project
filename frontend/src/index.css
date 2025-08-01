@@ -5,10 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-primary: #2563eb;
-  --color-secondary: #f97316;
-  --color-background: #f9fafb;
-  --color-dark: #1f2937;
+  --color-primary: #0ea5e9; /* Sky-500 — clean, modern blue */
+  --color-secondary: #fbbf24; /* Amber-400 — softer than yellow, warm */
+  --color-background: #ffffff;
+  --color-dark: #1e293b; /* Slate-800 — deep slate/navy */
+
   --color-success: #10b981;
   --color-danger: #ef4444;
   --spacing-custom: 90%;

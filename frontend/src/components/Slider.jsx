@@ -31,9 +31,9 @@ const Slider = () => {
           <div className=" flex flex-col justify-center items-center w-full h-full gap-y-10">
             <p className="text-7xl font-black text-center w-1/2 text-white">
               Your One-Stop Shop For
-              <span className="text-dark"> Everything</span> Online
+              <span className="text-primary"> Everything</span> Online
             </p>
-            <p className="text-xl w-2/5 text-center font-semibold text-dark">
+            <p className="text-xl w-2/5 text-center font-semibold text-white">
               Discover unbeatable deals on electronics, fashion, and more. Enjoy
               secure payments, fast delivery, and 24/7 support at Buyno. Start
               Shopping
