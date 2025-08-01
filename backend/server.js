@@ -7,6 +7,9 @@ const cookieParser = require("cookie-parser");
 
 const userRouter = require("./routes/userRoutes");
 const shopRouter = require("./routes/shopRoutes");
+const productRouter = require("./routes/productRoutes");
+const reviewRouter = require("./routes/reviewRoutes");
+const cartRouter = require("./routes/cartRoutes");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -48,6 +51,9 @@ cron.schedule("0 * * * *", async () => {
 
 app.use("/api/users", userRouter);
 app.use("/api/shops", shopRouter);
+app.use("/api/products", productRouter);
+app.use("/api/reviews", reviewRouter);
+app.use("/api/carts", cartRouter);
 
 app.use(errorHandler);
 

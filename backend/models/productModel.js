@@ -47,7 +47,18 @@ const productSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    totalReviews: {
+      type: Number,
+      default: 0,
+    },
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",

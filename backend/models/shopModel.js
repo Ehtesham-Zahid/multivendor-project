@@ -34,11 +34,14 @@ const shopSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
-    averageRating: {
+    rating: {
       type: Number,
-      default: 0, // ✅ recommended
+      default: 0,
     },
-
+    totalReviews: {
+      type: Number,
+      default: 0,
+    },
     orders: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -55,6 +58,12 @@ const shopSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Event",
+      },
+    ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
       },
     ],
   },

@@ -107,7 +107,9 @@ const getProductsByShop = asyncHandler(async (req, res) => {
 const getAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({ isDeleted: false }).populate(
     "shopId",
-    "name"
+    "name",
+    "rating",
+    "totalReviews"
   );
 
   res.status(200).json(products);
