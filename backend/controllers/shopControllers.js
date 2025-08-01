@@ -1,12 +1,7 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const asyncHandler = require("express-async-handler");
 const Shop = require("../models/shopModel");
+const Product = require("../models/productModel");
 const uploadAvatar = require("../utils/cloudinary");
-
-const generateToken = (id, expire) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: expire });
-};
 
 const createShop = asyncHandler(async (req, res) => {
   const { shopName, phoneNumber, address, zipCode } = req.body;
@@ -60,7 +55,7 @@ const getShop = asyncHandler(async (req, res) => {
 
   const shop = await Shop.findById(shopId);
   if (!shop) {
-    res.status(401);
+    res.status(404);
     throw new Error("Invalid Shop Id");
   }
 
@@ -109,16 +104,17 @@ const deleteShop = asyncHandler(async (req, res) => {
     throw new Error("Not authorized");
   }
 
-  await shop.deleteOne();
-  req.user.hasShop = false;
-  req.user.shop = null;
-  await req.user.save();
+  shop.isDeleted = true;
+  await shop.save();
+
+  // Also soft-delete all its products
+  await Product.updateMany({ shop: shop._id }, { isDeleted: true });
 
   res.status(200).json({ message: "Shop deleted" });
 });
 
 const getAllShops = asyncHandler(async (req, res) => {
-  const shops = await Shop.find({}).populate("owner", "name email");
+  const shops = await Shop.find({}).populate("ownerId", "name email");
   res.status(200).json(shops);
 });
 

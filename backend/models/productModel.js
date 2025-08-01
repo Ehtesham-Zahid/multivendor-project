@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: [true, "Please add a product name"],
       unique: [true, "Product Name already exist"],
@@ -43,6 +43,11 @@ const productSchema = mongoose.Schema(
       enum: ["active", "inactive"],
       default: "active",
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
