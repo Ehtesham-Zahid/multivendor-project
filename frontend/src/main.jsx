@@ -20,6 +20,7 @@ import AllEventsPage from "./pages/AllEventsPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import SingleProductPage from "./pages/SingleProductPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -45,6 +46,19 @@ let router = createBrowserRouter([
     ],
   },
   { path: "create-shop", Component: CreateShop },
+  {
+    path: "dashboard",
+    Component: DashboardPage, // This will act as a layout for its children
+    children: [
+      { index: true, Component: Home },
+      { path: "best-selling", Component: BestSellingPage },
+      { path: "all-products", Component: AllProductsPage },
+      { path: "all-events", Component: AllEventsPage },
+      { path: "profile", Component: ProfilePage },
+      { path: "category/:cateogry", Component: CategoryPage },
+      { path: "product/:productId", Component: SingleProductPage },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
