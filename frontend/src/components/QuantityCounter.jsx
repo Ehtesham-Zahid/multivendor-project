@@ -1,9 +1,9 @@
 const QuantityCounter = () => {
   return (
-    <div className="border-primary border-3 text-lg flex font-bold w-fit rounded-md">
-      <p className="bg-blue-200 py-2 px-3 cursor-pointer">+</p>
-      <p className="px-3 py-2">100</p>
-      <p className="bg-blue-200 py-2 px-3 cursor-pointer">-</p>
+    <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
+      <p className="px-2.5 py-0.5 cursor-pointer ">-</p>
+      <p className="px-2.5 py-0.5 text-sky-600">10</p>
+      <p className="px-2.5 py-0.5 cursor-pointer">+</p>
     </div>
   );
 };

@@ -8,6 +8,8 @@ import CategoryImage5 from "../../assets/images/category-5.png";
 import CategoryImage6 from "../../assets/images/category-6.png";
 import CategoryImage7 from "../../assets/images/category-7.png";
 import CategoryImage8 from "../../assets/images/category-8.png";
+import CategoryImage9 from "../../assets/images/category-9.png";
+import CategoryImage10 from "../../assets/images/category-10.png";
 
 const Categories = () => {
   return (
@@ -15,7 +17,7 @@ const Categories = () => {
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         Product Categories
       </p>
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-6 gap-4">
         <CategoryCard
           categoryTitle="Clothing & Shoes"
           productTitle="Sneakers"
@@ -30,6 +32,13 @@ const Categories = () => {
           image={CategoryImage2}
           bgColor="bg-zinc-200"
           textColor="text-zinc-500"
+        />{" "}
+        <CategoryCard
+          categoryTitle="Pet Care"
+          productTitle="Cat Food"
+          image={CategoryImage9}
+          bgColor="bg-purple-200"
+          textColor="text-purple-500"
         />{" "}
         <CategoryCard
           categoryTitle="Home & Kitchen"
@@ -66,6 +75,13 @@ const Categories = () => {
           bgColor="bg-pink-100"
           textColor="text-pink-500"
         />
+        <CategoryCard
+          categoryTitle="Others"
+          productTitle="Gift Box Set"
+          image={CategoryImage10}
+          bgColor="bg-fuchsia-200"
+          textColor="text-fuchsia-500"
+        />{" "}
         <CategoryCard
           categoryTitle="Toy & Baby Items"
           productTitle="Train"

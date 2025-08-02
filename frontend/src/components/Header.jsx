@@ -20,6 +20,18 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import CartSheet from "./CartSheet";
+import WishlistSheet from "./WishlistSheet";
+
+import CategoryImage1 from "../assets/images/category-1.png";
+import CategoryImage2 from "../assets/images/category-2.png";
+import CategoryImage3 from "../assets/images/category-3.png";
+import CategoryImage4 from "../assets/images/category-4.png";
+import CategoryImage5 from "../assets/images/category-5.png";
+import CategoryImage6 from "../assets/images/category-6.png";
+import CategoryImage7 from "../assets/images/category-7.png";
+import CategoryImage8 from "../assets/images/category-8.png";
+import CategoryImage9 from "../assets/images/category-9.png";
+import CategoryImage10 from "../assets/images/category-10.png";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
@@ -88,21 +100,103 @@ const Header = () => {
                 >
                   <DropdownMenuItem
                     value="top"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none flex gap-3"
                   >
-                    Top
+                    <img
+                      src={CategoryImage1}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Clothing & Shoes
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     value="bottom"
                     className="hover:bg-blue-200 cursor-pointer rounded-none"
                   >
-                    Bottom
+                    <img
+                      src={CategoryImage2}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Mobile & Electronics
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     value="right"
                     className="hover:bg-blue-200 cursor-pointer rounded-none"
                   >
-                    Right
+                    <img
+                      src={CategoryImage9}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Pet Food
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    value="right"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                  >
+                    <img
+                      src={CategoryImage3}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Home & Kitcchen
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    value="right"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                  >
+                    <img
+                      src={CategoryImage4}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Beauty & Personal Care
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    value="right"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                  >
+                    <img
+                      src={CategoryImage5}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Grocery & Food
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    value="right"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                  >
+                    <img
+                      src={CategoryImage6}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Health & Fitness
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    value="right"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                  >
+                    <img
+                      src={CategoryImage7}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Books & Stationery
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    value="right"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                  >
+                    <img
+                      src={CategoryImage8}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Toy & Baby Items
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    value="right"
+                    className="hover:bg-blue-200 cursor-pointer rounded-none"
+                  >
+                    <img
+                      src={CategoryImage10}
+                      className=" w-12 border-2 rounded-sm object-cover"
+                    />
+                    Others
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -141,7 +235,7 @@ const Header = () => {
             </li>
           </ul>
           <div className="flex gap-5 py-5  ">
-            <Heart />
+            <WishlistSheet />
             <CartSheet />
             <Link to="/auth/login">
               <CircleUserRound />

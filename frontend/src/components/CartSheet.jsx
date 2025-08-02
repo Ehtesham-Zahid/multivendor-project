@@ -17,7 +17,7 @@ const CartSheet = () => {
       <SheetTrigger className="cursor-pointer">
         <ShoppingCart />
       </SheetTrigger>
-      <SheetContent className="flex flex-col  items-center max-[450px]:w-[325px] overflow-y-scroll overflow-x-hidden ">
+      <SheetContent className="flex flex-col  items-center max-[450px]:w-[325px] overflow-y-scroll overflow-x-hidden pb-20">
         <p className=" font-bold text-2xl w-full ml-5 mt-2">CART</p>
         {/* <p>Your Cart is empty</p> */}
         <MiniCard />
@@ -25,9 +25,11 @@ const CartSheet = () => {
         <MiniCard />
         <MiniCard />
         <MiniCard />
+        <MiniCard />
+        <MiniCard />
         <div className=" fixed bottom-0 w-[366px]  border-t-2 border-primary   py-5 flex justify-center  bg-background">
           <Button
-            className={"font-bold text-white  tracking-wider text-md"}
+            className={"font-bold text-white tracking-wider text-md"}
             size={"lg"}
           >
             <p>CHECKOUT</p>

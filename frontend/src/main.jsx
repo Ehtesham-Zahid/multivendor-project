@@ -17,6 +17,7 @@ import CreateShop from "./pages/CreateShop.jsx";
 import BestSellingPage from "./pages/BestSellingPage.jsx";
 import AllProductsPage from "./pages/AllProductsPage.jsx";
 import AllEventsPage from "./pages/AllEventsPage.jsx";
+import CategoryPage from "./pages/CategoryPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ let router = createBrowserRouter([
       { path: "best-selling", Component: BestSellingPage },
       { path: "all-products", Component: AllProductsPage },
       { path: "all-events", Component: AllEventsPage },
+      { path: "category/:cateogry", Component: CategoryPage },
     ],
   },
   {
