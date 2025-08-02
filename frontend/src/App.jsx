@@ -3,6 +3,8 @@ import { Header, Footer } from "./components";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "./features/auth/authSlice";
+import { SidebarProvider, SidebarTrigger } from "./shadcn/sidebar";
+import ProfileSidebar from "./components/ProfileSidebar";
 
 const App = () => {
   const dispatch = useDispatch();

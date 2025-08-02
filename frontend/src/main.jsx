@@ -18,6 +18,8 @@ import BestSellingPage from "./pages/BestSellingPage.jsx";
 import AllProductsPage from "./pages/AllProductsPage.jsx";
 import AllEventsPage from "./pages/AllEventsPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
+import SingleProductPage from "./pages/SingleProductPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -28,7 +30,9 @@ let router = createBrowserRouter([
       { path: "best-selling", Component: BestSellingPage },
       { path: "all-products", Component: AllProductsPage },
       { path: "all-events", Component: AllEventsPage },
+      { path: "profile", Component: ProfilePage },
       { path: "category/:cateogry", Component: CategoryPage },
+      { path: "product/:productId", Component: SingleProductPage },
     ],
   },
   {

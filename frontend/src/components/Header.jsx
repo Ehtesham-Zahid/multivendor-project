@@ -237,7 +237,7 @@ const Header = () => {
           <div className="flex gap-5 py-5  ">
             <WishlistSheet />
             <CartSheet />
-            <Link to="/auth/login">
+            <Link to={`${user ? "/profile" : "/auth/login"}`}>
               <CircleUserRound />
             </Link>
           </div>

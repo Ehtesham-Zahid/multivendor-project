@@ -11,6 +11,7 @@ import FeaturedProducts from "./sections/FeaturedProducts";
 import AllProducts from "./sections/AllProducts";
 import AllEvents from "./sections/AllEvents";
 import CategoryProductsSection from "./sections/CategoryProductsSection";
+import SingleProductSection from "./sections/SingleProductSection";
 
 export {
   Header,
@@ -26,4 +27,5 @@ export {
   CreateShopForm,
   AllEvents,
   CategoryProductsSection,
+  SingleProductSection,
 };
