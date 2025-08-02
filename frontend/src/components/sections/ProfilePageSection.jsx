@@ -4,11 +4,9 @@ import ProfileSection from "./ProfileSection";
 
 const ProfilePageSection = () => {
   return (
-    <div className="w-custom m-auto flex my-10">
+    <div className="w-custom m-auto flex my-10 gap-10">
       <ProfileSidebar />
-      <div>
-        <ProfileSection />
-      </div>
+      <ProfileSection />
     </div>
   );
 };

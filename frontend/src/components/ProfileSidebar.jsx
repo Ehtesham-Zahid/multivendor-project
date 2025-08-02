@@ -61,46 +61,46 @@ const items = [
 
 const ProfileSidebar = () => {
   return (
-    <div className="bg-white shadow-2xl w-60 rounded-md p-5">
+    <div className="bg-white shadow-2xl w-64 rounded-md p-5">
       <ul className="flex flex-col gap-8 text-lg">
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <UserRound size={24} /> Profile
+            <UserRound size={20} /> Profile
           </Link>
         </li>
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <ListOrdered size={24} /> Orders
+            <ListOrdered size={20} /> Orders
           </Link>
         </li>
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <SendToBackIcon size={24} /> Refunds
+            <SendToBackIcon size={20} /> Refunds
           </Link>
         </li>
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <MessageCircleIcon size={24} /> Inbox
+            <MessageCircleIcon size={20} /> Inbox
           </Link>
         </li>
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <CircleAlert size={24} /> Track Order
+            <CircleAlert size={20} /> Track Order
           </Link>
         </li>
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <Lock size={24} /> Change Password
+            <Lock size={20} /> Change Password
           </Link>
         </li>
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <HomeIcon size={24} /> Addresses
+            <HomeIcon size={20} /> Addresses
           </Link>
         </li>
         <li>
           <Link className="flex font-medium gap-3 items-center">
-            <LogOut size={24} /> Log out
+            <LogOut size={20} className="rotate-180" /> Log out
           </Link>
         </li>
       </ul>
