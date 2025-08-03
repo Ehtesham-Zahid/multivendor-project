@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const productSchema = mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
       required: [true, "Please add a product name"],
       unique: [true, "Product Name already exist"],

@@ -7,22 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcn/table";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Delete,
-  Edit,
-  Edit2,
-  Edit3,
-  FileEdit,
-  ShoppingBasket,
-  Trash,
-  Trash2,
-} from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const DashboardProductsSection = () => {
+  const { shop } = useSelector((state) => state.shop);
+
   return (
-    <div className="w-full h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
+    <div className="w-full h-[500px] overflow-y-scroll rounded-sm p-3 shadow-2xl">
       <Table>
         <TableHeader>
           <TableRow className="text-primary">
@@ -33,36 +25,34 @@ const DashboardProductsSection = () => {
             <TableHead>SOLD</TableHead>
             <TableHead>Edit</TableHead>
             <TableHead>Delete</TableHead>
-            {/* <TableHead className="text-right">See Details</TableHead> */}
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>June 23, 2025</TableCell>
-            <TableCell>Credit Card</TableCell>
-            <TableCell>Delivered</TableCell>
-            <TableCell>$250.00</TableCell>{" "}
-            <TableCell className="text-primary">
-              <Edit className="" size={20} />
-            </TableCell>
-            <TableCell className="text-primary">
-              <Trash2 className="" size={20} />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">INV001</TableCell>
-            <TableCell>June 23, 2025</TableCell>
-            <TableCell>Credit Card</TableCell>
-            <TableCell>Dispatched</TableCell>
-            <TableCell>$250.00</TableCell>
-            <TableCell className="text-primary">
-              <Edit className="" size={20} />
-            </TableCell>
-            <TableCell className="text-primary">
-              <Trash2 className="" size={20} />
-            </TableCell>
-          </TableRow>
+          {shop?.products?.length > 0 ? (
+            shop.products.map((product) => (
+              <TableRow key={product._id || product.id}>
+                <TableCell className="font-medium">
+                  {product._id || "PRD001"}
+                </TableCell>
+                <TableCell>{product.name || "Product Name"}</TableCell>
+                <TableCell>${product.price || "0.00"}</TableCell>
+                <TableCell>{product.stock || "0"}</TableCell>
+                <TableCell>{product.sold || "0"}</TableCell>
+                <TableCell className="text-primary">
+                  <Edit size={20} />
+                </TableCell>
+                <TableCell className="text-primary">
+                  <Trash2 size={20} />
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center py-4 font-semibold">
+                No products yet.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

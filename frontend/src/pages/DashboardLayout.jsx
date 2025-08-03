@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarTrigger } from "../shadcn/sidebar";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../features/auth/authSlice";
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
 const DashboardLayout = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const DashboardLayout = () => {
       <SidebarProvider>
         <DashboardSidebar />
         <main className="w-full">
+          <ToastContainer />
           <SidebarTrigger />
           {/* <PanelLeftIcon size={28} /> */}
           {/* <DashboardHeader /> */}

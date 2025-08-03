@@ -3,19 +3,22 @@ const Product = require("../models/productModel");
 const uploadAvatar = require("../utils/cloudinary");
 
 const createProduct = asyncHandler(async (req, res) => {
-  const {
-    title,
-    description,
-    price,
-    discountPrice,
-    stock,
-    category,
-    sold,
-    status,
-    shopId,
-  } = req.body;
+  console.log(req);
+  const { name, description, price, discountPrice, stock, category } = req.body;
 
-  const productExists = await Product.findOne({ title });
+  if (
+    !name &&
+    !description &&
+    !price &&
+    !discountPrice &&
+    !stock &&
+    !category
+  ) {
+    res.status(400);
+    throw new Error("Please add all fields");
+  }
+
+  const productExists = await Product.findOne({ name });
 
   if (productExists) {
     res.status(400);
@@ -23,16 +26,16 @@ const createProduct = asyncHandler(async (req, res) => {
   }
 
   const product = await Product.create({
-    title,
+    name,
     description,
     price,
     discountPrice,
     stock,
     category,
-    sold,
-    status,
-    shopId,
+    shopId: req.user.shopId,
   });
+
+  console.log("Bahaya", product);
 
   // Step 2: Handle image uploads if files exist
   if (req.files && req.files.length > 0) {

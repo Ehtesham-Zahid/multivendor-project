@@ -10,7 +10,9 @@ import {
   SelectValue,
 } from "@/shadcn/select";
 
-const CategorySelector = () => {
+import { CATEGORIES } from "@/constants/";
+
+const CategorySelector = ({ setCategoryValue }) => {
   return (
     <Select>
       <SelectTrigger className="w-full">
@@ -19,21 +21,17 @@ const CategorySelector = () => {
       <SelectContent className="bg-background outline-none">
         <SelectGroup className="outline-none">
           {/* <SelectLabel>CATEGORY</SelectLabel> */}
-          <SelectItem value="apple" className="hover:bg-sky-200">
-            Apple
-          </SelectItem>
-          <SelectItem className="hover:bg-sky-200" value="banana">
-            Banana
-          </SelectItem>
-          <SelectItem className="hover:bg-sky-200" value="blueberry">
-            Blueberry
-          </SelectItem>
-          <SelectItem className="hover:bg-sky-200" value="grapes">
-            Grapes
-          </SelectItem>
-          <SelectItem className="hover:bg-sky-200" value="pineapple">
-            Pineapple
-          </SelectItem>
+          {CATEGORIES.map((category) => {
+            return (
+              <SelectItem
+                value={category.name}
+                className="hover:bg-sky-200"
+                onClick={(e) => setCategoryValue(e.target.value)}
+              >
+                {category.name}
+              </SelectItem>
+            );
+          })}
         </SelectGroup>
       </SelectContent>
     </Select>
