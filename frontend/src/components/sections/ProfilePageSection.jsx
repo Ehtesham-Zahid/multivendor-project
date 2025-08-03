@@ -3,7 +3,7 @@ import { Sidebar, SidebarProvider, SidebarTrigger } from "../../shadcn/sidebar";
 import ProfileSidebar from "../ProfileSidebar";
 import AddressSection from "./AddressSection";
 import ChangePasswordSection from "./ChangePasswordSection";
-import OrdersSection from "./OrdersSection";
+import OrdersSection from "./UserOrdersSection";
 import ProfileSection from "./ProfileSection";
 import RefundsSection from "./RefundsSection";
 import TrackOrderSection from "./TrackOrderSection";

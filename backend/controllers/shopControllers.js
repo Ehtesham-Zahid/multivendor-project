@@ -37,17 +37,10 @@ const createShop = asyncHandler(async (req, res) => {
   await shop.save();
 
   req.user.hasShop = true;
-  req.user.shop = shop._id;
+  req.user.shopId = shop._id;
   await req.user.save();
 
-  res.status(201).json({
-    id: shop._id,
-    shopName: shop.shopName,
-    phoneNumber: shop.phoneNumber,
-    address: shop.address,
-    zipCode: shop.zipCode,
-    imageUrl: shop.imageUrl,
-  });
+  res.status(201).json(shop);
 });
 
 const getShop = asyncHandler(async (req, res) => {

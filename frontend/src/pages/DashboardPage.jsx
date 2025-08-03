@@ -1,5 +1,5 @@
 import { DashboardSection } from "../components";
-import OrdersSection from "../components/sections/OrdersSection";
+import { ShopOrdersSection } from "../components";
 
 const DashboardPage = () => {
   return (
@@ -8,7 +8,7 @@ const DashboardPage = () => {
         <p className="text-2xl font-bold mb-3">Overview</p>
         <DashboardSection />
       </div>
-      <OrdersSection />
+      <ShopOrdersSection />
     </div>
   );
 };

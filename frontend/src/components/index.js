@@ -14,8 +14,9 @@ import AllEvents from "./sections/AllEvents";
 import CategoryProductsSection from "./sections/CategoryProductsSection";
 import SingleProductSection from "./sections/SingleProductSection";
 import DashboardSection from "./sections/DashboardSection";
-import OrdersSection from "./sections/OrdersSection";
+import OrdersSection from "./sections/UserOrdersSection";
 import DashboardProductsSection from "./sections/DashboardProductsSection";
+import ShopOrdersSection from "./sections/ShopOrdersSection";
 import DashboardCouponCodesSection from "./sections/DashboardCouponCodesSection";
 import RefundsSection from "./sections/RefundsSection";
 import DashboardEventsSection from "./sections/DashboardEventsSection";
@@ -49,4 +50,5 @@ export {
   DashboardCouponCodesSection,
   DashboardSettingsSection,
   RefundsSection,
+  ShopOrdersSection,
 };

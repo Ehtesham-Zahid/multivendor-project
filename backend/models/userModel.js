@@ -39,7 +39,7 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    shop: {
+    shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
       default: null,

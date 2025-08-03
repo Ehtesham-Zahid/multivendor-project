@@ -9,7 +9,7 @@ import {
 } from "@/shadcn/table";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const OrdersSection = () => {
+const UserOrdersSection = () => {
   return (
     <div className="w-full  h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
       <Table>
@@ -50,4 +50,4 @@ const OrdersSection = () => {
   );
 };
 
-export default OrdersSection;
+export default UserOrdersSection;

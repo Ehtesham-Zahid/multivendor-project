@@ -15,7 +15,7 @@ const protect = asyncHandler(async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decoded.id).select(
-      "_id fullname email imageUrl role"
+      "_id fullname email imageUrl role hasShop shopId"
     );
     next();
   } catch (error) {
