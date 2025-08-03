@@ -12,6 +12,9 @@ import AllProducts from "./sections/AllProducts";
 import AllEvents from "./sections/AllEvents";
 import CategoryProductsSection from "./sections/CategoryProductsSection";
 import SingleProductSection from "./sections/SingleProductSection";
+import DashboardSection from "./sections/DashboardSection";
+import OrdersSection from "../components/sections/OrdersSection";
+import DashboardProductsSection from "../components/sections/DashboardProductsSection";
 
 export {
   Header,
@@ -28,4 +31,7 @@ export {
   AllEvents,
   CategoryProductsSection,
   SingleProductSection,
+  DashboardSection,
+  OrdersSection,
+  DashboardProductsSection,
 };

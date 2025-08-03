@@ -2,12 +2,10 @@ import DashboardCard from "../DashboardCard";
 
 const DashboardSection = () => {
   return (
-    <div>
-      <div>
-        <DashboardCard />
-        <DashboardCard />
-        <DashboardCard />
-      </div>
+    <div className="flex gap-10">
+      <DashboardCard />
+      <DashboardCard />
+      <DashboardCard />
     </div>
   );
 };

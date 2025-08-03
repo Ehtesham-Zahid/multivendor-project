@@ -20,7 +20,11 @@ import AllEventsPage from "./pages/AllEventsPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import SingleProductPage from "./pages/SingleProductPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+// import DashboardPage from "./pages/DashboardLayout.jsx";
+import DashboardLayout from "./pages/DashboardLayout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import DashboardOrdersPage from "./pages/DashboardOrdersPage.jsx";
+import DashboardProductsPage from "./pages/DashboardProductsPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -48,13 +52,13 @@ let router = createBrowserRouter([
   { path: "create-shop", Component: CreateShop },
   {
     path: "dashboard",
-    Component: DashboardPage, // This will act as a layout for its children
+    Component: DashboardLayout, // This will act as a layout for its children
     children: [
-      { index: true, Component: Home },
-      { path: "best-selling", Component: BestSellingPage },
-      { path: "all-products", Component: AllProductsPage },
-      { path: "all-events", Component: AllEventsPage },
-      { path: "profile", Component: ProfilePage },
+      { index: true, Component: DashboardPage },
+      { path: "orders", Component: DashboardOrdersPage },
+      { path: "products", Component: DashboardProductsPage },
+      { path: "events", Component: AllEventsPage },
+      { path: "withdraw-money", Component: ProfilePage },
       { path: "category/:cateogry", Component: CategoryPage },
       { path: "product/:productId", Component: SingleProductPage },
     ],

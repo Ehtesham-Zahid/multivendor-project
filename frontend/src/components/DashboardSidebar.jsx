@@ -19,22 +19,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shadcn/sidebar";
+import { Link } from "react-router";
 
 // Menu items.
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
     title: "Orders",
-    url: "#",
+    url: "/dashboard/orders",
     icon: Inbox,
   },
   {
     title: "Products",
-    url: "#",
+    url: "/dashboard/products",
     icon: Calendar,
   },
   {
@@ -79,10 +80,10 @@ const DashboardSidebar = () => {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className="my-1.5">
-                    <a href={item.url} className="flex items-center gap-4">
+                    <Link to={item.url} className="flex items-center gap-4">
                       <item.icon size={28} className="text-primary w-36" />
                       <span className="text-lg">{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
