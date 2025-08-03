@@ -16,8 +16,12 @@ import SingleProductSection from "./sections/SingleProductSection";
 import DashboardSection from "./sections/DashboardSection";
 import OrdersSection from "./sections/OrdersSection";
 import DashboardProductsSection from "./sections/DashboardProductsSection";
+import DashboardCouponCodesSection from "./sections/DashboardCouponCodesSection";
+import RefundsSection from "./sections/RefundsSection";
 import DashboardEventsSection from "./sections/DashboardEventsSection";
+import DashboardSettingsSection from "./sections/DashboardSettingsSection";
 import CreateProductDialog from "./CreateProductDialog";
+import CreateCouponCodeDialog from "./CreateCouponCodeDialog";
 import CreateEventDialog from "./CreateEventDialog";
 
 export {
@@ -41,4 +45,8 @@ export {
   DashboardEventsSection,
   CreateProductDialog,
   CreateEventDialog,
+  CreateCouponCodeDialog,
+  DashboardCouponCodesSection,
+  DashboardSettingsSection,
+  RefundsSection,
 };

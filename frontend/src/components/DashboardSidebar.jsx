@@ -20,6 +20,9 @@ import {
   SidebarMenuItem,
 } from "@/shadcn/sidebar";
 import { Link } from "react-router";
+import { SidebarFooter, SidebarHeader } from "../shadcn/sidebar";
+
+import Logo from "../assets/images/logo.png";
 
 // Menu items.
 const items = [
@@ -54,18 +57,18 @@ const items = [
     icon: MessageCircleMoreIcon,
   },
   {
-    title: "Discount Codes",
-    url: "#",
+    title: "Coupon Codes",
+    url: "/dashboard/coupon-codes",
     icon: GiftIcon,
   },
   {
     title: "Refunds",
-    url: "#",
+    url: "/dashboard/refunds",
     icon: SendToBackIcon,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/dashboard/settings",
     icon: Settings,
   },
 ];
@@ -73,7 +76,12 @@ const items = [
 const DashboardSidebar = () => {
   return (
     <Sidebar className="text-l">
-      <SidebarContent>
+      <SidebarContent className="flex  ">
+        <SidebarHeader className={"border-b-2 border-dark "}>
+          <Link className="text-4xl xl:text-5xl font-black  py-2 " to="/">
+            Swift<span className="text-primary">Cart</span>
+          </Link>
+        </SidebarHeader>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -90,6 +98,16 @@ const DashboardSidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarFooter className="border-t-2 flex flex-row items-center mt-auto">
+          <img
+            src={Logo}
+            className="w-12 h-12 rounded-full border-2 border-dark"
+          />
+          <div>
+            <p className="font-bold">Hyper products</p>
+            <p className="">Rating</p>
+          </div>
+        </SidebarFooter>
       </SidebarContent>
     </Sidebar>
   );

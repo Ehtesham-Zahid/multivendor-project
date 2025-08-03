@@ -14,7 +14,7 @@ const RefundsSection = () => {
     <div className="w-full  h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="text-primary">
             <TableHead className="w-[100px]">ORDER ID</TableHead>
             <TableHead>DATE</TableHead>
             <TableHead>PAYMENT STATUS</TableHead>
@@ -31,7 +31,7 @@ const RefundsSection = () => {
             <TableCell>Delivered</TableCell>
             <TableCell>$250.00</TableCell>{" "}
             <TableCell>
-              <ArrowRight className="ml-auto" />
+              <ArrowRight className="ml-auto text-primary" />
             </TableCell>
           </TableRow>
           <TableRow>
@@ -41,7 +41,7 @@ const RefundsSection = () => {
             <TableCell>Dispatched</TableCell>
             <TableCell>$250.00</TableCell>
             <TableCell>
-              <ArrowRight className="ml-auto" />
+              <ArrowRight className="ml-auto text-primary" />
             </TableCell>
           </TableRow>
         </TableBody>

@@ -26,6 +26,9 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import DashboardOrdersPage from "./pages/DashboardOrdersPage.jsx";
 import DashboardProductsPage from "./pages/DashboardProductsPage.jsx";
 import DashboardEventsPage from "./pages/DashboardEventsPage.jsx";
+import DashboardCouponCodesPage from "./pages/DashboardCouponCodesPage.jsx";
+import DashboardRefundsPage from "./pages/DashboardRefundsPage.jsx";
+import DashboardSettingsPage from "./pages/DashboardSettingsPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -59,7 +62,10 @@ let router = createBrowserRouter([
       { path: "orders", Component: DashboardOrdersPage },
       { path: "products", Component: DashboardProductsPage },
       { path: "events", Component: DashboardEventsPage },
+      { path: "coupon-codes", Component: DashboardCouponCodesPage },
+      { path: "refunds", Component: DashboardRefundsPage },
       { path: "withdraw-money", Component: ProfilePage },
+      { path: "settings", Component: DashboardSettingsPage },
       { path: "category/:cateogry", Component: CategoryPage },
       { path: "product/:productId", Component: SingleProductPage },
     ],
