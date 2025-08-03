@@ -25,6 +25,7 @@ import DashboardLayout from "./pages/DashboardLayout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import DashboardOrdersPage from "./pages/DashboardOrdersPage.jsx";
 import DashboardProductsPage from "./pages/DashboardProductsPage.jsx";
+import DashboardEventsPage from "./pages/DashboardEventsPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -57,7 +58,7 @@ let router = createBrowserRouter([
       { index: true, Component: DashboardPage },
       { path: "orders", Component: DashboardOrdersPage },
       { path: "products", Component: DashboardProductsPage },
-      { path: "events", Component: AllEventsPage },
+      { path: "events", Component: DashboardEventsPage },
       { path: "withdraw-money", Component: ProfilePage },
       { path: "category/:cateogry", Component: CategoryPage },
       { path: "product/:productId", Component: SingleProductPage },

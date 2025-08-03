@@ -5,6 +5,7 @@ import Slider from "./Slider";
 import AuthForm from "./AuthForm";
 import CreateShopForm from "./CreateShopForm";
 import EmailVerification from "./EmailVerification";
+// import CreateProductDialog from "./CreateProductDialog";
 import Categories from "./sections/Categories";
 import BestSelling from "./sections/BestSelling";
 import FeaturedProducts from "./sections/FeaturedProducts";
@@ -13,8 +14,11 @@ import AllEvents from "./sections/AllEvents";
 import CategoryProductsSection from "./sections/CategoryProductsSection";
 import SingleProductSection from "./sections/SingleProductSection";
 import DashboardSection from "./sections/DashboardSection";
-import OrdersSection from "../components/sections/OrdersSection";
-import DashboardProductsSection from "../components/sections/DashboardProductsSection";
+import OrdersSection from "./sections/OrdersSection";
+import DashboardProductsSection from "./sections/DashboardProductsSection";
+import DashboardEventsSection from "./sections/DashboardEventsSection";
+import CreateProductDialog from "./CreateProductDialog";
+import CreateEventDialog from "./CreateEventDialog";
 
 export {
   Header,
@@ -34,4 +38,7 @@ export {
   DashboardSection,
   OrdersSection,
   DashboardProductsSection,
+  DashboardEventsSection,
+  CreateProductDialog,
+  CreateEventDialog,
 };

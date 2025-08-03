@@ -40,7 +40,7 @@ const items = [
   },
   {
     title: "Events",
-    url: "#",
+    url: "/dashboard/events",
     icon: Search,
   },
   {

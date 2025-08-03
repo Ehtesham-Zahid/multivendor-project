@@ -20,13 +20,13 @@ import {
   Trash2,
 } from "lucide-react";
 
-const DashboardProductsSection = () => {
+const DashboardEventsSection = () => {
   return (
     <div className="w-full h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
       <Table>
         <TableHeader>
           <TableRow className="text-primary">
-            <TableHead className="w-[100px]">PRODUCT ID</TableHead>
+            <TableHead className="w-[100px]">EVENT ID</TableHead>
             <TableHead>NAME</TableHead>
             <TableHead>PRICE</TableHead>
             <TableHead>STOCK</TableHead>
@@ -69,4 +69,4 @@ const DashboardProductsSection = () => {
   );
 };
 
-export default DashboardProductsSection;
+export default DashboardEventsSection;
