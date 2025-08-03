@@ -38,7 +38,7 @@ const orderSchema = mongoose.Schema(
     paymentMethod: {
       type: String,
       required: [true, "Please add a payment method"],
-      default: "Cash on delievery",
+      default: "Cash on delivery",
     },
     deliveryStatus: {
       type: String,
@@ -48,6 +48,7 @@ const orderSchema = mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     shippingAddress: {
       type: mongoose.Schema.Types.ObjectId,

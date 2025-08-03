@@ -142,4 +142,62 @@ const me = asyncHandler(async (req, res) => {
   res.status(200).json(req.user);
 });
 
-module.exports = { registerUser, loginUser, verifyToken, me };
+const updateMe = asyncHandler(async (req, res) => {
+  const user = req.user;
+
+  // Only allow specific fields to be updated
+  const { fullname } = req.body;
+
+  if (fullname) user.fullname = fullname;
+
+  if (req.file) {
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+    const { original } = await uploadAvatar(dataURI, user._id, "user_logos");
+    user.imageUrl = original;
+    console.log("MAIN ANDER HU");
+  }
+
+  await user.save();
+
+  res.status(200).json(user);
+});
+
+const changePassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+
+  if (!oldPassword || !newPassword) {
+    res.status(400);
+    throw new Error("Please provide both old and new passwords");
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    res.status(400);
+    throw new Error("Invalid old password");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(newPassword, salt);
+
+  await user.save();
+
+  res.status(200).json({
+    message: "Password changed successfully",
+  });
+});
+
+module.exports = {
+  registerUser,
+  loginUser,
+  verifyToken,
+  me,
+  updateMe,
+  changePassword,
+};

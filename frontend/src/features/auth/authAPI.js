@@ -19,3 +19,15 @@ export const getMe = async () => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const updateMeAPI = async (data) => {
+  return await API.patch(`/users/update-me`, data, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};
+
+export const changePasswordAPI = async (data) => {
+  return await API.patch(`/users/change-password`, data, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};

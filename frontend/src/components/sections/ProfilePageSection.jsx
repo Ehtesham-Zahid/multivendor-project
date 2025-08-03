@@ -7,9 +7,12 @@ import OrdersSection from "./OrdersSection";
 import ProfileSection from "./ProfileSection";
 import RefundsSection from "./RefundsSection";
 import TrackOrderSection from "./TrackOrderSection";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const ProfilePageSection = () => {
   const { currentProfilePageSection } = useSelector((state) => state.profile);
+
   let section = <ProfileSection />;
   if (currentProfilePageSection === "profile") {
     section = <ProfileSection />;

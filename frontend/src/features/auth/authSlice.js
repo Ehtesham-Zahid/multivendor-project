@@ -1,5 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getMe, login, register, verifyToken } from "./authAPI";
+import {
+  changePasswordAPI,
+  getMe,
+  login,
+  register,
+  updateMeAPI,
+  verifyToken,
+} from "./authAPI";
 
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -42,7 +49,30 @@ export const getCurrentUser = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await getMe(data);
-      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const updateMeThunk = createAsyncThunk(
+  "auth/updateMe",
+  async (data, thunkAPI) => {
+    try {
+      const res = await updateMeAPI(data);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const changePasswordThunk = createAsyncThunk(
+  "auth/changePassword",
+  async (data, thunkAPI) => {
+    try {
+      const res = await changePasswordAPI(data);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -127,6 +157,37 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.success = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(updateMeThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateMeThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.user = action.payload;
+      })
+      .addCase(updateMeThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.success = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(changePasswordThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(changePasswordThunk.fulfilled, (state) => {
+        state.isLoading = false;
+        state.success = true;
+      })
+      .addCase(changePasswordThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
         state.error = action.payload;

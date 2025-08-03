@@ -28,9 +28,10 @@ import {
   SidebarMenuItem,
 } from "@/shadcn/sidebar";
 import { SidebarProvider } from "../shadcn/sidebar";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { profilePageSection } from "../features/profile/profileSlice";
+import { logout } from "../features/auth/authSlice";
 
 // Menu items.
 const items = [
@@ -62,7 +63,13 @@ const items = [
 ];
 
 const ProfileSidebar = () => {
+  let navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
   return (
     <div className="bg-white shadow-2xl w-64 rounded-md p-5">
       <ul className="flex flex-col gap-8 text-lg">
@@ -123,7 +130,10 @@ const ProfileSidebar = () => {
           </Link>
         </li>
         <li>
-          <Link className="flex font-medium gap-3 items-center">
+          <Link
+            className="flex font-medium gap-3 items-center"
+            onClick={logoutHandler}
+          >
             <LogOut size={20} className="rotate-180" /> Log out
           </Link>
         </li>
