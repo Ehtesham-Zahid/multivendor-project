@@ -31,7 +31,8 @@ import { SidebarProvider } from "../shadcn/sidebar";
 import { Link, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { profilePageSection } from "../features/profile/profileSlice";
-import { logout } from "../features/auth/authSlice";
+import { logoutThunk } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 // Menu items.
 const items = [
@@ -66,9 +67,14 @@ const ProfileSidebar = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const logoutHandler = () => {
-    dispatch(logout());
-    navigate("/");
+  const logoutHandler = async () => {
+    const resultAction = await dispatch(logoutThunk());
+    if (logoutThunk.fulfilled.match(resultAction)) {
+      toast.success("Logged Out Successfully");
+      navigate("/");
+    } else {
+      toast.error("Error in logging out");
+    }
   };
   return (
     <div className="bg-white shadow-2xl w-64 rounded-md p-5">

@@ -31,3 +31,13 @@ export const changePasswordAPI = async (data) => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const logoutAPI = async () => {
+  return await API.post(
+    `/users/logout`,
+    {},
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
+};

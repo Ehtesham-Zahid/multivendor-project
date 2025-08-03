@@ -3,6 +3,7 @@ import {
   changePasswordAPI,
   getMe,
   login,
+  logoutAPI,
   register,
   updateMeAPI,
   verifyToken,
@@ -80,6 +81,18 @@ export const changePasswordThunk = createAsyncThunk(
   }
 );
 
+export const logoutThunk = createAsyncThunk(
+  "auth/logout",
+  async (_, thunkAPI) => {
+    try {
+      const res = await logoutAPI();
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   user: null,
   isLoading: false,
@@ -91,9 +104,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout(state) {
-      state.user = null;
-    },
     resetError(state) {
       state.error = null;
     },
@@ -192,8 +202,24 @@ const authSlice = createSlice({
         state.success = false;
         state.error = action.payload;
       });
+    builder
+      .addCase(logoutThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(logoutThunk.fulfilled, (state) => {
+        state.isLoading = false;
+        state.success = true;
+        state.user = null;
+      })
+      .addCase(logoutThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.success = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { logout, resetError } = authSlice.actions;
+export const { resetError } = authSlice.actions;
 export default authSlice.reducer;

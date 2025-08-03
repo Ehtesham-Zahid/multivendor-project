@@ -8,6 +8,7 @@ const {
   me,
   updateMe,
   changePassword,
+  logout,
 } = require("../controllers/userControllers.js");
 
 const upload = require("../middlewares/uploadMiddleware.js");
@@ -19,5 +20,6 @@ router.get("/verify-token/:token", verifyToken);
 router.get("/me", protect, me);
 router.patch("/update-me", upload.single("image"), protect, updateMe);
 router.patch("/change-password", protect, changePassword);
+router.post("/logout", protect, logout);
 
 module.exports = router;
