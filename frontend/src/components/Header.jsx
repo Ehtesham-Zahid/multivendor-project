@@ -59,7 +59,7 @@ const Header = () => {
           user.hasShop ? (
             <Link
               className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5"
-              to="/shop/:id"
+              to="/dashboard"
             >
               Go To Shop <ArrowRight />
             </Link>

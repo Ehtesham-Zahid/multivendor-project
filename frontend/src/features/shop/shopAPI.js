@@ -6,8 +6,8 @@ export const createShopApi = async (shopData) => {
   });
 };
 
-export const getShopApi = async (shopId) => {
-  return await API.get(`/shops/${shopId}`, {
+export const getCurrentUserShopApi = async () => {
+  return await API.get(`/shops/getCurrentUserShop`, {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };

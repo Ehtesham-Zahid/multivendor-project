@@ -6,12 +6,14 @@ const {
   updateProduct,
   getProductById,
   getAllProducts,
+  getProductsByShop,
 } = require("../controllers/productControllers");
 const { protect } = require("../middlewares/authMiddleware");
 const upload = require("../middlewares/uploadMiddleware");
 
 router.post("/", protect, upload.array("images"), createProduct);
 router.get("/", getAllProducts);
+router.get("/getProductsByShop", protect, getProductsByShop);
 router.get("/:productId", getProductById);
 router.patch("/:productId", updateProduct);
 router.delete("/:productId", deleteProduct);

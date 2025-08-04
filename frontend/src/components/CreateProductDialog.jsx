@@ -16,6 +16,7 @@ import { createProductThunk } from "../features/product/productSlice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { set } from "mongoose";
+import { DialogClose } from "../shadcn/dialog";
 
 const CreateProductDialog = () => {
   const { isLoading, error } = useSelector((state) => state.product);
@@ -29,6 +30,7 @@ const CreateProductDialog = () => {
 
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
+  const [open, setOpen] = useState(false);
   const [categoryValue, setCategoryValue] = useState("");
 
   const handleImageChange = (e) => {
@@ -80,6 +82,7 @@ const CreateProductDialog = () => {
         reset(); // reset form
         setImages([]);
         setPreviews([]);
+        setOpen(false);
       } else {
         toast.error("Something went wrong.");
       }
@@ -89,7 +92,7 @@ const CreateProductDialog = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button className="bg-primary text-white text-md" size="lg">
           Create Product <Plus className="ml-2" />

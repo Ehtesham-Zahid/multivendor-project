@@ -1,11 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createProductApi } from "./productAPI";
+import { createProductApi, getProductsByShopApi } from "./productAPI";
 
 export const createProductThunk = createAsyncThunk(
   "product/createProduct",
   async (data, thunkAPI) => {
     try {
       const res = await createProductApi(data);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getProductsByShopThunk = createAsyncThunk(
+  "product/getProductsByShop",
+  async (_, thunkAPI) => {
+    try {
+      const res = await getProductsByShopApi();
       console.log(res);
       return res.data;
     } catch (error) {
@@ -37,8 +50,25 @@ const productSlice = createSlice({
         state.isLoading = false;
         // state.shop = action.payload;
         state.success = true;
+        state.shopProducts.push(action.payload);
       })
       .addCase(createProductThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getProductsByShopThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getProductsByShopThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.shopProducts = action.payload;
+        state.success = true;
+      })
+      .addCase(getProductsByShopThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

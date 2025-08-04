@@ -43,10 +43,9 @@ const createShop = asyncHandler(async (req, res) => {
   res.status(201).json(shop);
 });
 
-const getShop = asyncHandler(async (req, res) => {
-  const { shopId } = req.params;
-
-  const shop = await Shop.findById(shopId);
+const getCurrentUserShop = asyncHandler(async (req, res) => {
+  console.log(req.user);
+  const shop = await Shop.findById(req.user.shopId);
   if (!shop) {
     res.status(404);
     throw new Error("Invalid Shop Id");
@@ -113,7 +112,7 @@ const getAllShops = asyncHandler(async (req, res) => {
 
 module.exports = {
   createShop,
-  getShop,
+  getCurrentUserShop,
   updateShop,
   deleteShop,
   getAllShops,

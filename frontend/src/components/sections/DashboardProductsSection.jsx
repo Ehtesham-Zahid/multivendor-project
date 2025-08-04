@@ -8,10 +8,18 @@ import {
   TableRow,
 } from "@/shadcn/table";
 import { Edit, Trash2 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductsByShopThunk } from "../../features/product/productSlice";
+import Spinner from "../Spinner";
 
 const DashboardProductsSection = () => {
-  const { shop } = useSelector((state) => state.shop);
+  const { shopProducts, isLoading } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProductsByShopThunk());
+  }, []);
 
   return (
     <div className="w-full h-[500px] overflow-y-scroll rounded-sm p-3 shadow-2xl">
@@ -28,8 +36,12 @@ const DashboardProductsSection = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {shop?.products?.length > 0 ? (
-            shop.products.map((product) => (
+          {isLoading ? (
+            <div className="w-full h-full flex justify-center items-center">
+              <Spinner />
+            </div>
+          ) : shopProducts?.length > 0 ? (
+            shopProducts.map((product) => (
               <TableRow key={product._id || product.id}>
                 <TableCell className="font-medium">
                   {product._id || "PRD001"}

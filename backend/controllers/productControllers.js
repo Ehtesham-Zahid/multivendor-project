@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
+const Shop = require("../models/shopModel");
 const uploadAvatar = require("../utils/cloudinary");
 
 const createProduct = asyncHandler(async (req, res) => {
@@ -65,6 +66,15 @@ const createProduct = asyncHandler(async (req, res) => {
     await product.save(); // Save updated product with images
   }
 
+  const shop = await Shop.findById(req.user.shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+
+  shop.products.push(product._id);
+  await shop.save();
+
   res.status(201).json(product);
 });
 
@@ -111,8 +121,10 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 const getProductsByShop = asyncHandler(async (req, res) => {
-  const { shopId } = req.params;
-  const products = await Product.find({ shopId, isDeleted: false });
+  const products = await Product.find({
+    shopId: req.user.shopId,
+    isDeleted: false, // ✅ Add this
+  });
 
   res.status(200).json(products);
 });

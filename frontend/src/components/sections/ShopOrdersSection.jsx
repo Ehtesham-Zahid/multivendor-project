@@ -49,7 +49,7 @@ const ShopOrdersSection = () => {
             <TableRow>
               <TableCell
                 colSpan={6}
-                className="text-center py-6 font-semibold text-lg"
+                className="text-center py-6 font-semibold text-md"
               >
                 No orders yet.
               </TableCell>
