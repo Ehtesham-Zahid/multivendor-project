@@ -14,7 +14,7 @@ import { CATEGORIES } from "@/constants/";
 
 const CategorySelector = ({ setCategoryValue }) => {
   return (
-    <Select>
+    <Select onValueChange={setCategoryValue}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />
       </SelectTrigger>
@@ -23,11 +23,7 @@ const CategorySelector = ({ setCategoryValue }) => {
           {/* <SelectLabel>CATEGORY</SelectLabel> */}
           {CATEGORIES.map((category) => {
             return (
-              <SelectItem
-                value={category.name}
-                className="hover:bg-sky-200"
-                onClick={(e) => setCategoryValue(e.target.value)}
-              >
+              <SelectItem value={category.name} className="hover:bg-sky-200">
                 {category.name}
               </SelectItem>
             );

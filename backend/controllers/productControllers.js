@@ -24,15 +24,28 @@ const createProduct = asyncHandler(async (req, res) => {
     throw new Error("Product name already exists");
   }
 
-  const product = await Product.create({
-    name,
-    description,
-    price,
-    discountPrice,
-    stock,
-    category,
-    shopId: req.user.shopId,
-  });
+  if (discountPrice >= price) {
+    res.status(400);
+    throw new Error(
+      "Discount price cannot be greater than or equal to original price"
+    );
+  }
+
+  let product;
+  try {
+    product = await Product.create({
+      name,
+      description,
+      price,
+      discountPrice,
+      stock,
+      category,
+      shopId: req.user.shopId,
+    });
+  } catch (err) {
+    res.status(400);
+    throw new Error(err.message || "Invalid product data");
+  }
 
   // Step 2: Handle image uploads if files exist
   if (req.files && req.files.length > 0) {

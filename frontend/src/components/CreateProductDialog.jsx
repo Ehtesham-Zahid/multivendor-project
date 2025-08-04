@@ -55,6 +55,11 @@ const CreateProductDialog = () => {
       return;
     }
 
+    if (!categoryValue) {
+      toast.error("Please select a category.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
@@ -108,6 +113,11 @@ const CreateProductDialog = () => {
                 placeholder="Enter product name"
                 {...register("name", { required: true })}
               />
+              {errors.name && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
             </div>
 
             {/* Description */}
@@ -119,7 +129,12 @@ const CreateProductDialog = () => {
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
                 placeholder="Enter product description"
                 {...register("description", { required: true })}
-              />
+              />{" "}
+              {errors.description && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
             </div>
 
             {/* Category Selector */}
@@ -136,6 +151,11 @@ const CreateProductDialog = () => {
                 placeholder="Enter original price"
                 {...register("price", { required: true })}
               />
+              {errors.price && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
             </div>
 
             {/* Discounted Price */}
@@ -148,7 +168,12 @@ const CreateProductDialog = () => {
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
                 placeholder="Enter discounted price"
                 {...register("discountPrice", { required: true })}
-              />
+              />{" "}
+              {errors.discountPrice && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
             </div>
 
             {/* Stock */}
@@ -161,7 +186,12 @@ const CreateProductDialog = () => {
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
                 placeholder="Enter product stock"
                 {...register("stock", { required: true })}
-              />
+              />{" "}
+              {errors.stock && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
             </div>
 
             {/* Image Upload */}
@@ -198,7 +228,6 @@ const CreateProductDialog = () => {
                   multiple
                   accept="image/*"
                   className="sr-only"
-                  // {...register("images", { required: true })}
                   onChange={handleImageChange}
                 />
               </label>
