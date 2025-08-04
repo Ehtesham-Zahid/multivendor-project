@@ -2,6 +2,24 @@ const mongoose = require("mongoose");
 
 const eventSchema = mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: [true, "Event Name is required"],
+    },
+    originalPrice: {
+      type: Number,
+      required: [true, "Original Price is required"],
+    },
+    eventPrice: {
+      type: Number,
+      required: [true, "Event Price is required"],
+      validate: {
+        validator: function (value) {
+          return value < this.originalPrice;
+        },
+        message: "Event Price must be less than Original Price",
+      },
+    },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",

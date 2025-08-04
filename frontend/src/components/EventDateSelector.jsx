@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@/shadcn/button";
@@ -23,11 +23,19 @@ function isValidDate(date) {
   return date instanceof Date && !isNaN(date.getTime());
 }
 
-const EventDateSelector = ({ title }) => {
+const EventDateSelector = ({ title, onDateChange }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date("2025-06-01"));
   const [month, setMonth] = useState(date);
   const [value, setValue] = useState(formatDate(date));
+
+  console.log(value);
+
+  useEffect(() => {
+    if (isValidDate(date)) {
+      onDateChange?.(date); // notify parent
+    }
+  }, [date]); // only trigger when `date` changes
 
   return (
     <div className="flex flex-col gap-1 bg-background">

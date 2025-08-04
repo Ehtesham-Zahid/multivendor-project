@@ -19,8 +19,16 @@ import {
   Trash,
   Trash2,
 } from "lucide-react";
+import { getProductsByShopThunk } from "../../features/product/productSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const DashboardEventsSection = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProductsByShopThunk());
+  }, []);
+
   return (
     <div className="w-full h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
       <Table>

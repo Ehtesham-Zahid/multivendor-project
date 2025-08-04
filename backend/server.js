@@ -11,7 +11,8 @@ const productRouter = require("./routes/productRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
 const cartRouter = require("./routes/cartRoutes");
 const orderRouter = require("./routes/orderRoutes");
-const addressesRouter = require("./routes/addressesRoutes");
+const addressesRouter = require("./routes/addressRoutes");
+const eventRouter = require("./routes/eventRoutes");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -58,6 +59,7 @@ app.use("/api/reviews", reviewRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/addresses", addressesRouter);
+app.use("/api/events", eventRouter);
 
 app.use(errorHandler);
 

@@ -5,19 +5,37 @@ const Event = require("../models/eventModel");
 // @route   POST /api/events
 // @access  Private (seller only)
 const createEvent = asyncHandler(async (req, res) => {
-  const { productId, startDate, endDate } = req.body;
+  const { name, originalPrice, eventPrice, productId, startDate, endDate } =
+    req.body;
 
-  if (!productId || !startDate || !endDate) {
+  if (
+    !name ||
+    !originalPrice ||
+    !eventPrice ||
+    !productId ||
+    !startDate ||
+    !endDate
+  ) {
     res.status(400);
     throw new Error("All fields are required");
   }
 
-  const event = await Event.create({
-    productId,
-    startDate,
-    endDate,
-    shopId: req.user.shopId,
-  });
+  let event;
+
+  try {
+    event = await Event.create({
+      name,
+      originalPrice,
+      eventPrice,
+      productId,
+      startDate,
+      endDate,
+      shopId: req.user.shopId,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message || "Server error while creating event");
+  }
 
   res.status(201).json(event);
 });
