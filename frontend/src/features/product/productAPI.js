@@ -11,3 +11,15 @@ export const getProductsByShopApi = async () => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const updateProductApi = async (id, data) => {
+  return await API.patch(`/products/${id}`, data, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};
+
+export const deleteProductApi = async (id) => {
+  return await API.delete(`/products/${id}`, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};

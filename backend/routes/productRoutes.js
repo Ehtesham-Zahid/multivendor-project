@@ -15,7 +15,7 @@ router.post("/", protect, upload.array("images"), createProduct);
 router.get("/", getAllProducts);
 router.get("/getProductsByShop", protect, getProductsByShop);
 router.get("/:productId", getProductById);
-router.patch("/:productId", updateProduct);
+router.patch("/:productId", protect, upload.array("images"), updateProduct);
 router.delete("/:productId", deleteProduct);
 
 module.exports = router;

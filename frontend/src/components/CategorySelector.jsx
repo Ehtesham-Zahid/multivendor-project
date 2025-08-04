@@ -12,9 +12,9 @@ import {
 
 import { CATEGORIES } from "@/constants/";
 
-const CategorySelector = ({ setCategoryValue }) => {
+const CategorySelector = ({ setCategoryValue, defaultValue }) => {
   return (
-    <Select onValueChange={setCategoryValue}>
+    <Select onValueChange={setCategoryValue} defaultValue={defaultValue}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a Category" />
       </SelectTrigger>

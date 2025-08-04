@@ -93,21 +93,62 @@ const getProductById = asyncHandler(async (req, res) => {
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const { name, description, price, discountPrice, stock, category } = req.body;
+
+  console.log("HEY BUDDY", req.body);
+
+  const product = await Product.findById(req.params.productId);
 
   if (!product || product.isDeleted) {
     res.status(404);
     throw new Error("Product not found");
   }
 
-  Object.assign(product, req.body);
-  await product.save();
+  // Optional: Ensure product belongs to the same shop
+  if (String(product.shopId) !== String(req.user.shopId)) {
+    res.status(403);
+    throw new Error("You are not allowed to update this product");
+  }
 
-  res.status(200).json(product);
+  // Validation: prevent invalid updates
+  if (discountPrice && price && discountPrice >= price) {
+    res.status(400);
+    throw new Error(
+      "Discount price cannot be greater than or equal to original price"
+    );
+  }
+
+  // Assign updated fields (if provided)
+  product.name = name || product.name;
+  product.description = description || product.description;
+  product.price = price || product.price;
+  product.discountPrice = discountPrice || product.discountPrice;
+  product.stock = stock || product.stock;
+  product.category = category || product.category;
+
+  // Handle new image uploads if any
+  if (req.files && req.files.length > 0) {
+    const imageUploadPromises = req.files.map(async (image, index) => {
+      const b64 = Buffer.from(image.buffer).toString("base64");
+      const dataURI = `data:${image.mimetype};base64,${b64}`;
+      const { original } = await uploadAvatar(
+        dataURI,
+        `${product._id}-updated-${index}`,
+        "product_images"
+      );
+      return original;
+    });
+
+    const newImages = await Promise.all(imageUploadPromises);
+    product.images = newImages; // overwrite existing images
+  }
+
+  const updatedProduct = await product.save();
+  res.status(200).json(updatedProduct);
 });
 
 const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.productId);
 
   if (!product || product.isDeleted) {
     res.status(404);

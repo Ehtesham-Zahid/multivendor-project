@@ -1,0 +1,264 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shadcn/dialog";
+
+import { Button } from "../shadcn/button";
+import { Edit, Edit2, Loader2, Pencil, Plus, X } from "lucide-react";
+import CategorySelector from "./CategorySelector";
+import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { updateProductThunk } from "../features/product/productSlice";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+
+const UpdateProductDialog = ({ product }) => {
+  const { isLoading, error } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  const [images, setImages] = useState([]);
+  const [previews, setPreviews] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [categoryValue, setCategoryValue] = useState(product.category);
+
+  useEffect(() => {
+    if (product) {
+      setValue("name", product.name);
+      setValue("description", product.description);
+      setValue("price", product.price);
+      setValue("discountPrice", product.discountPrice);
+      setValue("stock", product.stock);
+      setCategoryValue(product.category);
+      setPreviews(product.images || []);
+    }
+  }, [product, setValue]);
+
+  const handleImageChange = (e) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+    setImages(fileArray);
+
+    const previewUrls = fileArray.map((file) => URL.createObjectURL(file));
+    setPreviews(previewUrls);
+  };
+
+  const removeImage = (index) => {
+    const newPreviews = previews.filter((_, i) => i !== index);
+    setPreviews(newPreviews);
+  };
+
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("category", categoryValue);
+    formData.append("stock", data.stock);
+    formData.append("price", data.price);
+    formData.append("discountPrice", data.discountPrice);
+
+    images.forEach((img) => {
+      formData.append("images", img);
+    });
+
+    try {
+      const resultAction = await dispatch(
+        updateProductThunk({ id: product._id, data: formData })
+      );
+
+      if (updateProductThunk.fulfilled.match(resultAction)) {
+        toast.success("Product Updated!");
+        setOpen(false);
+      } else {
+        toast.error("Failed to update product.");
+      }
+    } catch (err) {
+      toast.error("Error updating product.");
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger>
+        <Edit className="" size={20} />
+      </DialogTrigger>
+      <DialogContent className="w-fit">
+        <DialogHeader>
+          <DialogTitle className="mb-5 font-bold">Update Product</DialogTitle>
+          <form
+            className="flex flex-col gap-5"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            {/* Same input fields as before, omitted for brevity */}
+            {/* Product Name */}
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600">
+                Product Name
+              </label>
+              <input
+                type="text"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                placeholder="Enter product name"
+                {...register("name", { required: true })}
+              />
+              {errors.name && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
+            </div>
+
+            {/* Description */}
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600">
+                Description
+              </label>
+              <textarea
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                placeholder="Enter product description"
+                {...register("description", { required: true })}
+              />{" "}
+              {errors.description && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
+            </div>
+
+            {/* Category Selector */}
+            <CategorySelector
+              setCategoryValue={setCategoryValue}
+              defaultValue={categoryValue}
+            />
+
+            {/* Original Price */}
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600">
+                Original Price
+              </label>
+              <input
+                type="number"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                placeholder="Enter original price"
+                {...register("price", { required: true })}
+              />
+              {errors.price && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
+            </div>
+
+            {/* Discounted Price */}
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600">
+                Discounted Price
+              </label>
+              <input
+                type="number"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                placeholder="Enter discounted price"
+                {...register("discountPrice", { required: true })}
+              />{" "}
+              {errors.discountPrice && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
+            </div>
+
+            {/* Stock */}
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600">
+                Product Stock
+              </label>
+              <input
+                type="number"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                placeholder="Enter product stock"
+                {...register("stock", { required: true })}
+              />{" "}
+              {errors.stock && (
+                <span className="text-red-500 text-sm font-semibold">
+                  This field is required
+                </span>
+              )}
+            </div>
+
+            {/* Image Upload */}
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600 mb-1">
+                Product Images
+              </label>
+              <div className="flex items-center gap-5 flex-wrap">
+                {previews.map((preview, index) => (
+                  <div key={index} className="relative w-20 h-20">
+                    <img
+                      src={preview}
+                      alt={`Preview ${index}`}
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <label
+                htmlFor="file-input"
+                className="mt-3 inline-flex items-center gap-1 p-1.5 px-3 border-2 border-zinc-300 rounded-md cursor-pointer w-fit text-sm"
+              >
+                Upload Images <Plus size={16} />
+                <input
+                  id="file-input"
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={handleImageChange}
+                />
+              </label>
+            </div>
+
+            {error ? (
+              <p className="text-center text-danger font-bold text-sm mt-2">
+                {error}
+              </p>
+            ) : null}
+
+            {/* Submit Button */}
+            <Button
+              disabled={isLoading}
+              type="submit"
+              className={"text-white text-md cursor-pointer w-full mt-3"}
+            >
+              {isLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <p>Update</p>
+              )}
+            </Button>
+          </form>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default UpdateProductDialog;
