@@ -13,8 +13,8 @@ const { protect } = require("../middlewares/authMiddleware");
 router.post("/", protect, createEvent);
 router.get("/getActiveEvents", getActiveEvents);
 router.get("/getShopEvents", protect, getShopEvents);
-router.patch("/:id", protect, updateEvent);
-router.delete("/:id", protect, deleteEvent);
-router.get("/:id", getEventById);
+router.patch("/:eventId", protect, updateEvent);
+router.delete("/:eventId", protect, deleteEvent);
+router.get("/:eventId", getEventById);
 
 module.exports = router;

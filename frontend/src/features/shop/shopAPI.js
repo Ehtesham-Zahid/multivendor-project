@@ -11,3 +11,9 @@ export const getCurrentUserShopApi = async () => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const updateCurrentUserShopApi = async (shopData) => {
+  return await API.patch(`/shops/updateCurrentUserShop`, shopData, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};

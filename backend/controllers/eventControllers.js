@@ -70,15 +70,18 @@ const getEventById = asyncHandler(async (req, res) => {
 // @route   PUT /api/events/:id
 // @access  Private (seller only)
 const updateEvent = asyncHandler(async (req, res) => {
-  const event = await Event.findById(req.params.id);
+  const event = await Event.findById(req.params.eventId);
 
   if (!event) {
     res.status(404);
     throw new Error("Event not found");
   }
 
-  const { productId, startDate, endDate, shopId, isActive } = req.body;
+  const { name, productId, startDate, endDate, shopId, isActive } = req.body;
 
+  event.name = name || event.name;
+  event.originalPrice = req.body.originalPrice || event.originalPrice;
+  event.eventPrice = req.body.eventPrice || event.eventPrice;
   event.productId = productId || event.productId;
   event.startDate = startDate || event.startDate;
   event.endDate = endDate || event.endDate;
@@ -93,14 +96,14 @@ const updateEvent = asyncHandler(async (req, res) => {
 // @route   DELETE /api/events/:id
 // @access  Private (seller only)
 const deleteEvent = asyncHandler(async (req, res) => {
-  const event = await Event.findById(req.params.id);
+  const event = await Event.findById(req.params.eventId);
 
   if (!event) {
     res.status(404);
     throw new Error("Event not found");
   }
 
-  await event.remove();
+  await event.deleteOne();
   res.json({ message: "Event deleted successfully" });
 });
 

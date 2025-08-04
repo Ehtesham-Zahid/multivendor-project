@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createShopApi, getCurrentUserShopApi } from "./shopAPI";
+import {
+  createShopApi,
+  getCurrentUserShopApi,
+  updateCurrentUserShopApi,
+} from "./shopAPI";
 
 export const createShopThunk = createAsyncThunk(
   "shop/createShop",
@@ -26,6 +30,18 @@ export const getCurrentUserShopThunk = createAsyncThunk(
   }
 );
 
+export const updateCurrentUserShopThunk = createAsyncThunk(
+  "shop/updateCurrentUserShop",
+  async (shopData, thunkAPI) => {
+    try {
+      const res = await updateCurrentUserShopApi(shopData);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const initialState = {
   shop: null,
   isLoading: false,
@@ -73,6 +89,22 @@ const shopSlice = createSlice({
         state.success = true;
       })
       .addCase(getCurrentUserShopThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(updateCurrentUserShopThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateCurrentUserShopThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.shop = action.payload;
+        state.success = true;
+      })
+      .addCase(updateCurrentUserShopThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

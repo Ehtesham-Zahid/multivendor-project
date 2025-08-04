@@ -1,11 +1,55 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createEventApi } from "./eventAPI";
+import {
+  createEventApi,
+  deleteEventApi,
+  getShopEventsApi,
+  updateEventApi,
+} from "./eventAPI";
 
 export const createEventThunk = createAsyncThunk(
   "event/createEvent",
   async (data, thunkAPI) => {
     try {
       const res = await createEventApi(data);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const deleteEventThunk = createAsyncThunk(
+  "event/deleteEvent",
+  async (eventId, thunkAPI) => {
+    try {
+      const res = await deleteEventApi(eventId);
+      console.log(res);
+      return eventId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getShopEventsThunk = createAsyncThunk(
+  "event/getShopEvents",
+  async (_, thunkAPI) => {
+    try {
+      const res = await getShopEventsApi();
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const updateEventThunk = createAsyncThunk(
+  "event/updateEvent",
+  async ({ id, data }, thunkAPI) => {
+    try {
+      const res = await updateEventApi(id, data);
       console.log(res);
       return res.data;
     } catch (error) {
@@ -39,6 +83,58 @@ const eventSlice = createSlice({
         state.shopEvents.push(action.payload);
       })
       .addCase(createEventThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getShopEventsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getShopEventsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.shopEvents = action.payload;
+      })
+      .addCase(getShopEventsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(deleteEventThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(deleteEventThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.shopEvents = state.shopEvents.filter(
+          (event) => event._id !== action.payload
+        );
+      })
+      .addCase(deleteEventThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(updateEventThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateEventThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.shopEvents = state.shopEvents.map((event) =>
+          event._id === action.payload._id ? action.payload : event
+        );
+      })
+      .addCase(updateEventThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

@@ -54,8 +54,8 @@ const getCurrentUserShop = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
-const updateShop = asyncHandler(async (req, res) => {
-  const { shopId } = req.params;
+const updateCurrentUserShop = asyncHandler(async (req, res) => {
+  const { shopId } = req.user;
   const updates = req.body;
 
   const shop = await Shop.findById(shopId);
@@ -113,7 +113,7 @@ const getAllShops = asyncHandler(async (req, res) => {
 module.exports = {
   createShop,
   getCurrentUserShop,
-  updateShop,
+  updateCurrentUserShop,
   deleteShop,
   getAllShops,
 };
