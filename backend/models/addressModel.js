@@ -2,18 +2,43 @@ const mongoose = require("mongoose");
 
 const addressSchema = mongoose.Schema(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      default: null, // Null for guest addresses
     },
-    fullName: { type: String, required: true },
-    phoneNumber: { type: String, required: true },
-    street: { type: String, required: true },
-    city: { type: String, required: true },
-    zipCode: { type: String, required: true },
-    country: { type: String, required: true },
-    isDefault: { type: Boolean, default: false },
+    fullName: {
+      type: String,
+      required: [true, "Full name is required"],
+    },
+    phoneNumber: {
+      type: String,
+      required: [true, "Phone number is required"],
+    },
+    street: {
+      type: String,
+      required: [true, "Street address is required"],
+    },
+    city: {
+      type: String,
+      required: [true, "City is required"],
+    },
+    state: {
+      type: String,
+      required: [true, "State/Province is required"],
+    },
+    zipCode: {
+      type: String,
+      required: [true, "ZIP/Postal code is required"],
+    },
+    country: {
+      type: String,
+      required: [true, "Country is required"],
+    },
+    isGuestAddress: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

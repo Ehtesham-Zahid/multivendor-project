@@ -14,9 +14,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id).select(
-      "_id fullname email imageUrl role hasShop shopId"
-    );
+    req.user = await User.findById(decoded.id).select("-password");
     next();
   } catch (error) {
     res.status(401);
@@ -24,6 +22,21 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
+const optionalAuth = asyncHandler(async (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) return next(); // No token? Guest user, continue
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.id).select("-password");
+  } catch (error) {
+    req.user = null;
+  }
+  next();
+});
+
 module.exports = {
   protect,
+  optionalAuth,
 };

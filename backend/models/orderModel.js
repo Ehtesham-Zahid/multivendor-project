@@ -30,25 +30,30 @@ const orderSchema = mongoose.Schema(
       type: Number,
       required: [true, "Total Amount is required"],
     },
-    paymentStatus: {
-      type: String,
-      required: [true, "Payment Status is required"],
-      default: "Pending",
-    },
     paymentMethod: {
       type: String,
       required: [true, "Please add a payment method"],
-      default: "Cash on delivery",
+      enum: ["paypal", "creditCard", "cashOnDelivery"],
+    },
+    paymentStatus: {
+      type: String,
+      required: [true, "Please add a payment status"],
+      enum: ["pending", "paid", "failed"],
     },
     deliveryStatus: {
       type: String,
       enum: ["pending", "fulfilled", "cancelled"],
       default: "pending",
     },
+    refundStatus: {
+      type: String,
+      enum: ["none", "requested", "approved", "rejected", "refunded"],
+      default: "none",
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      default: null,
     },
     shippingAddress: {
       type: mongoose.Schema.Types.ObjectId,
