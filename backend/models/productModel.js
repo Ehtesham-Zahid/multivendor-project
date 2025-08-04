@@ -29,10 +29,23 @@ const productSchema = mongoose.Schema(
     category: {
       type: String,
       required: [true, "Please add a category"],
+      enum: [
+        "Clothing & Shoes",
+        "Mobile & Electronics",
+        "Pet Food",
+        "Home & Kitchen",
+        "Beauty & Personal Care",
+        "Grocery & Food",
+        "Health & Fitness",
+        "Books & Stationery",
+        "Toy & Baby Items",
+        "Others",
+      ],
     },
+
     images: {
       type: [String],
-      validate: [(arr) => arr.length > 0, "At least one image is required"],
+      // validate: [(arr) => arr.length > 0, "At least one image is required"],
     },
     sold: {
       type: Number,

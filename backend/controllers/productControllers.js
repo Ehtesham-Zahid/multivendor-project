@@ -3,7 +3,6 @@ const Product = require("../models/productModel");
 const uploadAvatar = require("../utils/cloudinary");
 
 const createProduct = asyncHandler(async (req, res) => {
-  console.log(req);
   const { name, description, price, discountPrice, stock, category } = req.body;
 
   if (
@@ -35,8 +34,6 @@ const createProduct = asyncHandler(async (req, res) => {
     shopId: req.user.shopId,
   });
 
-  console.log("Bahaya", product);
-
   // Step 2: Handle image uploads if files exist
   if (req.files && req.files.length > 0) {
     const imageUploadPromises = req.files.map(async (image, index) => {
@@ -44,7 +41,7 @@ const createProduct = asyncHandler(async (req, res) => {
       const dataURI = `data:${image.mimetype};base64,${b64}`;
       const { original } = await uploadAvatar(
         dataURI,
-        `${product._id}&${index}`,
+        `${product._id}${index}`,
         "product_images"
       );
       return original;

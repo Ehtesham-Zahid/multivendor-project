@@ -21,6 +21,8 @@ const uploadAvatar = asyncHandler(async (filePath, id, folderName) => {
     height: 500,
   });
 
+  console.log("I am the original one", uploadResult.secure_url);
+
   return {
     original: uploadResult.secure_url,
     optimized: optimizeUrl,
