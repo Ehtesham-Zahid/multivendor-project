@@ -175,12 +175,22 @@ const getProductsByShop = asyncHandler(async (req, res) => {
 });
 
 const getAllProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({ isDeleted: false }).populate(
-    "shopId",
-    "shopName rating totalReviews imageUrl"
-  );
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
 
-  res.status(200).json(products);
+  const skip = (page - 1) * limit;
+
+  const filter = { isDeleted: false };
+
+  const total = await Product.countDocuments(filter);
+  const products = await Product.find(filter).skip(skip).limit(limit);
+
+  res.json({
+    products,
+    currentPage: page,
+    totalPages: Math.ceil(total / limit),
+    totalProducts: total,
+  });
 });
 
 module.exports = {

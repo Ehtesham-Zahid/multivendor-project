@@ -17,8 +17,9 @@ import { toast } from "react-toastify";
 
 const CreateAddressDialog = () => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.address);
+  const { isLoading, error, addresses } = useSelector((state) => state.address);
   const [isOpen, setIsOpen] = useState(false);
+  //   const [isPrimary, setIsPrimary] = useState(false);
 
   const {
     register,
@@ -28,6 +29,7 @@ const CreateAddressDialog = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    console.log("Submitted Data:", data);
     try {
       const resultAction = await dispatch(createAddressThunk(data));
       if (createAddressThunk.fulfilled.match(resultAction)) {
@@ -173,6 +175,22 @@ const CreateAddressDialog = () => {
                 </span>
               )}
             </div>
+            {addresses.length !== 0 && (
+              <div className="flex gap-x-2 items-center ">
+                <input
+                  type="checkbox"
+                  id="isPrimary"
+                  {...register("isPrimary")}
+                  className="bg-primary text-primary cursor-pointer "
+                />
+                <label
+                  htmlFor="isPrimary"
+                  className="text-dark font-medium text-sm cursor-pointer"
+                >
+                  Set as Primary Address
+                </label>
+              </div>
+            )}
 
             {error && (
               <span className="text-red-500 text-sm font-semibold">

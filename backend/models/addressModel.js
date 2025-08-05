@@ -35,6 +35,10 @@ const addressSchema = mongoose.Schema(
       type: String,
       required: [true, "Country is required"],
     },
+    isPrimary: {
+      type: Boolean,
+      default: false, // Default to false, can be set to true for primary address
+    },
     isGuestAddress: {
       type: Boolean,
       default: false,

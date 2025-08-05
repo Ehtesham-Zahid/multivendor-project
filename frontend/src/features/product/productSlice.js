@@ -62,9 +62,9 @@ export const updateProductThunk = createAsyncThunk(
 
 export const getAllProductsThunk = createAsyncThunk(
   "product/getAllProducts",
-  async (_, thunkAPI) => {
+  async ({ page, limit }, thunkAPI) => {
     try {
-      const res = await getAllProductsApi();
+      const res = await getAllProductsApi(page, limit);
       console.log(res);
       return res.data;
     } catch (error) {
@@ -93,6 +93,7 @@ const initialState = {
   isLoading: false,
   error: null,
   success: false,
+  totalPages: 0,
 };
 
 const productSlice = createSlice({
@@ -185,6 +186,7 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.success = true;
         state.allProducts = action.payload;
+        state.totalPages = action.totalPages;
       })
       .addCase(getAllProductsThunk.rejected, (state, action) => {
         state.isLoading = false;

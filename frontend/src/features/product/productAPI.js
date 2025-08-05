@@ -24,8 +24,8 @@ export const deleteProductApi = async (id) => {
   });
 };
 
-export const getAllProductsApi = async () => {
-  return await API.get(`/products/`);
+export const getAllProductsApi = async (page, limit) => {
+  return await API.get(`/products?page=${page}&limit=${limit}`);
 };
 
 export const getProductByIdApi = async (id) => {
