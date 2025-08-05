@@ -75,7 +75,9 @@ const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findOne({
     _id: req.params.productId,
     isDeleted: false,
-  }).populate("shopId", "shopName imageUrl rating totalReviews");
+  })
+    .populate("shopId", "shopName imageUrl rating totalReviews")
+    .populate("eventId");
 
   if (!product) {
     res.status(404);

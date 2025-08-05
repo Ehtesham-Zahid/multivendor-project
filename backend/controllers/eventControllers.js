@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Event = require("../models/eventModel");
+const Product = require("../models/productModel");
 
 // @desc    Create a new event
 // @route   POST /api/events
@@ -36,6 +37,14 @@ const createEvent = asyncHandler(async (req, res) => {
     res.status(500);
     throw new Error(error.message || "Server error while creating event");
   }
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+  product.eventId = event._id; // Link product to the event
+  await product.save();
 
   res.status(201).json(event);
 });

@@ -76,6 +76,11 @@ const productSchema = mongoose.Schema(
       ref: "Shop",
       required: true,
     },
+    eventId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event",
+      default: null,
+    },
     reviews: [
       {
         type: mongoose.Schema.Types.ObjectId,

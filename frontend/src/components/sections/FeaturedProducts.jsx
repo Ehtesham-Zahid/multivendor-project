@@ -7,6 +7,7 @@ const BestSelling = () => {
         Featured Products
       </p>
       <div className="grid grid-cols-5 gap-8">
+        {/* <ProductCard />
         <ProductCard />
         <ProductCard />
         <ProductCard />
@@ -16,8 +17,7 @@ const BestSelling = () => {
         <ProductCard />
         <ProductCard />
         <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        <ProductCard /> */}
       </div>
     </section>
   );

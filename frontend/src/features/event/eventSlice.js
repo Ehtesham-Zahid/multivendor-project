@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createEventApi,
   deleteEventApi,
+  getActiveEventsApi,
   getShopEventsApi,
   updateEventApi,
 } from "./eventAPI";
@@ -50,6 +51,19 @@ export const updateEventThunk = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     try {
       const res = await updateEventApi(id, data);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getActiveEventsThunk = createAsyncThunk(
+  "event/getActiveEvents",
+  async (_, thunkAPI) => {
+    try {
+      const res = await getActiveEventsApi();
       console.log(res);
       return res.data;
     } catch (error) {
@@ -135,6 +149,22 @@ const eventSlice = createSlice({
         );
       })
       .addCase(updateEventThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getActiveEventsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getActiveEventsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.allEvents = action.payload;
+      })
+      .addCase(getActiveEventsThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

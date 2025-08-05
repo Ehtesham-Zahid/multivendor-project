@@ -23,3 +23,7 @@ export const updateEventApi = async (eventId, data) => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const getActiveEventsApi = async () => {
+  return await API.get(`/events/getActiveEvents/`);
+};

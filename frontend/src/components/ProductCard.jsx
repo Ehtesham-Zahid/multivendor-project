@@ -2,22 +2,56 @@ import { Eye, Heart, ShoppingCart, Star } from "lucide-react";
 import ProductImage from "../assets/images/category-1.jpg";
 import { Badge } from "../shadcn/badge";
 import ProductDialog from "./ProductDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { useDispatch } from "react-redux";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../features/wishlist/wishlistSlice";
 
 const ProductCard = ({ product }) => {
   const [isWished, setIsWished] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const isProductInWishlist = wishlist.some(
+      (item) => item._id === product._id
+    );
+    setIsWished(isProductInWishlist);
+  }, [product._id]);
+
+  // Handle wish list toggle
+  const handleWishlistToggle = () => {
+    setIsWished((prev) => !prev);
+    if (!isWished) {
+      // Add to wishlist logic here
+      console.log("Added to wishlist:", product._id);
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      // Dispatch action to add to wishlist
+      dispatch(addToWishlist(product));
+    } else {
+      console.log("Removed from wishlist:", product._id);
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const updatedWishlist = wishlist.filter(
+        (item) => item._id !== product._id
+      );
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      // Dispatch action to remove from wishlist
+      dispatch(removeFromWishlist(product._id));
+    }
+  };
   return (
-    <Link
-      to={`/product/${product._id}`}
-      className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300 cursor-pointer relative hover:shadow-2xl hover:shadow-zinc-400 w-80 h-90 "
-    >
+    <div className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400 w-80 h-90 ">
       <div className="flex flex-col absolute right-5 top-5 gap-y-2 z-10">
         <Heart
           className="bg-white rounded-sm p-1 hover:bg-orange-300 "
           size={"28px"}
           fill={isWished ? "red" : "white"}
-          onClick={() => setIsWished((prev) => !prev)}
+          onClick={handleWishlistToggle}
         />
         <ProductDialog product={product} />
         <ShoppingCart
@@ -31,10 +65,12 @@ const ProductCard = ({ product }) => {
           className="rounded-md hover:scale-103 transition duration-300 object-contain"
         />
       </div>
-      <p className="text-sm font-bold text-primary hover:underline underline-offset-[4px] decoration-2">
+      <p className="text-sm font-bold text-primary hover:underline underline-offset-[4px] decoration-2  cursor-pointer">
         {product?.shopId?.shopName}
       </p>
-      <p className="text-xl font-bold mt-2">{product?.name}</p>
+      <Link to={`/product/${product?._id}`}>
+        <p className="text-xl font-bold mt-2">{product?.name}</p>
+      </Link>
       <div className="flex text-sm gap-0.5 items-center mt-4">
         <Star size="18px" />
         <Star size="18px" />
@@ -49,7 +85,7 @@ const ProductCard = ({ product }) => {
           {product?.sold} Sold
         </Badge>
       </div>
-    </Link>
+    </div>
   );
 };
 
