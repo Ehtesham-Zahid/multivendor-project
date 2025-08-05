@@ -5,6 +5,7 @@ import { ShoppingCart, ShoppingCartIcon } from "lucide-react";
 import { removeFromWishlist } from "../features/wishlist/wishlistSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
+import { addToCart, removeFromCart } from "../features/cart/cartSlice";
 
 const MiniCard = ({ sheet, product }) => {
   const dispatch = useDispatch();
@@ -19,7 +20,34 @@ const MiniCard = ({ sheet, product }) => {
       localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
       // Dispatch action to remove from wishlist
       dispatch(removeFromWishlist(product._id));
+    } else {
+      console.log("Remove from cart:", product.id);
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const updatedCart = cart.filter((item) => item._id !== product._id);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      // Dispatch action to remove from cart
+      dispatch(removeFromCart(product._id));
     }
+  };
+  // Handle add to cart logic here
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingItemIndex = cart.findIndex(
+      (item) => item._id === product._id
+    );
+
+    if (existingItemIndex !== -1) {
+      // Product already in cart, increase quantity by 1
+      cart[existingItemIndex].quantity =
+        (cart[existingItemIndex].quantity || 1) + 1;
+    } else {
+      // Product not in cart, add with quantity 1
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    dispatch(addToCart({ ...product, quantity: 1 }));
   };
   return (
     <div className="flex gap-5 w-full p-2">
@@ -46,9 +74,13 @@ const MiniCard = ({ sheet, product }) => {
             <ShoppingCart
               className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
               size={"32px"}
+              onClick={handleAddToCart}
             />
           ) : (
-            <QuantityCounter />
+            <QuantityCounter
+              quantityValue={product?.quantity}
+              id={product?._id}
+            />
           )}
           <p
             className="underline underline-offset-2 font-semibold hover:text-red-500 cursor-pointer"

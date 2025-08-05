@@ -9,6 +9,7 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../features/wishlist/wishlistSlice";
+import { addToCart } from "../features/cart/cartSlice";
 
 const ProductCard = ({ product }) => {
   const [isWished, setIsWished] = useState(false);
@@ -44,6 +45,28 @@ const ProductCard = ({ product }) => {
       dispatch(removeFromWishlist(product._id));
     }
   };
+
+  // Handle add to cart logic here
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingItemIndex = cart.findIndex(
+      (item) => item._id === product._id
+    );
+
+    if (existingItemIndex !== -1) {
+      // Product already in cart, increase quantity by 1
+      cart[existingItemIndex].quantity =
+        (cart[existingItemIndex].quantity || 1) + 1;
+    } else {
+      // Product not in cart, add with quantity 1
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    dispatch(addToCart({ ...product, quantity: 1 }));
+  };
+
   return (
     <div className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400 w-80 h-90 ">
       <div className="flex flex-col absolute right-5 top-5 gap-y-2 z-10">
@@ -57,6 +80,7 @@ const ProductCard = ({ product }) => {
         <ShoppingCart
           className="bg-white rounded-sm p-1 hover:bg-orange-300 "
           size={"28px"}
+          onClick={handleAddToCart}
         />
       </div>
       <div className="overflow-hidden rounded-md   aspect-square w-48 h-48 mx-auto  ">

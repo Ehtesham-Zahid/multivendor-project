@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getProductByIdThunk } from "../../features/product/productSlice";
 import { intervalToDuration } from "date-fns";
+import { addToCart } from "../../features/cart/cartSlice";
 const SingleProductSection = () => {
   const { productId } = useParams();
   const dispatch = useDispatch();
@@ -36,6 +37,27 @@ const SingleProductSection = () => {
 
     return () => clearInterval(intervalId); // cleanup
   }, [singleProduct?.eventId?.endDate]);
+
+  // Handle add to cart logic here
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingItemIndex = cart.findIndex(
+      (item) => item._id === singleProduct._id
+    );
+
+    if (existingItemIndex !== -1) {
+      // Product already in cart, increase quantity by 1
+      cart[existingItemIndex].quantity =
+        (cart[existingItemIndex].quantity || 1) + 1;
+    } else {
+      // Product not in cart, add with quantity 1
+      cart.push({ ...singleProduct, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    dispatch(addToCart({ ...singleProduct, quantity: 1 }));
+  };
   return (
     <section className="xl:w-5/6 2xl:w-4/5 m-auto grid grid-cols-1 lg:grid-cols-2 my-20 gap-x-10">
       <div className="flex gap-8 col-span-1 flex-col 2xl:flex-row border-2 border-zinc-300 pb-5 rounded-md">
@@ -145,7 +167,10 @@ const SingleProductSection = () => {
           </Button>
         </div>
         <div>
-          <Button className="w-full my-8 text-md text-white ">
+          <Button
+            className="w-full my-8 text-md text-white "
+            onClick={handleAddToCart}
+          >
             Add To Cart
           </Button>
         </div>
