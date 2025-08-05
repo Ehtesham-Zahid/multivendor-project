@@ -22,36 +22,36 @@ import Logo from "../assets/images/logo.png";
 import { Badge } from "../shadcn/badge";
 import QuantityCounter from "./QuantityCounter";
 
-const ProductDialog = ({ title, description }) => {
+const ProductDialog = ({ product }) => {
   return (
     <div>
       <Dialog className="w-screen">
         <DialogTrigger>
           <Eye
-            className="bg-white rounded-sm p-1 hover:bg-orange-300 "
+            className="bg-white rounded-sm p-1 hover:bg-orange-300 cursor-pointer "
             size={"28px"}
           />
         </DialogTrigger>
         <DialogContent className="rounded-lg w-screen    grid grid-cols-2 gap-10">
-          <div className="flex justify-center  items-center ">
+          <div className="flex justify-center  items-center aspect-square w-96 h-96 mx-auto ">
             <img
-              src={ProductImage}
-              className="w-full h-full  object-cover rounded-md"
+              src={product?.images[0]}
+              className="w-full h-full  object-contain rounded-md"
             />
           </div>
-          <div>
+          <div className="flex flex-col justify-between">
             <div className="border-b-2 border-zinc-400 pb-5">
               <p className="text-3xl font-bold text-sky-700  ">
-                HyperX Cloud Stinger Core
+                {product?.name}
               </p>
               <div className="flex justify-between  mt-3">
-                <p className="font-bold text-2xl">110$</p>
+                <p className="font-bold text-2xl">{product?.price}$</p>
                 <Badge variant="default" className="text-white bg-secondary">
-                  120 Sold
+                  {product?.sold} Sold
                 </Badge>
               </div>
             </div>
-            <div className="border-b-2 border-zinc-400 pb-5 flex  items-center justify-between mt-5">
+            <div className="border-b-2 border-zinc-400 pb-4 flex  items-center justify-between">
               {/* <QuantityCounter /> */}
               <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
                 <p className="px-2.5 py-0.5">-</p>
@@ -59,18 +59,18 @@ const ProductDialog = ({ title, description }) => {
                 <p className="px-2.5 py-0.5">+</p>
               </div>
               <p className="text-lg ml-1">
-                <strong>100</strong> items left
+                <strong>{product?.stock}</strong> items left
               </p>
             </div>
-            <div className="flex justify-between gap-5 w-full items-center border-b-2 border-zinc-400 py-3">
-              <div className="flex gap-5 items-center">
+            <div className="flex justify-between gap-5 w-full items-center border-b-2 border-zinc-400 pb-4">
+              <div className="flex gap-x-5 items-center">
                 <img
-                  src={Logo}
+                  src={product?.shopId?.imageUrl || Logo}
                   className="rounded-md w-16 h-16  object-contain border-2 "
                 />
                 <div className="flex flex-col">
-                  <p className="font-bold">Hyper Products</p>
-                  <p>5 Ratings</p>
+                  <p className="font-bold">{product?.shopId?.shopName}</p>
+                  <p>{product?.rating} Ratings</p>
                 </div>
               </div>
               <Button className="text-white cursor-pointer">

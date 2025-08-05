@@ -68,7 +68,9 @@ const CreateProductDialog = () => {
     formData.append("category", categoryValue);
     formData.append("stock", data.stock);
     formData.append("price", data.price);
-    formData.append("discountPrice", data.discountPrice);
+    if (data.discountPrice) {
+      formData.append("discountPrice", data.discountPrice);
+    }
 
     images.forEach((img) => {
       formData.append("images", img); // FIX: append each image individually
@@ -168,13 +170,21 @@ const CreateProductDialog = () => {
               </label>
               <input
                 type="number"
+                defaultValue=""
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
                 placeholder="Enter discounted price"
-                {...register("discountPrice", { required: true })}
-              />{" "}
+                {...register("discountPrice", {
+                  valueAsNumber: true,
+                  validate: (value) => {
+                    console.log(value);
+                    if (isNaN(value)) return true;
+                    return value >= 0 || "Discount cannot be negative";
+                  },
+                })}
+              />
               {errors.discountPrice && (
                 <span className="text-red-500 text-sm font-semibold">
-                  This field is required
+                  {errors.discountPrice.message}
                 </span>
               )}
             </div>

@@ -6,14 +6,7 @@ const uploadAvatar = require("../utils/cloudinary");
 const createProduct = asyncHandler(async (req, res) => {
   const { name, description, price, discountPrice, stock, category } = req.body;
 
-  if (
-    !name &&
-    !description &&
-    !price &&
-    !discountPrice &&
-    !stock &&
-    !category
-  ) {
+  if (!name && !description && !price && !stock && !category) {
     res.status(400);
     throw new Error("Please add all fields");
   }
@@ -80,9 +73,9 @@ const createProduct = asyncHandler(async (req, res) => {
 
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findOne({
-    _id: req.params.id,
+    _id: req.params.productId,
     isDeleted: false,
-  }).populate("shopId", "name");
+  }).populate("shopId", "shopName imageUrl rating totalReviews");
 
   if (!product) {
     res.status(404);
@@ -111,7 +104,12 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 
   // Validation: prevent invalid updates
-  if (discountPrice && price && discountPrice >= price) {
+  if (
+    discountPrice &&
+    discountPrice !== NaN &&
+    price &&
+    discountPrice >= price
+  ) {
     res.status(400);
     throw new Error(
       "Discount price cannot be greater than or equal to original price"
@@ -122,9 +120,13 @@ const updateProduct = asyncHandler(async (req, res) => {
   product.name = name || product.name;
   product.description = description || product.description;
   product.price = price || product.price;
-  product.discountPrice = discountPrice || product.discountPrice;
+  if (discountPrice && discountPrice !== NaN) {
+    product.discountPrice = discountPrice || product.discountPrice;
+  }
   product.stock = stock || product.stock;
   product.category = category || product.category;
+
+  console.log("Updated Product:", product);
 
   // Handle new image uploads if any
   if (req.files && req.files.length > 0) {
@@ -173,9 +175,7 @@ const getProductsByShop = asyncHandler(async (req, res) => {
 const getAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({ isDeleted: false }).populate(
     "shopId",
-    "name",
-    "rating",
-    "totalReviews"
+    "shopName rating totalReviews imageUrl"
   );
 
   res.status(200).json(products);

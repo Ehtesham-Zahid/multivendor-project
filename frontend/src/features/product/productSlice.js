@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createProductApi,
   deleteProductApi,
+  getAllProductsApi,
+  getProductByIdApi,
   getProductsByShopApi,
   updateProductApi,
 } from "./productAPI";
@@ -58,9 +60,36 @@ export const updateProductThunk = createAsyncThunk(
   }
 );
 
+export const getAllProductsThunk = createAsyncThunk(
+  "product/getAllProducts",
+  async (_, thunkAPI) => {
+    try {
+      const res = await getAllProductsApi();
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getProductByIdThunk = createAsyncThunk(
+  "product/getProductById",
+  async (id, thunkAPI) => {
+    try {
+      const res = await getProductByIdApi(id);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   allProducts: [],
   shopProducts: [],
+  singleProduct: null,
   isLoading: false,
   error: null,
   success: false,
@@ -142,6 +171,38 @@ const productSlice = createSlice({
         });
       })
       .addCase(updateProductThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getAllProductsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getAllProductsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.allProducts = action.payload;
+      })
+      .addCase(getAllProductsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getProductByIdThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getProductByIdThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.singleProduct = action.payload;
+      })
+      .addCase(getProductByIdThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

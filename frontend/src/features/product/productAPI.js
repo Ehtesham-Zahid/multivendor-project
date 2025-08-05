@@ -23,3 +23,11 @@ export const deleteProductApi = async (id) => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const getAllProductsApi = async () => {
+  return await API.get(`/products/`);
+};
+
+export const getProductByIdApi = async (id) => {
+  return await API.get(`/products/${id}`);
+};
