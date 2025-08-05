@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const addressSchema = mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null, // Null for guest addresses

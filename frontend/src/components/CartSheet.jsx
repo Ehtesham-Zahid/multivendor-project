@@ -23,7 +23,7 @@ const CartSheet = () => {
     dispatch(getCart(cart));
   }, []);
 
-  const { cart } = useSelector((state) => state.cart);
+  const { cart, totalAmount } = useSelector((state) => state.cart);
   return (
     <Sheet>
       <SheetTrigger className="cursor-pointer relative">
@@ -48,7 +48,7 @@ const CartSheet = () => {
           >
             <p>CHECKOUT</p>
             <span className="text-4xl mb-2.5 mx-2">•</span>
-            <p>$500</p>{" "}
+            <p>${totalAmount}</p>{" "}
           </Button>
         </div>
       </SheetContent>
