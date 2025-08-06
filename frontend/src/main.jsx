@@ -29,6 +29,7 @@ import DashboardEventsPage from "./pages/DashboardEventsPage.jsx";
 import DashboardCouponCodesPage from "./pages/DashboardCouponCodesPage.jsx";
 import DashboardRefundsPage from "./pages/DashboardRefundsPage.jsx";
 import DashboardSettingsPage from "./pages/DashboardSettingsPage.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -70,6 +71,7 @@ let router = createBrowserRouter([
       { path: "product/:productId", Component: SingleProductPage },
     ],
   },
+  { path: "checkout", Component: CheckoutPage },
 ]);
 
 createRoot(document.getElementById("root")).render(

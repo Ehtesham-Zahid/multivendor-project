@@ -19,6 +19,7 @@ import DashboardProductsSection from "./sections/DashboardProductsSection";
 import ShopOrdersSection from "./sections/ShopOrdersSection";
 import DashboardCouponCodesSection from "./sections/DashboardCouponCodesSection";
 import RefundsSection from "./sections/RefundsSection";
+import CheckoutSection from "./sections/CheckoutSection";
 import DashboardEventsSection from "./sections/DashboardEventsSection";
 import DashboardSettingsSection from "./sections/DashboardSettingsSection";
 import CreateProductDialog from "./CreateProductDialog";
@@ -51,4 +52,5 @@ export {
   DashboardSettingsSection,
   RefundsSection,
   ShopOrdersSection,
+  CheckoutSection,
 };
