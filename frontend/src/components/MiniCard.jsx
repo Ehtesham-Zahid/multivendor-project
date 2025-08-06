@@ -78,7 +78,7 @@ const MiniCard = ({ sheet, product }) => {
             />
           ) : (
             <QuantityCounter
-              quantityValue={product?.quantity}
+              // quantityValue={product?.quantity}
               id={product?._id}
             />
           )}

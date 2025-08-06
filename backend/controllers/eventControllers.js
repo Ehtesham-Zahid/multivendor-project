@@ -53,9 +53,39 @@ const createEvent = asyncHandler(async (req, res) => {
 // @route   GET /api/events
 // @access  Public
 const getActiveEvents = asyncHandler(async (req, res) => {
-  const events = await Event.find({ isActive: true })
-    .populate("productId")
-    .populate("shopId");
+  const { sortBy, limit } = req.query;
+
+  const pipeline = [
+    { $match: { isActive: true } },
+    {
+      $lookup: {
+        from: "products",
+        localField: "productId",
+        foreignField: "_id",
+        as: "productId",
+      },
+    },
+    {
+      $lookup: {
+        from: "shops",
+        localField: "shopId",
+        foreignField: "_id",
+        as: "shopId",
+      },
+    },
+    { $unwind: "$productId" },
+    { $unwind: "$shopId" },
+  ];
+
+  if (sortBy === "sales") {
+    pipeline.push({ $sort: { "productId.sold": -1 } });
+  }
+
+  if (limit) {
+    pipeline.push({ $limit: parseInt(limit) });
+  }
+
+  const events = await Event.aggregate(pipeline);
   res.json(events);
 });
 

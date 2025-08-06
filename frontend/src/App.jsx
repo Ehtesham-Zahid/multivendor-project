@@ -15,10 +15,12 @@ const App = () => {
   }, []);
 
   return (
-    <div className="bg-background min-h-screen w-full ">
+    <div className="bg-background w-full min-h-screen flex flex-col">
       <Header />
       <ToastContainer />
-      <Outlet />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );

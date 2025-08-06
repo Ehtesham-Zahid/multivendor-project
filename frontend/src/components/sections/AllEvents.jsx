@@ -9,10 +9,10 @@ const AllEvents = () => {
   const { allEvents, isLoading, error } = useSelector((state) => state.event);
 
   useEffect(() => {
-    dispatch(getActiveEventsThunk());
+    dispatch(getActiveEventsThunk({ sortBy: null, limit: null }));
   }, []);
   return (
-    <section className="w-custom m-auto min-h-screen">
+    <section className="w-custom m-auto min-h-screen ">
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         All Events
       </p>

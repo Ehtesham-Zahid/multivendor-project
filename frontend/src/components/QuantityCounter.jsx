@@ -2,22 +2,34 @@ import { useState } from "react";
 import { updateQuantity } from "../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 
-const QuantityCounter = ({ quantityValue, id }) => {
-  const [quantity, setQuantity] = useState(quantityValue || 1);
+const QuantityCounter = ({ id }) => {
   const dispatch = useDispatch();
 
+  // Get initial quantity from localStorage or default to 1
+  const getInitialQuantity = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const item = cart.find((item) => item._id === id);
+    return item?.quantity || 1;
+  };
+
+  const [quantity, setQuantity] = useState(getInitialQuantity());
+
   const handleQuantityChange = (newQuantity) => {
-    console.log("New Quantity:", newQuantity);
-    if (newQuantity < 1) return; // Prevent negative or zero quantity
+    if (newQuantity < 1) return;
+
     setQuantity(newQuantity);
+
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const itemIndex = cart.findIndex((item) => item._id === id);
+
     if (itemIndex !== -1) {
       cart[itemIndex].quantity = newQuantity;
       localStorage.setItem("cart", JSON.stringify(cart));
     }
+
     dispatch(updateQuantity({ _id: id, quantity: newQuantity }));
   };
+
   return (
     <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
       <p

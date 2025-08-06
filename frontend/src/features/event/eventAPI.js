@@ -24,6 +24,13 @@ export const updateEventApi = async (eventId, data) => {
   });
 };
 
-export const getActiveEventsApi = async () => {
-  return await API.get(`/events/getActiveEvents/`);
+export const getActiveEventsApi = async ({ sortBy, limit }) => {
+  const params = new URLSearchParams();
+
+  if (sortBy) params.append("sortBy", sortBy);
+  if (limit) params.append("limit", limit);
+
+  console.log(`/events/getActiveEvents/?${params.toString()}`);
+
+  return await API.get(`/events/getActiveEvents/?${params.toString()}`);
 };

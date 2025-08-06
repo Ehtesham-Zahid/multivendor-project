@@ -12,6 +12,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/shadcn/pagination";
+import Spinner from "../Spinner";
 const AllProducts = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
@@ -31,7 +32,7 @@ const AllProducts = () => {
       </p>
       <div className="grid grid-cols-5 gap-8">
         {isLoading ? (
-          <p>Loading...</p>
+          <Spinner />
         ) : error ? (
           <p>{error}</p>
         ) : allProducts?.length === 0 ? (

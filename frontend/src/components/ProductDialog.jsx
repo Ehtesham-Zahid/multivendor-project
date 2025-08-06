@@ -20,8 +20,34 @@ import { Button } from "../shadcn/button";
 import ProductImage from "../assets/images/category-1.jpg";
 import Logo from "../assets/images/logo.png";
 import { Badge } from "../shadcn/badge";
+import QuantityCounter from "./QuantityCounter";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/cartSlice";
+import { useState } from "react";
 
 const ProductDialog = ({ product }) => {
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
+  // Handle add to cart logic here
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingItemIndex = cart.findIndex(
+      (item) => item._id === product._id
+    );
+
+    if (existingItemIndex !== -1) {
+      // Product already in cart, increase quantity by 1
+      cart[existingItemIndex].quantity =
+        (cart[existingItemIndex].quantity || 1) + 1;
+    } else {
+      // Product not in cart, add with quantity 1
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    dispatch(addToCart({ ...product, quantity: 1 }));
+  };
   return (
     <div>
       <Dialog className="w-screen">
@@ -51,12 +77,12 @@ const ProductDialog = ({ product }) => {
               </div>
             </div>
             <div className="border-b-2 border-zinc-400 pb-4 flex  items-center justify-between">
-              {/* <QuantityCounter /> */}
-              <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
+              <QuantityCounter id={product?._id} />
+              {/* <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
                 <p className="px-2.5 py-0.5">-</p>
                 <p className="px-2.5 py-0.5">10</p>
                 <p className="px-2.5 py-0.5">+</p>
-              </div>
+              </div> */}
               <p className="text-lg ml-1">
                 <strong>{product?.stock}</strong> items left
               </p>
@@ -86,6 +112,7 @@ const ProductDialog = ({ product }) => {
               <Button
                 className=" text-white w-48  text-md cursor-pointer"
                 size={"lg"}
+                onClick={handleAddToCart}
               >
                 Add To Cart
               </Button>

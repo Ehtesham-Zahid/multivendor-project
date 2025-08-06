@@ -61,12 +61,13 @@ export const updateEventThunk = createAsyncThunk(
 
 export const getActiveEventsThunk = createAsyncThunk(
   "event/getActiveEvents",
-  async (_, thunkAPI) => {
+  async ({ sortBy, limit }, thunkAPI) => {
     try {
-      const res = await getActiveEventsApi();
+      const res = await getActiveEventsApi({ sortBy, limit });
       console.log(res);
       return res.data;
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -75,6 +76,7 @@ export const getActiveEventsThunk = createAsyncThunk(
 const initialState = {
   allEvents: [],
   shopEvents: [],
+  popularEvent: null,
   isLoading: false,
   error: null,
   success: false,
@@ -162,7 +164,13 @@ const eventSlice = createSlice({
       .addCase(getActiveEventsThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.success = true;
-        state.allEvents = action.payload;
+        console.log("MAAA", action.payload);
+        const { sortBy, limit } = action.meta.arg;
+        if (sortBy === "sales" && limit === 1) {
+          state.popularEvent = action.payload[0];
+        } else {
+          state.allEvents = action.payload;
+        }
       })
       .addCase(getActiveEventsThunk.rejected, (state, action) => {
         state.isLoading = false;
