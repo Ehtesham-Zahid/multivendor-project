@@ -20,7 +20,6 @@ import { Button } from "../shadcn/button";
 import ProductImage from "../assets/images/category-1.jpg";
 import Logo from "../assets/images/logo.png";
 import { Badge } from "../shadcn/badge";
-import QuantityCounter from "./QuantityCounter";
 
 const ProductDialog = ({ product }) => {
   return (
@@ -28,7 +27,7 @@ const ProductDialog = ({ product }) => {
       <Dialog className="w-screen">
         <DialogTrigger>
           <Eye
-            className="bg-white rounded-sm p-1 hover:bg-orange-300 cursor-pointer "
+            className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
             size={"28px"}
           />
         </DialogTrigger>

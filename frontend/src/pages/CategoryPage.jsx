@@ -2,7 +2,7 @@ import { CategoryProductsSection } from "../components";
 
 const CategoryPage = () => {
   return (
-    <div>
+    <div className=" ">
       <CategoryProductsSection />
     </div>
   );

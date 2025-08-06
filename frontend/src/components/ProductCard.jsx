@@ -71,14 +71,14 @@ const ProductCard = ({ product }) => {
     <div className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400 w-80 h-90 ">
       <div className="flex flex-col absolute right-5 top-5 gap-y-2 z-10">
         <Heart
-          className="bg-white rounded-sm p-1 hover:bg-orange-300 "
+          className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
           size={"28px"}
           fill={isWished ? "red" : "white"}
           onClick={handleWishlistToggle}
         />
         <ProductDialog product={product} />
         <ShoppingCart
-          className="bg-white rounded-sm p-1 hover:bg-orange-300 "
+          className="bg-white rounded-sm p-1 hover:bg-sky-200  cursor-pointer"
           size={"28px"}
           onClick={handleAddToCart}
         />

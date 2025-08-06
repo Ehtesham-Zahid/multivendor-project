@@ -24,10 +24,21 @@ export const deleteProductApi = async (id) => {
   });
 };
 
-export const getAllProductsApi = async (page, limit) => {
-  return await API.get(`/products?page=${page}&limit=${limit}`);
+export const getAllProductsApi = async ({ page, limit, category, sortBy }) => {
+  const params = new URLSearchParams();
+
+  if (page) params.append("page", page);
+  if (limit) params.append("limit", limit);
+  if (category) params.append("category", category);
+  if (sortBy) params.append("sortBy", sortBy);
+
+  return await API.get(`/products?${params.toString()}`);
 };
 
 export const getProductByIdApi = async (id) => {
   return await API.get(`/products/${id}`);
+};
+
+export const getProductsByCategoryApi = async (category) => {
+  return await API.get(`/products/category/${category}`);
 };

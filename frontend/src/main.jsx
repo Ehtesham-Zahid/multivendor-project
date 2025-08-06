@@ -40,7 +40,7 @@ let router = createBrowserRouter([
       { path: "all-products", Component: AllProductsPage },
       { path: "all-events", Component: AllEventsPage },
       { path: "profile", Component: ProfilePage },
-      { path: "category/:cateogry", Component: CategoryPage },
+      { path: "category/:category", Component: CategoryPage },
       { path: "product/:productId", Component: SingleProductPage },
     ],
   },

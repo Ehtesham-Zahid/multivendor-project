@@ -32,6 +32,7 @@ import CategoryImage7 from "../assets/images/category-7.png";
 import CategoryImage8 from "../assets/images/category-8.png";
 import CategoryImage9 from "../assets/images/category-9.png";
 import CategoryImage10 from "../assets/images/category-10.png";
+import CategoryDropdown from "./CategoryDropdown";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
@@ -83,124 +84,7 @@ const Header = () => {
       <div className="secondary-nav bg-primary w-full flex justify-center ">
         <div className="w-custom flex justify-between  text-white font-semibold">
           <div className="text-dark py-1">
-            <DropdownMenu className="outline-none ">
-              <DropdownMenuTrigger asChild className="w-[200px] ">
-                <Button
-                  variant="outline"
-                  className="   border-t-2 border-b-2 ring-0 ring-transparent focus:ring-0  h-full rounded-md border-primary  text-lg font-bold flex gap-5 items-center cursor-pointer"
-                >
-                  All Categories <ChevronDown />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[200px] p-0 bg-white  text-dark font-semibold">
-                <DropdownMenuGroup
-                  value={category}
-                  onValueChange={setCategory}
-                  className="p-0"
-                >
-                  <DropdownMenuItem
-                    value="top"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none flex gap-3"
-                  >
-                    <img
-                      src={CategoryImage1}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Clothing & Shoes
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="bottom"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage2}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Mobile & Electronics
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage9}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Pet Food
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage3}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Home & Kitcchen
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage4}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Beauty & Personal Care
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage5}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Grocery & Food
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage6}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Health & Fitness
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage7}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Books & Stationery
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage8}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Toy & Baby Items
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    value="right"
-                    className="hover:bg-blue-200 cursor-pointer rounded-none"
-                  >
-                    <img
-                      src={CategoryImage10}
-                      className=" w-12 border-2 rounded-sm object-cover"
-                    />
-                    Others
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <CategoryDropdown />
           </div>
           <ul className="flex gap-12 py-5 ">
             <li>

@@ -4,7 +4,7 @@ import { BestSelling } from "../components";
 const BestSellingPage = () => {
   return (
     <div>
-      <BestSelling />
+      <BestSelling limit={10} />
     </div>
   );
 };

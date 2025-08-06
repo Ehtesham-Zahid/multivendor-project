@@ -175,15 +175,35 @@ const getProductsByShop = asyncHandler(async (req, res) => {
 });
 
 const getAllProducts = asyncHandler(async (req, res) => {
+  console.log("1");
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-
   const skip = (page - 1) * limit;
+
+  const { category, sortBy } = req.query;
 
   const filter = { isDeleted: false };
 
+  if (category) {
+    filter.category = category;
+  }
+  console.log("2");
+  let sortOption = {};
+
+  if (sortBy === "sales") {
+    sortOption = { sold: -1 }; // Most sold
+  } else if (sortBy === "latest") {
+    sortOption = { createdAt: -1 }; // Newest products
+  }
+
+  console.log("3");
   const total = await Product.countDocuments(filter);
-  const products = await Product.find(filter).skip(skip).limit(limit);
+
+  const products = await Product.find(filter)
+    .sort(sortOption)
+    .skip(skip)
+    .limit(limit);
+  console.log("4");
 
   res.json({
     products,
@@ -193,6 +213,22 @@ const getAllProducts = asyncHandler(async (req, res) => {
   });
 });
 
+const getProductsByCategory = asyncHandler(async (req, res) => {
+  const { category } = req.params;
+
+  if (!category) {
+    res.status(400);
+    throw new Error("Category is required");
+  }
+
+  const products = await Product.find({
+    category,
+    isDeleted: false,
+  });
+
+  res.status(200).json(products);
+});
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -200,4 +236,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getProductsByShop,
+  getProductsByCategory,
 };

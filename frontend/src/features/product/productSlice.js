@@ -4,6 +4,7 @@ import {
   deleteProductApi,
   getAllProductsApi,
   getProductByIdApi,
+  getProductsByCategoryApi,
   getProductsByShopApi,
   updateProductApi,
 } from "./productAPI";
@@ -62,12 +63,13 @@ export const updateProductThunk = createAsyncThunk(
 
 export const getAllProductsThunk = createAsyncThunk(
   "product/getAllProducts",
-  async ({ page, limit }, thunkAPI) => {
+  async ({ page, limit, category, sortBy }, thunkAPI) => {
     try {
-      const res = await getAllProductsApi(page, limit);
+      const res = await getAllProductsApi({ page, limit, category, sortBy });
       console.log(res);
       return res.data;
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -86,9 +88,24 @@ export const getProductByIdThunk = createAsyncThunk(
   }
 );
 
+export const getProductsByCategoryThunk = createAsyncThunk(
+  "product/getProductsByCategory",
+  async (category, thunkAPI) => {
+    try {
+      const res = await getProductsByCategoryApi(category);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   allProducts: [],
   shopProducts: [],
+  categoryProducts: [],
+  bestSellingProducts: [],
   singleProduct: null,
   isLoading: false,
   error: null,
@@ -185,9 +202,28 @@ const productSlice = createSlice({
       .addCase(getAllProductsThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.success = true;
-        state.allProducts = action.payload;
-        state.totalPages = action.totalPages;
+
+        const { sortBy, limit, category } = action.meta.arg;
+
+        if (sortBy === "sales") {
+          console.log("MAIN CHAL RAHA");
+          state.bestSellingProducts = action.payload.products;
+          state.totalPages = action.payload.totalPages;
+        }
+        if (category) {
+          state.categoryProducts = action.payload.products;
+          state.totalPages = action.payload.totalPages;
+        }
+
+        // This block should be your fallback when no specific filters are passed
+        console.log(!category && !(sortBy === "sales"));
+        if (!category && !(sortBy === "sales")) {
+          console.log(action.payload.products);
+          state.allProducts = action.payload.products;
+          state.totalPages = action.payload.totalPages;
+        }
       })
+
       .addCase(getAllProductsThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
@@ -205,6 +241,22 @@ const productSlice = createSlice({
         state.singleProduct = action.payload;
       })
       .addCase(getProductByIdThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getProductsByCategoryThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.categoryProducts = action.payload;
+      })
+      .addCase(getProductsByCategoryThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

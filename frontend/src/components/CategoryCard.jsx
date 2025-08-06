@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 const CategoryCard = ({
   categoryTitle,
@@ -9,7 +10,8 @@ const CategoryCard = ({
   span = 1,
 }) => {
   return span === 2 ? (
-    <div
+    <Link
+      to={`/category/${categoryTitle}`}
       className={`h-72 w-full col-span-2  p-5   rounded-md flex justify-between ${bgColor}   cursor-pointer transition duration-300 hover:scale-102`}
     >
       <div>
@@ -21,9 +23,10 @@ const CategoryCard = ({
         </p>
       </div>
       <img src={image} className="w-96  object-contain" />
-    </div>
+    </Link>
   ) : (
-    <div
+    <Link
+      to={`/category/${categoryTitle}`}
       className={`relative h-72 col-span-1  p-3 flex flex-col justify-end   rounded-md ${bgColor}  cursor-pointer transition duration-300 hover:scale-102`}
     >
       <div className="absolute top-5 ">
@@ -33,7 +36,7 @@ const CategoryCard = ({
         </p>
       </div>
       <img src={image} className="h-48   object-contain" />
-    </div>
+    </Link>
   );
 };
 
