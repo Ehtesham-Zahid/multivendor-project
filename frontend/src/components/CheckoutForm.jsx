@@ -67,7 +67,7 @@ const CheckoutForm = () => {
   };
   return (
     <form
-      className="p-5 border-r-2 w-2/3 ml-auto"
+      className="p-5 border-r-2 w-3/5 ml-auto"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="contact border-b-2 border-dark py-5 flex flex-col gap-2">

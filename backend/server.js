@@ -14,6 +14,7 @@ const orderRouter = require("./routes/orderRoutes");
 const addressesRouter = require("./routes/addressRoutes");
 const eventRouter = require("./routes/eventRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
+const couponRouter = require("./routes/couponRoutes");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -62,6 +63,7 @@ app.use("/api/orders", orderRouter);
 app.use("/api/addresses", addressesRouter);
 app.use("/api/events", eventRouter);
 app.use("/api/payments", paymentRouter);
+app.use("/api/coupons", couponRouter);
 
 app.use(errorHandler);
 

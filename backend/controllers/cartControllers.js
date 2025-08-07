@@ -1,112 +1,84 @@
 const asyncHandler = require("express-async-handler");
-const Cart = require("../models/cartModel");
-const Product = require("../models/productModel");
+const Coupon = require("../models/couponModel");
 
-// Get user cart
-const getCart = asyncHandler(async (req, res) => {
-  const cart = await Cart.findOne({ userId: req.user._id }).populate(
-    "items.productId",
-    "name price"
-  );
+// @desc    Create a new coupon (admin only)
+const createCoupon = asyncHandler(async (req, res) => {
+  const { code, discountType, discountAmount, minAmount, expiresAt } = req.body;
 
-  if (!cart) {
-    res.status(404);
-    throw new Error("Cart not found");
-  }
-
-  res.status(200).json(cart);
-});
-
-// Add or update item in cart
-const addToCart = asyncHandler(async (req, res) => {
-  const { productId, quantity } = req.body;
-
-  if (!productId || quantity < 1) {
+  if (!code || !discountType || !discountAmount) {
     res.status(400);
-    throw new Error("Product ID and valid quantity required");
+    throw new Error("Code, discount type, and amount are required");
   }
 
-  const product = await Product.findById(productId);
-  if (!product) {
-    res.status(404);
-    throw new Error("Product not found");
+  const existing = await Coupon.findOne({ code: code.toUpperCase() });
+  if (existing) {
+    res.status(400);
+    throw new Error("Coupon code already exists");
   }
 
-  let cart = await Cart.findOne({ userId: req.user._id });
+  const coupon = await Coupon.create({
+    code: code.toUpperCase(),
+    discountType,
+    discountAmount,
+    minAmount,
+    expiresAt,
+  });
 
-  if (!cart) {
-    cart = new Cart({
-      userId: req.user._id,
-      items: [],
-      totalAmount: 0,
-    });
-  }
-
-  const existingItem = cart.items.find(
-    (item) => item.productId.toString() === productId
-  );
-
-  if (existingItem) {
-    existingItem.quantity += quantity;
-  } else {
-    cart.items.push({ productId, quantity });
-  }
-
-  // Recalculate total
-  cart.totalAmount = 0;
-  for (let item of cart.items) {
-    const prod = await Product.findById(item.productId);
-    cart.totalAmount += prod.price * item.quantity;
-  }
-
-  await cart.save();
-  res.status(200).json(cart);
+  res.status(201).json(coupon);
 });
 
-// Remove item from cart
-const removeFromCart = asyncHandler(async (req, res) => {
-  const { productId } = req.body;
-
-  let cart = await Cart.findOne({ userId: req.user._id });
-  if (!cart) {
-    res.status(404);
-    throw new Error("Cart not found");
-  }
-
-  cart.items = cart.items.filter(
-    (item) => item.productId.toString() !== productId
-  );
-
-  // Recalculate total
-  cart.totalAmount = 0;
-  for (let item of cart.items) {
-    const prod = await Product.findById(item.productId);
-    cart.totalAmount += prod.price * item.quantity;
-  }
-
-  await cart.save();
-  res.status(200).json({ message: "Item removed", cart });
+// @desc    Get all coupons (admin only)
+const getAllCoupons = asyncHandler(async (req, res) => {
+  const coupons = await Coupon.find().sort({ createdAt: -1 });
+  res.status(200).json(coupons);
 });
 
-// Clear cart
-const clearCart = asyncHandler(async (req, res) => {
-  const cart = await Cart.findOne({ userId: req.user._id });
+// @desc    Validate coupon for current cart total
+const validateCoupon = asyncHandler(async (req, res) => {
+  const { code, cartTotal } = req.body;
 
-  if (!cart) {
+  const coupon = await Coupon.findOne({ code: code.toUpperCase() });
+  if (!coupon) {
     res.status(404);
-    throw new Error("Cart not found");
+    throw new Error("Coupon not found");
   }
 
-  cart.items = [];
-  cart.totalAmount = 0;
+  if (coupon.expiresAt && new Date(coupon.expiresAt) < new Date()) {
+    res.status(400);
+    throw new Error("Coupon has expired");
+  }
 
-  await cart.save();
-  res.status(200).json({ message: "Cart cleared" });
+  if (coupon.minAmount && cartTotal < coupon.minAmount) {
+    res.status(400);
+    throw new Error(
+      `Minimum cart amount for this coupon is ${coupon.minAmount}`
+    );
+  }
+
+  res.status(200).json({
+    message: "Coupon is valid",
+    discountType: coupon.discountType,
+    discountAmount: coupon.discountAmount,
+  });
+});
+
+// @desc    Delete coupon by ID (admin only)
+const deleteCoupon = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const coupon = await Coupon.findById(id);
+  if (!coupon) {
+    res.status(404);
+    throw new Error("Coupon not found");
+  }
+
+  await coupon.deleteOne();
+  res.status(200).json({ message: "Coupon deleted" });
 });
 
 module.exports = {
-  getCart,
-  addToCart,
-  removeFromCart,
-  clearCart,
+  createCoupon,
+  getAllCoupons,
+  validateCoupon,
+  deleteCoupon,
 };

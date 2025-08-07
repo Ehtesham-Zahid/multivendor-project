@@ -42,14 +42,18 @@ const CartSheet = () => {
           ))
         )}
         <div className=" fixed bottom-0 w-[366px]  border-t-2 border-primary   py-5 flex justify-center  bg-background">
-          <Button
-            className={"font-bold text-white tracking-wider text-md"}
-            size={"lg"}
-          >
-            <p>CHECKOUT</p>
-            <span className="text-4xl mb-2.5 mx-2">•</span>
-            <p>${totalAmount}</p>{" "}
-          </Button>
+          <Link to="/checkout" className="">
+            <Button
+              className={
+                "font-bold text-white tracking-wider text-md cursor-pointer"
+              }
+              size={"lg"}
+            >
+              <p>CHECKOUT</p>
+              <span className="text-4xl mb-2.5 mx-2">•</span>
+              <p>${totalAmount}</p>{" "}
+            </Button>
+          </Link>
         </div>
       </SheetContent>
     </Sheet>
