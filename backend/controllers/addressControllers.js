@@ -18,31 +18,34 @@ const createAddress = asyncHandler(async (req, res) => {
   const {
     fullName,
     phoneNumber,
-    street,
+    email,
+    addressDetails,
     city,
     state,
     zipCode,
     country,
     isPrimary,
   } = req.body;
-
-  if (
-    !fullName ||
-    !phoneNumber ||
-    !street ||
-    !city ||
-    !state ||
-    !zipCode ||
-    !country
-  ) {
-    res.status(400);
-    throw new Error("All fields are required");
-  }
+  console.log(req.body);
+  //   if (
+  //     !fullName ||
+  //     !phoneNumber ||
+  //     !email ||
+  //     !addressDetails ||
+  //     !city ||
+  //     !state ||
+  //     !zipCode ||
+  //     !country
+  //   ) {
+  //     res.status(400);
+  //     throw new Error("All fields are required");
+  //   }
 
   const address = await Address.create({
     fullName,
     phoneNumber,
-    street,
+    email,
+    addressDetails,
     city,
     state,
     zipCode,
@@ -72,7 +75,8 @@ const updateAddress = asyncHandler(async (req, res) => {
   const {
     fullName,
     phoneNumber,
-    street,
+    email,
+    addressDetails,
     city,
     state,
     zipCode,
@@ -108,7 +112,8 @@ const updateAddress = asyncHandler(async (req, res) => {
 
   address.fullName = fullName;
   address.phoneNumber = phoneNumber;
-  address.street = street;
+  address.email = email;
+  address.addressDetails = addressDetails;
   address.city = city;
   address.state = state;
   address.zipCode = zipCode;

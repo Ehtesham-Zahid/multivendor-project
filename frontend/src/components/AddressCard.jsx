@@ -21,7 +21,7 @@ const AddressCard = ({ address, index }) => {
       </p>
       <div className="flex flex-col gap-1 py-3 border-b border-primary">
         <p className="text-sm">{address?.fullName}</p>
-        <p className="text-sm">{address?.street}</p>
+        <p className="text-sm">{address?.address}</p>
         <p className="text-sm">{address?.city}</p>
         <p className="text-sm">
           {address?.state} {address?.zipCode}

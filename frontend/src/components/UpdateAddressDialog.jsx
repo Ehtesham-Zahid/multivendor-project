@@ -29,6 +29,7 @@ const UpdateAddressDialog = ({ address }) => {
     defaultValues: {
       fullName: address.fullName,
       phoneNumber: address.phoneNumber,
+      email: address.email,
       street: address.street,
       city: address.city,
       state: address.state,
@@ -75,13 +76,17 @@ const UpdateAddressDialog = ({ address }) => {
           </DialogTitle>{" "}
         </DialogHeader>
         <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
-          {/* Fields - same structure as CreateAddressDialog */}
           {[
             { name: "fullName", label: "Full Name", placeholder: "John Doe" },
             {
               name: "phoneNumber",
               label: "Phone Number",
               placeholder: "0300-1234567",
+            },
+            {
+              name: "email",
+              label: "Email",
+              placeholder: "johndoe@gmail.com",
             },
             {
               name: "street",

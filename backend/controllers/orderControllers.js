@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
-const { get } = require("mongoose");
 
 // Create
 

@@ -13,6 +13,7 @@ const cartRouter = require("./routes/cartRoutes");
 const orderRouter = require("./routes/orderRoutes");
 const addressesRouter = require("./routes/addressRoutes");
 const eventRouter = require("./routes/eventRoutes");
+const paymentRouter = require("./routes/paymentRoutes");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -60,6 +61,7 @@ app.use("/api/carts", cartRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/addresses", addressesRouter);
 app.use("/api/events", eventRouter);
+app.use("/api/payments", paymentRouter);
 
 app.use(errorHandler);
 

@@ -76,6 +76,21 @@ const CreateAddressDialog = () => {
               )}
             </div>
 
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600">Email</label>
+              <input
+                type="tel"
+                {...register("email", { required: true })}
+                placeholder="johndoe@gmail.com"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+              />
+              {errors.email && (
+                <span className="text-red-500 text-sm font-semibold">
+                  Email is required
+                </span>
+              )}
+            </div>
+
             {/* Phone Number */}
             <div className="flex flex-col">
               <label className="text-sm font-bold text-zinc-600">
