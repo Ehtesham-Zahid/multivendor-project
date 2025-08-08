@@ -33,12 +33,13 @@ const orderSchema = mongoose.Schema(
     paymentMethod: {
       type: String,
       required: [true, "Please add a payment method"],
-      enum: ["paypal", "creditCard", "cashOnDelivery"],
+      enum: ["paypal", "card", "cod"],
     },
     paymentStatus: {
       type: String,
-      required: [true, "Please add a payment status"],
+      // required: [true, "Please add a payment status"],
       enum: ["pending", "paid", "failed"],
+      default: "pending",
     },
     deliveryStatus: {
       type: String,

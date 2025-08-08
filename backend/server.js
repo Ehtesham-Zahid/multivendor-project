@@ -19,6 +19,7 @@ const couponRouter = require("./routes/couponRoutes");
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
 const User = require("./models/userModel");
+const { webhook } = require("./controllers/paymentControllers");
 const port = process.env.PORT || 8000;
 
 connectDB();
@@ -30,6 +31,13 @@ app.use(
     origin: "http://localhost:5173", // frontend origin
     credentials: true, // required to allow cookies
   })
+);
+
+// Stripe webhook route - raw body
+app.post(
+  "/api/payments/webhook",
+  express.raw({ type: "application/json" }),
+  webhook
 );
 
 app.use(express.json());

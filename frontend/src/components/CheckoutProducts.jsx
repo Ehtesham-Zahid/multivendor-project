@@ -7,6 +7,7 @@ import CouponCodeForm from "./CouponCodeForm";
 const CheckoutProducts = () => {
   const dispatch = useDispatch();
   const { cart, totalAmount } = useSelector((state) => state.cart);
+  const { coupon } = useSelector((state) => state.coupon);
   useEffect(() => {
     // Fetch wishlist items if needed
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -19,7 +20,7 @@ const CheckoutProducts = () => {
         {cart?.map((product) => {
           return <CheckoutCard key={product._id} product={product} />;
         })}{" "}
-        <CouponCodeForm />
+        <CouponCodeForm totalAmount={totalAmount} />
         <div className="flex justify-between items-center mt-5">
           <p className="text-  ">subtotal</p>
           <p className="  ">${totalAmount}</p>
@@ -28,10 +29,25 @@ const CheckoutProducts = () => {
           <p className="text-   ">shipping</p>
           <p className="  ">${totalAmount}</p>
         </div>
-        <div className="flex justify-between items-center mt-5">
-          <p className="text-xl font-semibold">Total</p>
-          <p className="text-xl font-medium">${totalAmount}</p>
-        </div>
+        {coupon && (
+          <div className="flex justify-between items-center mt-3">
+            <p className="text-lg font-semibold text-sky-500">Discount</p>
+            <p className="text-lg font-medium text-sky-500">
+              ${coupon.discountAmount}
+            </p>
+          </div>
+        )}
+        {coupon ? (
+          <div className="flex justify-between items-center mt-3">
+            <p className="text-xl font-semibold">Total</p>
+            <p className=" text-xl font-medium ">${coupon.newTotal}</p>
+          </div>
+        ) : (
+          <div className="flex justify-between items-center mt-5">
+            <p className="text-xl font-semibold">Total</p>
+            <p className="text-xl font-medium">${totalAmount}</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -92,6 +92,7 @@ const validateCoupon = asyncHandler(async (req, res) => {
     res.status(200).json({
       valid: true,
       discountAmount,
+      discountPercentage: coupon.discountValue,
       newTotal,
       message: "Coupon applied successfully.",
     });

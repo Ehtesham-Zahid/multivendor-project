@@ -6,15 +6,16 @@ export const createOrderThunk = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await createOrderApi(data);
-      console.log(res);
       return res.data;
     } catch (error) {
+      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
 );
 
 const initialState = {
+  order: null,
   userOrders: [],
   shopOrders: [],
   isLoading: false,
@@ -23,23 +24,23 @@ const initialState = {
 };
 
 const orderSlice = createSlice({
-  name: "product",
+  name: "order",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createProductThunk.pending, (state) => {
+      .addCase(createOrderThunk.pending, (state) => {
         state.isLoading = true;
         state.error = null;
         state.success = false;
       })
-      .addCase(createProductThunk.fulfilled, (state, action) => {
+      .addCase(createOrderThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.shop = action.payload;
         state.success = true;
-        state.shopProducts.push(action.payload);
+        state.order = action.payload;
+        // state.userOrders.push(action.payload);
       })
-      .addCase(createProductThunk.rejected, (state, action) => {
+      .addCase(createOrderThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;
@@ -47,5 +48,4 @@ const orderSlice = createSlice({
   },
 });
 
-// export const { logout, resetError } = orderSlice.actions;
 export default orderSlice.reducer;

@@ -1,9 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
+const Address = require("../models/addressModel");
 
 // Create
 
 const createOrder = asyncHandler(async (req, res) => {
+  console.log("order controller", req.body);
   const { items, totalAmount, paymentStatus, paymentMethod, shippingAddress } =
     req.body;
 
@@ -27,6 +29,8 @@ const createOrder = asyncHandler(async (req, res) => {
     paymentMethod,
     shippingAddress,
   });
+
+  console.log("order created", order);
 
   res.status(201).json(order);
 });

@@ -30,6 +30,8 @@ import DashboardCouponCodesPage from "./pages/DashboardCouponCodesPage.jsx";
 import DashboardRefundsPage from "./pages/DashboardRefundsPage.jsx";
 import DashboardSettingsPage from "./pages/DashboardSettingsPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
+import SuccessPage from "./pages/SuccessPage.jsx";
+import CancelPage from "./pages/CancelPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -72,6 +74,8 @@ let router = createBrowserRouter([
     ],
   },
   { path: "checkout", Component: CheckoutPage },
+  { path: "success", Component: SuccessPage },
+  { path: "cancel", Component: CancelPage },
 ]);
 
 createRoot(document.getElementById("root")).render(

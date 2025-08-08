@@ -10,6 +10,7 @@ import { createAddressThunk } from "../features/address/addressSlice";
 import API from "../api/axios";
 import { Loader2 } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
+import { createOrderThunk } from "../features/order/orderSlice";
 
 const CheckoutForm = () => {
   const stripePromise = loadStripe(
@@ -24,6 +25,8 @@ const CheckoutForm = () => {
   const { user } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.address);
   const [cart, setCart] = useState([]);
+  const { coupon } = useSelector((state) => state.coupon);
+  const { totalAmount } = useSelector((state) => state.cart);
   const {
     register,
     handleSubmit,
@@ -41,18 +44,45 @@ const CheckoutForm = () => {
       country: country,
       state: state,
     };
+
     const resultAction = await dispatch(createAddressThunk(addressData));
 
     if (createAddressThunk.fulfilled.match(resultAction)) {
-      console.log(selectedOption);
+      const addressId = resultAction.payload._id;
+
+      // Transform cart to match the `items` structure in your Order model
+      const items = cart.map((product) => ({
+        productId: product._id, // Product ID
+        shopId:
+          typeof product.shopId === "object"
+            ? product.shopId._id
+            : product.shopId, // Shop ID
+        quantity: product.quantity || 1, // Default to 1 if missing
+        price: product.discountPrice || product.price, // Prefer discount price if available
+      }));
+
+      const orderData = {
+        items,
+        paymentMethod: selectedOption,
+        // paymentStatus: selectedOption === "card" ? "pending" : "paid", // adjust based on flow
+        totalAmount: coupon ? coupon.newTotal : totalAmount,
+        shippingAddress: addressId,
+      };
+
+      console.log("orderData", orderData);
+
+      const resultAction2 = await dispatch(createOrderThunk(orderData));
+
       if (selectedOption === "card") {
-        console.log(cart);
-        console.log("HELO");
+        console.log("resultAction2", resultAction2.payload);
+        const total = coupon ? coupon.newTotal : totalAmount;
         const res = await API.post("/payments/create-checkout-session", {
           productsData: cart,
+          totalAmount: total,
+          discountPercentage: coupon?.discountPercentage || 0,
+          orderId: resultAction2.payload._id,
         });
 
-        // const data = await res.json();
         const stripe = await stripePromise;
         if (!stripe) {
           console.error("Stripe failed to load");
@@ -61,10 +91,13 @@ const CheckoutForm = () => {
 
         await stripe.redirectToCheckout({ sessionId: res.data.id });
       } else if (selectedOption === "paypal") {
+        // Paypal logic here
       } else if (selectedOption === "cod") {
+        // COD logic here
       }
     }
   };
+
   return (
     <form
       className="p-5 border-r-2 w-3/5 ml-auto"
