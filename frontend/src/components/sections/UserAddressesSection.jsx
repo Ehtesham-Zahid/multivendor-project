@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../Spinner";
 import { getUserAddressThunk } from "../../features/address/addressSlice";
 
-const AddressSection = () => {
+const UserAddressesSection = () => {
   const dispatch = useDispatch();
   const { addresses, isLoading, error } = useSelector((state) => state.address);
   // const { user } = useSelector((state) => state.auth);
@@ -43,4 +43,4 @@ const AddressSection = () => {
   );
 };
 
-export default AddressSection;
+export default UserAddressesSection;

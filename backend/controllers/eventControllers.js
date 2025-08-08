@@ -21,6 +21,12 @@ const createEvent = asyncHandler(async (req, res) => {
     throw new Error("All fields are required");
   }
 
+  const product = await Product.findById(productId);
+  if (!product) {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+
   let event;
 
   try {
@@ -38,13 +44,10 @@ const createEvent = asyncHandler(async (req, res) => {
     throw new Error(error.message || "Server error while creating event");
   }
 
-  const product = await Product.findById(productId);
-  if (!product) {
-    res.status(404);
-    throw new Error("Product not found");
-  }
-  product.eventId = event._id; // Link product to the event
+  product.eventId = event._id;
   await product.save();
+
+  await event.populate("productId");
 
   res.status(201).json(event);
 });

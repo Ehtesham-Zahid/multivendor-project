@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../shadcn/button";
 import { Loader2 } from "lucide-react";
 
-const ChangePasswordSection = () => {
+const UserChangePasswordSection = () => {
   const { error, isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const {
@@ -112,4 +112,4 @@ const ChangePasswordSection = () => {
   );
 };
 
-export default ChangePasswordSection;
+export default UserChangePasswordSection;

@@ -15,7 +15,7 @@ import { useState } from "react";
 import { createAddressThunk } from "../features/address/addressSlice"; // You’ll need to implement this
 import { toast } from "react-toastify";
 
-const CreateAddressDialog = () => {
+const CreateAddressDialog = ({ page }) => {
   const dispatch = useDispatch();
   const { isLoading, error, addresses } = useSelector((state) => state.address);
   const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +47,18 @@ const CreateAddressDialog = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
-        <Button className="bg-primary text-white text-md" size="lg">
-          Add Address <Plus />
-        </Button>
+        {page === "checkout" ? (
+          <div
+            className={"flex items-center space-x-2 border-b py-2 font-bold"}
+          >
+            <Plus />
+            <p>Add Address</p>
+          </div>
+        ) : (
+          <Button className="bg-primary text-white text-md" size="lg">
+            Add Address <Plus />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="w-fit">
         <DialogHeader>
@@ -111,32 +120,33 @@ const CreateAddressDialog = () => {
 
             {/* Street */}
             <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">Street</label>
+              <label className="text-sm font-bold text-zinc-600">
+                Address Details
+              </label>
               <input
                 type="text"
-                {...register("street", { required: true })}
+                {...register("addressDetails", { required: true })}
                 placeholder="123 Street Name"
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
               />
-              {errors.street && (
+              {errors.addressDetails && (
                 <span className="text-red-500 text-sm font-semibold">
-                  Street is required
+                  Address Details are required
                 </span>
               )}
             </div>
-
-            {/* City */}
+            {/* Country */}
             <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">City</label>
+              <label className="text-sm font-bold text-zinc-600">Country</label>
               <input
                 type="text"
-                {...register("city", { required: true })}
-                placeholder="Lahore"
+                {...register("country", { required: true })}
+                placeholder="Pakistan"
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
               />
-              {errors.city && (
+              {errors.country && (
                 <span className="text-red-500 text-sm font-semibold">
-                  City is required
+                  Country is required
                 </span>
               )}
             </div>
@@ -153,6 +163,22 @@ const CreateAddressDialog = () => {
               {errors.state && (
                 <span className="text-red-500 text-sm font-semibold">
                   State is required
+                </span>
+              )}
+            </div>
+
+            {/* City */}
+            <div className="flex flex-col">
+              <label className="text-sm font-bold text-zinc-600">City</label>
+              <input
+                type="text"
+                {...register("city", { required: true })}
+                placeholder="Lahore"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+              />
+              {errors.city && (
+                <span className="text-red-500 text-sm font-semibold">
+                  City is required
                 </span>
               )}
             </div>
@@ -175,21 +201,6 @@ const CreateAddressDialog = () => {
               )}
             </div>
 
-            {/* Country */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">Country</label>
-              <input
-                type="text"
-                {...register("country", { required: true })}
-                placeholder="Pakistan"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
-              />
-              {errors.country && (
-                <span className="text-red-500 text-sm font-semibold">
-                  Country is required
-                </span>
-              )}
-            </div>
             {addresses.length !== 0 && (
               <div className="flex gap-x-2 items-center ">
                 <input

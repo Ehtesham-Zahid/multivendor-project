@@ -30,7 +30,7 @@ const UpdateAddressDialog = ({ address }) => {
       fullName: address.fullName,
       phoneNumber: address.phoneNumber,
       email: address.email,
-      street: address.street,
+      addressDetails: address.addressDetails,
       city: address.city,
       state: address.state,
       zipCode: address.zipCode,
@@ -89,14 +89,14 @@ const UpdateAddressDialog = ({ address }) => {
               placeholder: "johndoe@gmail.com",
             },
             {
-              name: "street",
-              label: "Street",
+              name: "addressDetails",
+              label: "Address Details",
               placeholder: "123 Street Name",
             },
-            { name: "city", label: "City", placeholder: "Lahore" },
-            { name: "state", label: "State", placeholder: "Punjab" },
-            { name: "zipCode", label: "ZIP Code", placeholder: "54000" },
             { name: "country", label: "Country", placeholder: "Pakistan" },
+            { name: "state", label: "State", placeholder: "Punjab" },
+            { name: "city", label: "City", placeholder: "Lahore" },
+            { name: "zipCode", label: "ZIP Code", placeholder: "54000" },
           ].map((field) => (
             <div className="flex flex-col" key={field.name}>
               <label className="text-sm font-bold text-zinc-600">

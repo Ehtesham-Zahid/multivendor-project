@@ -18,13 +18,19 @@ import OrdersSection from "./sections/UserOrdersSection";
 import DashboardProductsSection from "./sections/DashboardProductsSection";
 import ShopOrdersSection from "./sections/ShopOrdersSection";
 import DashboardCouponCodesSection from "./sections/DashboardCouponCodesSection";
-import RefundsSection from "./sections/RefundsSection";
+import RefundsSection from "./sections/UserRefundsSection";
 import CheckoutSection from "./sections/CheckoutSection";
 import DashboardEventsSection from "./sections/DashboardEventsSection";
 import DashboardSettingsSection from "./sections/DashboardSettingsSection";
 import CreateProductDialog from "./CreateProductDialog";
 import CreateCouponCodeDialog from "./CreateCouponCodeDialog";
 import CreateEventDialog from "./CreateEventDialog";
+import UserProfileSection from "./sections/UserProfileSection";
+import UserOrdersSection from "./sections/UserOrdersSection";
+import UserRefundsSection from "./sections/UserRefundsSection";
+import UserChangePasswordSection from "./sections/UserChangePasswordSection";
+import UserAddressesSection from "./sections/UserAddressesSection";
+// import UserInboxSection from "./sections/UserInboxSection";
 
 export {
   Header,
@@ -53,4 +59,10 @@ export {
   RefundsSection,
   ShopOrdersSection,
   CheckoutSection,
+  UserProfileSection,
+  UserOrdersSection,
+  UserRefundsSection,
+  UserChangePasswordSection,
+  UserAddressesSection,
+  // UserInboxSection,
 };

@@ -6,50 +6,76 @@ import { useForm } from "react-hook-form";
 import CountrySelector from "./CountrySelector";
 import { useEffect, useState } from "react";
 import StateSelector from "./StateSelector";
-import { createAddressThunk } from "../features/address/addressSlice";
+import {
+  createAddressThunk,
+  getUserAddressThunk,
+} from "../features/address/addressSlice";
 import API from "../api/axios";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import { createOrderThunk } from "../features/order/orderSlice";
+import { Link, useNavigate } from "react-router";
+import { logoutThunk } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
+import CreateAddressDialog from "./CreateAddressDialog";
+import Spinner from "./Spinner";
 
 const CheckoutForm = () => {
   const stripePromise = loadStripe(
     "pk_test_51RtPHKBTJUPkctEDjF0z9JDkW96NEMYHHUx1rXTX6AjvGywa9yUEZVW7hoD48BYw3IEiPaCh5BfboCJr6WfRwbd400TQjxpmSE"
   );
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+  const { coupon } = useSelector((state) => state.coupon);
+  const { totalAmount, cart } = useSelector((state) => state.cart);
+  const { addresses, isLoading } = useSelector((state) => state.address);
+
   const [selectedOption, setSelectedOption] = useState("card");
+  const [selectedAddress, setSelectedAddress] = useState(addresses[0]?._id);
   const [country, setCountry] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [state, setState] = useState("");
-  const { user } = useSelector((state) => state.auth);
-  const { isLoading } = useSelector((state) => state.address);
-  const [cart, setCart] = useState([]);
-  const { coupon } = useSelector((state) => state.coupon);
-  const { totalAmount } = useSelector((state) => state.cart);
+  const [addressId, setAddressId] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(storedCart);
-  }, []);
+    if (addresses.length > 0 && !selectedAddress) {
+      setSelectedAddress(addresses[0]._id);
+      setAddressId(addresses[0]._id);
+    } else if (selectedAddress) {
+      setAddressId(selectedAddress);
+    }
+  }, [addresses, selectedAddress]);
 
   const onSubmit = async (data) => {
-    const addressData = {
-      ...data,
-      country: country,
-      state: state,
-    };
+    console.log("data", data);
+    if (user) {
+      console.log("selectedAddress", selectedAddress);
+      setAddressId(selectedAddress);
+      console.log("addressId", addressId);
+    } else {
+      const addressData = {
+        ...data,
+        country: country,
+        state: state,
+      };
+      const resultAction = await dispatch(createAddressThunk(addressData));
 
-    const resultAction = await dispatch(createAddressThunk(addressData));
+      if (createAddressThunk.fulfilled.match(resultAction)) {
+        setAddressId(resultAction.payload._id);
+      }
+    }
 
-    if (createAddressThunk.fulfilled.match(resultAction)) {
-      const addressId = resultAction.payload._id;
-
+    if (addressId) {
+      console.log("addressId", addressId);
       // Transform cart to match the `items` structure in your Order model
       const items = cart.map((product) => ({
         productId: product._id, // Product ID
@@ -64,37 +90,43 @@ const CheckoutForm = () => {
       const orderData = {
         items,
         paymentMethod: selectedOption,
-        // paymentStatus: selectedOption === "card" ? "pending" : "paid", // adjust based on flow
         totalAmount: coupon ? coupon.newTotal : totalAmount,
         shippingAddress: addressId,
       };
 
-      console.log("orderData", orderData);
-
       const resultAction2 = await dispatch(createOrderThunk(orderData));
 
-      if (selectedOption === "card") {
-        console.log("resultAction2", resultAction2.payload);
-        const total = coupon ? coupon.newTotal : totalAmount;
-        const res = await API.post("/payments/create-checkout-session", {
-          productsData: cart,
-          totalAmount: total,
-          discountPercentage: coupon?.discountPercentage || 0,
-          orderId: resultAction2.payload._id,
-        });
+      if (createOrderThunk.fulfilled.match(resultAction2)) {
+        if (selectedOption === "card") {
+          const total = coupon ? coupon.newTotal : totalAmount;
+          const res = await API.post("/payments/create-checkout-session", {
+            productsData: cart,
+            totalAmount: total,
+            discountPercentage: coupon?.discountPercentage || 0,
+            orderId: resultAction2.payload._id,
+          });
 
-        const stripe = await stripePromise;
-        if (!stripe) {
-          console.error("Stripe failed to load");
-          return;
+          const stripe = await stripePromise;
+          if (!stripe) {
+            console.error("Stripe failed to load");
+            return;
+          }
+
+          await stripe.redirectToCheckout({ sessionId: res.data.id });
+        } else {
+          navigate("/success");
         }
-
-        await stripe.redirectToCheckout({ sessionId: res.data.id });
-      } else if (selectedOption === "paypal") {
-        // Paypal logic here
-      } else if (selectedOption === "cod") {
-        // COD logic here
+        localStorage.setItem("cart", JSON.stringify([]));
       }
+    }
+  };
+
+  const logoutHandler = async () => {
+    const resultAction = await dispatch(logoutThunk());
+    if (logoutThunk.fulfilled.match(resultAction)) {
+      toast.success("Logged Out Successfully");
+    } else {
+      toast.error("Error in logging out");
     }
   };
 
@@ -113,6 +145,7 @@ const CheckoutForm = () => {
                   " bg-white text-danger text-sm p-1 px-2 rounded-sm font-medium hover:underline hover:bg-white cursor-pointer"
                 }
                 size={"xs"}
+                onClick={logoutHandler}
               >
                 Logout
               </Button>
@@ -123,7 +156,15 @@ const CheckoutForm = () => {
           <>
             <div className="flex justify-between items-center">
               <p className="text-2xl font-bold">Contact</p>
-              <p>Login</p>
+              <Link
+                to="/auth/login"
+                className="hover:underline"
+                onClick={() => {
+                  sessionStorage.setItem("redirectAfterLogin", "checkout");
+                }}
+              >
+                Login
+              </Link>
             </div>
             <input
               type="text"
@@ -136,55 +177,93 @@ const CheckoutForm = () => {
       </div>
       <div className="delivery border-b-2 border-dark py-5 gap-5 flex flex-col">
         <p className="text-2xl font-bold">Shipping Address</p>
-        <input
-          type="text"
-          className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
-          placeholder="Fullname"
-          {...register("fullName", { required: true })}
-        />
-        <input
-          type="text"
-          className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
-          placeholder="Phone Number"
-          {...register("phoneNumber", { required: true })}
-        />
-        <input
-          type="text"
-          className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
-          placeholder="Address"
-          {...register("addressDetails", { required: true })}
-        />
-        <input
-          type="text"
-          className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
-          placeholder="Apartment, Suite Otional e.t.c"
-        />
-        <div className="flex gap-2">
-          <CountrySelector
-            setCountry={setCountry}
-            setCountryCode={setCountryCode}
-          />
-          <StateSelector
-            countryName={country}
-            countryCode={countryCode}
-            setState={setState}
-          />
-        </div>
-
-        <div className="flex gap-2">
-          <input
-            type="text"
-            className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
-            placeholder="City"
-            {...register("city", { required: true })}
-          />{" "}
-          <input
-            type="text"
-            className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
-            placeholder="Zip Code"
-            {...register("zipCode", { required: true })}
-          />
-        </div>
+        {user ? (
+          isLoading ? (
+            <Spinner />
+          ) : addresses?.length > 0 ? (
+            <RadioGroup
+              value={selectedAddress}
+              onValueChange={setSelectedAddress}
+            >
+              {addresses.map((address) => (
+                <div
+                  key={address._id}
+                  className="flex items-center space-x-2 border-b py-2 "
+                >
+                  <RadioGroupItem value={address._id} id={address._id} />
+                  <Label htmlFor={address._id}>
+                    <div>
+                      <p>
+                        {address.fullName} - {address.phoneNumber}
+                      </p>
+                      <p className="text-sm text-gray-500 font-normal">
+                        {address.addressDetails}, {address.city},{" "}
+                        {address.state}, {address.country}
+                      </p>
+                    </div>
+                  </Label>
+                </div>
+              ))}
+              <CreateAddressDialog page="checkout" />
+            </RadioGroup>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <div className=" border-b py-2">No addresses found</div>
+              <CreateAddressDialog page="checkout" />
+            </div>
+          )
+        ) : (
+          <>
+            <input
+              type="text"
+              className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
+              placeholder="Fullname"
+              {...register("fullName", { required: true })}
+            />
+            <input
+              type="text"
+              className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
+              placeholder="Phone Number"
+              {...register("phoneNumber", { required: true })}
+            />
+            <input
+              type="text"
+              className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
+              placeholder="Address"
+              {...register("addressDetails", { required: true })}
+            />
+            <input
+              type="text"
+              className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
+              placeholder="Apartment, Suite Otional e.t.c"
+            />
+            <div className="flex gap-2">
+              <CountrySelector
+                setCountry={setCountry}
+                setCountryCode={setCountryCode}
+              />
+              <StateSelector
+                countryName={country}
+                countryCode={countryCode}
+                setState={setState}
+              />
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
+                placeholder="City"
+                {...register("city", { required: true })}
+              />{" "}
+              <input
+                type="text"
+                className="p-2   rounded-md border-2 border-zinc-400 outline-primary w-full"
+                placeholder="Zip Code"
+                {...register("zipCode", { required: true })}
+              />
+            </div>{" "}
+          </>
+        )}
       </div>
       <div className="payment   py-5 flex flex-col gap-5">
         <div className="flex flex-col">
@@ -197,13 +276,7 @@ const CheckoutForm = () => {
           <div className="flex items-center space-x-2 border-b py-2 ">
             <RadioGroupItem value="card" id="card" />
             <Label htmlFor="card" className="text-xl font-normal">
-              Credit- Debit Card
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2 border-b py-2 ">
-            <RadioGroupItem value="paypal" id="paypal" />
-            <Label htmlFor="paypal" className="text-xl font-normal">
-              Paypal
+              Credit - Debit Card
             </Label>
           </div>
           <div className="flex items-center space-x-2 border-b py-2 ">

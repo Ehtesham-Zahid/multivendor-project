@@ -19,7 +19,6 @@ import AllProductsPage from "./pages/AllProductsPage.jsx";
 import AllEventsPage from "./pages/AllEventsPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import SingleProductPage from "./pages/SingleProductPage.jsx";
-import ProfilePage from "./pages/ProfilePage.jsx";
 // import DashboardPage from "./pages/DashboardLayout.jsx";
 import DashboardLayout from "./pages/DashboardLayout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
@@ -32,6 +31,13 @@ import DashboardSettingsPage from "./pages/DashboardSettingsPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import SuccessPage from "./pages/SuccessPage.jsx";
 import CancelPage from "./pages/CancelPage.jsx";
+import SingleOrderPage from "./pages/SingleOrderPage.jsx";
+import ProfileLayout from "./pages/ProfileLayout.jsx";
+import UserProfileSection from "./components/sections/UserProfileSection.jsx";
+import UserOrdersSection from "./components/sections/UserOrdersSection.jsx";
+import UserRefundsSection from "./components/sections/UserRefundsSection.jsx";
+import UserChangePasswordSection from "./components/sections/UserChangePasswordSection.jsx";
+import UserAddressesSection from "./components/sections/UserAddressesSection.jsx";
 
 let router = createBrowserRouter([
   {
@@ -42,9 +48,22 @@ let router = createBrowserRouter([
       { path: "best-selling", Component: BestSellingPage },
       { path: "all-products", Component: AllProductsPage },
       { path: "all-events", Component: AllEventsPage },
-      { path: "profile", Component: ProfilePage },
       { path: "category/:category", Component: CategoryPage },
       { path: "product/:productId", Component: SingleProductPage },
+      { path: "order/:orderId", Component: SingleOrderPage },
+      {
+        path: "profile",
+        Component: ProfileLayout,
+        children: [
+          { index: true, Component: UserProfileSection },
+          { path: "orders", Component: UserOrdersSection },
+          { path: "refunds", Component: UserRefundsSection },
+          // { path: "inbox", Component: UserInboxSection },
+          { path: "change-password", Component: UserChangePasswordSection },
+          { path: "addresses", Component: UserAddressesSection },
+          { path: "order/:orderId", Component: SingleOrderPage },
+        ],
+      },
     ],
   },
   {
@@ -67,10 +86,9 @@ let router = createBrowserRouter([
       { path: "events", Component: DashboardEventsPage },
       { path: "coupon-codes", Component: DashboardCouponCodesPage },
       { path: "refunds", Component: DashboardRefundsPage },
-      { path: "withdraw-money", Component: ProfilePage },
       { path: "settings", Component: DashboardSettingsPage },
       { path: "category/:cateogry", Component: CategoryPage },
-      { path: "product/:productId", Component: SingleProductPage },
+      { path: "order/:orderId", Component: SingleOrderPage },
     ],
   },
   { path: "checkout", Component: CheckoutPage },

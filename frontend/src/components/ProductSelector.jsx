@@ -7,10 +7,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shadcn/select";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const ProductSelector = ({ setProductId, setProductPrice }) => {
+  const [products, setProducts] = useState([]);
   const { shopProducts } = useSelector((state) => state.product);
+
+  useEffect(() => {
+    const newProducts = shopProducts.filter(
+      (product) => product.eventId === null
+    );
+    setProducts(newProducts);
+  }, [shopProducts]);
 
   const handleChange = (selectedId) => {
     setProductId(selectedId);
@@ -26,7 +35,7 @@ const ProductSelector = ({ setProductId, setProductPrice }) => {
       </SelectTrigger>
       <SelectContent className="bg-background outline-none">
         <SelectGroup className="outline-none">
-          {shopProducts?.map((product) => (
+          {products?.map((product) => (
             <SelectItem
               key={product._id}
               value={product._id}

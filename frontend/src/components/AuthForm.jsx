@@ -62,7 +62,13 @@ const AuthForm = ({ page }) => {
       toast.success("Verification Email sent. Please verify to continue!");
     } else if (page === "login" && loginUser.fulfilled.match(resultAction)) {
       toast.success("Logged in successfully!");
-      navigate("/");
+      const redirect = sessionStorage.getItem("redirectAfterLogin");
+      if (redirect === "checkout") {
+        navigate("/checkout");
+      } else {
+        navigate("/");
+      }
+      sessionStorage.removeItem("redirectAfterLogin");
     }
 
     reset();

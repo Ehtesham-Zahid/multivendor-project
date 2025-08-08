@@ -42,12 +42,10 @@ const shopSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    orders: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
+    accountBalance: {
+      type: Number,
+      default: 0,
+    },
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,

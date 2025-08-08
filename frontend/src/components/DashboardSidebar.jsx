@@ -57,11 +57,6 @@ const items = [
     icon: MessageCircleMoreIcon,
   },
   {
-    title: "Coupon Codes",
-    url: "/dashboard/coupon-codes",
-    icon: GiftIcon,
-  },
-  {
     title: "Refunds",
     url: "/dashboard/refunds",
     icon: SendToBackIcon,

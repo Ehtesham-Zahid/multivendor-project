@@ -29,10 +29,12 @@ import {
 import Spinner from "../Spinner";
 import { toast } from "react-toastify";
 import UpdateEventDialog from "../updateEventDialog";
+import { formatDate } from "../../utils";
 
 const DashboardEventsSection = () => {
   const { shopEvents, isLoading, error } = useSelector((state) => state.event);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getProductsByShopThunk());
     dispatch(getShopEventsThunk());
@@ -75,10 +77,10 @@ const DashboardEventsSection = () => {
                 <TableCell className="font-medium">{event._id}</TableCell>
                 <TableCell>{event.name}</TableCell>
                 <TableCell>{event.productId.name}</TableCell>
-                <TableCell>{event.eventPrice}</TableCell>
-                <TableCell>{event.originalPrice}</TableCell>
-                <TableCell>{event.startDate}</TableCell>
-                <TableCell>{event.endDate}</TableCell>
+                <TableCell>${event.originalPrice}</TableCell>
+                <TableCell>${event.eventPrice}</TableCell>
+                <TableCell>{formatDate(event.startDate)}</TableCell>
+                <TableCell>{formatDate(event.endDate)}</TableCell>
                 <TableCell className="text-primary">
                   <UpdateEventDialog event={event} />
                 </TableCell>
