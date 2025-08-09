@@ -39,7 +39,7 @@ const UserChangePasswordSection = () => {
           <label className=" font-bold text-zinc-600">Old Password</label>
           <input
             type="password"
-            className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-lg"
+            className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-md md:w-lg"
             placeholder="Enter your old password"
             {...register("oldPassword", {
               required: "Old password is required",
@@ -54,7 +54,7 @@ const UserChangePasswordSection = () => {
           <label className=" font-bold text-zinc-600">New Password</label>
           <input
             type="password"
-            className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-lg"
+            className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-md md:w-lg"
             placeholder="Enter your new password"
             {...register("newPassword", {
               required: "New password is required",
@@ -75,7 +75,7 @@ const UserChangePasswordSection = () => {
           </label>
           <input
             type="password"
-            className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-lg"
+            className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-md md:w-lg"
             placeholder="Confirm your new password"
             {...register("confirmNewPassword", {
               required: "Please confirm your new password",
@@ -99,7 +99,7 @@ const UserChangePasswordSection = () => {
         <Button
           type="submit"
           disabled={isLoading}
-          className={"w-lg  mt-5 text-white text-md"}
+          className={"w-xs sm:w-md md:w-lg  mt-5 text-white text-md"}
         >
           {isLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

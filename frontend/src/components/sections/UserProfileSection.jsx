@@ -98,7 +98,7 @@ const UserProfileSection = () => {
             <label className="text-sm font-bold text-zinc-600">Full Name</label>
             <input
               type="text"
-              className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md"
+              className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-md"
               {...register("fullname")}
               placeholder="Enter your full name"
             />
@@ -106,7 +106,7 @@ const UserProfileSection = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className={"w-md  mt-5 text-white text-md"}
+            className={"w-xs sm:w-md  mt-5 text-white text-md"}
           >
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

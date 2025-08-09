@@ -16,7 +16,7 @@ const AddressCard = ({ address, index }) => {
   };
   return (
     <div>
-      <p className="font-bold py-3 border-b border-primary w-60">
+      <p className="font-bold py-3 border-b border-primary w-52">
         {index === 0 ? "Primary Address" : `Address ${index + 1}`}
       </p>
       <div className="flex flex-col gap-1 py-3 border-b border-primary">

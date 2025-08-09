@@ -82,14 +82,14 @@ const AuthForm = ({ page }) => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
-      className="shadow-2xl rounded-md p-5 w-1/4 py-10 shadow-zinc-500"
+      className="shadow-2xl rounded-md w-full max-w-md sm:max-w-lg mx-4 p-5 sm:p-6 md:p-8 shadow-zinc-500"
     >
       <Link to="/" className="flex items-center justify-center">
-        <p className="text-5xl font-black">
+        <p className=" text-4xl md:text-5xl font-black">
           Swift<span className="text-primary">Cart</span>
         </p>
       </Link>
-      <p className="text-2xl text-center font-bold mt-3">
+      <p className="text-xl sm:text-2xl text-center font-bold mt-3">
         {page === "register"
           ? "Register your Account"
           : "Login to your Account"}
@@ -139,7 +139,7 @@ const AuthForm = ({ page }) => {
           </span>
         )}
         {page === "login" ? (
-          <div className="flex justify-between items-center mt-1">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2 gap-2">
             <div className="flex gap-x-2 items-center ">
               <input
                 type="checkbox"
@@ -167,7 +167,7 @@ const AuthForm = ({ page }) => {
       {page === "register" ? (
         <div className="flex flex-col mt-5">
           <label className="text-sm font-bold text-zinc-600 mb-1">Avatar</label>
-          <div className="flex items-center gap-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
             {preview ? (
               <img
                 src={preview}
@@ -203,7 +203,7 @@ const AuthForm = ({ page }) => {
       <Button
         disabled={isLoading}
         type="submit"
-        className={"text-white text-md cursor-pointer w-full mt-8"}
+        className={"text-white text-md cursor-pointer w-full mt-6 sm:mt-8"}
       >
         {isLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

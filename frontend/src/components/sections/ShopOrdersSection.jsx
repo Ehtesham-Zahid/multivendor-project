@@ -24,7 +24,7 @@ const ShopOrdersSection = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-[500px]   overflow-y-scroll rounded-sm p-3 shadow-2xl">
+    <div className="w-full    overflow-y-scroll rounded-sm p-3 shadow-2xl overflow-x-scroll">
       <Table>
         {/* Always render the table header */}
         <TableHeader>

@@ -24,60 +24,63 @@ const UserOrdersSection = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
-      <Table>
-        <TableHeader>
-          <TableRow className="text-primary">
-            <TableHead className="w-[100px]">ORDER ID</TableHead>
-            <TableHead>DATE</TableHead>
-            <TableHead>PAYMENT METHOD</TableHead>
-            <TableHead>PAYMENT STATUS</TableHead>
-            <TableHead>DELIVERY STATUS</TableHead>
-            <TableHead>TOTAL AMOUNT</TableHead>
-            <TableHead className="text-right">See Details</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading ? (
-            <Spinner />
-          ) : userOrders?.length > 0 ? (
-            userOrders?.map((order, index) => (
-              <TableRow key={order._id}>
-                <TableCell className="font-medium">
-                  {" "}
-                  {`SCO${1000 + index + 1}`}
-                </TableCell>
-                <TableCell>{formatDate(order.createdAt)}</TableCell>
-                <TableCell className="capitalize">
-                  {order.paymentMethod || "COD"}
-                </TableCell>
-                <TableCell className="capitalize">
-                  {order.paymentStatus || "Pending"}
-                </TableCell>
-                <TableCell className="capitalize">
-                  {order.deliveryStatus || "Pending"}
-                </TableCell>
-                <TableCell>${order.totalAmount || "250.00"}</TableCell>
-                <TableCell className="text-primary">
-                  <Link to={`/profile/order/${order._id}`}>
-                    <ArrowRight className="ml-auto" />
-                  </Link>
+    <>
+      <p className="text-2xl font-bold text-dark md:hidden">My Orders</p>
+      <div className="w-full min-h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
+        <Table>
+          <TableHeader>
+            <TableRow className="text-primary">
+              <TableHead className="w-[100px]">ORDER ID</TableHead>
+              <TableHead>DATE</TableHead>
+              <TableHead>PAYMENT METHOD</TableHead>
+              <TableHead>PAYMENT STATUS</TableHead>
+              <TableHead>DELIVERY STATUS</TableHead>
+              <TableHead>TOTAL AMOUNT</TableHead>
+              <TableHead className="text-right">See Details</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <Spinner />
+            ) : userOrders?.length > 0 ? (
+              userOrders?.map((order, index) => (
+                <TableRow key={order._id}>
+                  <TableCell className="font-medium">
+                    {" "}
+                    {`SCO${1000 + index + 1}`}
+                  </TableCell>
+                  <TableCell>{formatDate(order.createdAt)}</TableCell>
+                  <TableCell className="capitalize">
+                    {order.paymentMethod || "COD"}
+                  </TableCell>
+                  <TableCell className="capitalize">
+                    {order.paymentStatus || "Pending"}
+                  </TableCell>
+                  <TableCell className="capitalize">
+                    {order.deliveryStatus || "Pending"}
+                  </TableCell>
+                  <TableCell>${order.totalAmount || "250.00"}</TableCell>
+                  <TableCell className="text-primary">
+                    <Link to={`/profile/order/${order._id}`}>
+                      <ArrowRight className="ml-auto" />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  className="text-center py-6 font-semibold text-md"
+                >
+                  No orders found
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={6}
-                className="text-center py-6 font-semibold text-md"
-              >
-                No orders found
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 };
 

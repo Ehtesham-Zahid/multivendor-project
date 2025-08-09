@@ -14,7 +14,7 @@ const DashboardSection = () => {
   }, []);
 
   return (
-    <div className="flex gap-10">
+    <div className="flex gap-10 flex-wrap justify-center md:justify-start">
       <DashboardCard
         title="Account Balance"
         amount={shop?.accountBalance}

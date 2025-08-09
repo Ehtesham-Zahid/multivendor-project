@@ -18,13 +18,13 @@ const UserAddressesSection = () => {
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="flex justify-between">
-        <p className="font-bold text-3xl">My Addresses</p>
+        <p className="font-bold text-2xl sm:text-3xl">My Addresses</p>
         {/* <Button className="text-md text-white" size={"lg"}>
           Add New
         </Button> */}
         <CreateAddressDialog />
       </div>
-      <div className="flex w-full justify-start items-center gap-8 flex-wrap">
+      <div className="flex w-full justify-center md:justify-start items-center gap-8 flex-wrap">
         {isLoading ? (
           <Spinner />
         ) : addresses.length === 0 ? (

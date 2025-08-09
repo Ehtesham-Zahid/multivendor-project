@@ -16,10 +16,10 @@ const DashboardLayout = () => {
     dispatch(getCurrentUserShopThunk());
   }, []);
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full">
       <SidebarProvider>
         <DashboardSidebar />
-        <main className="w-full">
+        <main className="w-full h-screen">
           <ToastContainer />
           <SidebarTrigger />
           {/* <PanelLeftIcon size={28} /> */}

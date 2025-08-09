@@ -76,8 +76,64 @@ const ProfileSidebar = () => {
     }
   };
   return (
-    <div className="bg-white shadow-2xl w-64 rounded-md p-5">
-      <ul className="flex flex-col gap-8 text-lg">
+    <div className="bg-white shadow-2xl   rounded-md p-5 w-full md:w-[280px]">
+      <ul className="flex md:hidden gap-5 sm:gap-8 text-lg justify-around ">
+        <li>
+          <Link to="/profile" className="flex font-medium gap-3 items-center">
+            <UserRound size={20} />
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/profile/orders"
+            className="flex font-medium gap-3 items-center"
+          >
+            <ListOrdered size={20} />
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/profile/refunds"
+            className="flex font-medium gap-3 items-center"
+          >
+            <SendToBackIcon size={20} />
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/profile/inbox"
+            className="flex font-medium gap-3 items-center"
+          >
+            <MessageCircleIcon size={20} />
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            to="/profile/change-password"
+            className="flex font-medium gap-3 items-center"
+          >
+            <Lock size={20} />
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/profile/addresses"
+            className="flex font-medium gap-3 items-center"
+          >
+            <HomeIcon size={20} />
+          </Link>
+        </li>
+        <li>
+          <Link
+            className="flex font-medium gap-3 items-center text-red-500"
+            onClick={logoutHandler}
+          >
+            <LogOut size={20} className="rotate-180" />
+          </Link>
+        </li>
+      </ul>
+      <ul className=" flex-col gap-8 text-lg hidden md:flex">
         <li>
           <Link to="/profile" className="flex font-medium gap-3 items-center">
             <UserRound size={20} /> Profile
@@ -126,7 +182,7 @@ const ProfileSidebar = () => {
         </li>
         <li>
           <Link
-            className="flex font-medium gap-3 items-center"
+            className="flex font-medium gap-3 items-center text-red-500  "
             onClick={logoutHandler}
           >
             <LogOut size={20} className="rotate-180" /> Log out

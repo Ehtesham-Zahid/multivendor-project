@@ -6,7 +6,7 @@ const ProfileLayout = () => {
   return (
     <div className="w-full">
       <ToastContainer />
-      <main className="w-custom m-auto flex my-10 gap-10">
+      <main className="w-custom m-auto flex flex-col md:flex-row my-10 gap-10">
         <ProfileSidebar />
         <Outlet />
       </main>

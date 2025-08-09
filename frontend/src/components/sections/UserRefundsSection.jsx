@@ -33,51 +33,54 @@ const UserRefundsSection = () => {
   }, [userOrders]);
 
   return (
-    <div className="w-full  min-h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
-      <Table>
-        <TableHeader>
-          <TableRow className="text-primary">
-            <TableHead className="w-[100px]">REFUND ID</TableHead>
-            <TableHead>DATE</TableHead>
-            <TableHead>PAYMENT METHOD</TableHead>
-            <TableHead>Refund STATUS</TableHead>
-            <TableHead>TOTAL AMOUNT</TableHead>
-            <TableHead className="text-right">See Details</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading ? (
-            <TableRow className="w-full fle justify-center items-center">
-              <Spinner />
+    <>
+      <p className="text-2xl font-bold text-dark md:hidden">My Refunds</p>
+      <div className="w-full  min-h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
+        <Table>
+          <TableHeader>
+            <TableRow className="text-primary">
+              <TableHead className="w-[100px]">REFUND ID</TableHead>
+              <TableHead>DATE</TableHead>
+              <TableHead>PAYMENT METHOD</TableHead>
+              <TableHead>Refund STATUS</TableHead>
+              <TableHead>TOTAL AMOUNT</TableHead>
+              <TableHead className="text-right">See Details</TableHead>
             </TableRow>
-          ) : refundOrders?.length > 0 ? (
-            refundOrders?.map((order, index) => (
-              <TableRow key={order._id} className="capitalize">
-                <TableCell className="font-medium">
-                  {`SCR${1000 + index + 1}`}
-                </TableCell>
-                <TableCell>{formatDate(order.createdAt)}</TableCell>
-                <TableCell>{order.paymentMethod || "COD"}</TableCell>
-                <TableCell>{order.refundStatus || "Pending"}</TableCell>
-                <TableCell>$250.00</TableCell>{" "}
-                <TableCell>
-                  <ArrowRight className="ml-auto text-primary" />
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableRow className="w-full fle justify-center items-center">
+                <Spinner />
+              </TableRow>
+            ) : refundOrders?.length > 0 ? (
+              refundOrders?.map((order, index) => (
+                <TableRow key={order._id} className="capitalize">
+                  <TableCell className="font-medium">
+                    {`SCR${1000 + index + 1}`}
+                  </TableCell>
+                  <TableCell>{formatDate(order.createdAt)}</TableCell>
+                  <TableCell>{order.paymentMethod || "COD"}</TableCell>
+                  <TableCell>{order.refundStatus || "Pending"}</TableCell>
+                  <TableCell>$250.00</TableCell>{" "}
+                  <TableCell>
+                    <ArrowRight className="ml-auto text-primary" />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  className="text-center py-6 font-semibold text-md"
+                >
+                  No orders found
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={6}
-                className="text-center py-6 font-semibold text-md"
-              >
-                No orders found
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 };
 
