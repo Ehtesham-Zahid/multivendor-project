@@ -21,14 +21,48 @@ import ProductImage from "../assets/images/category-1.jpg";
 import Logo from "../assets/images/logo.png";
 import { Badge } from "../shadcn/badge";
 import QuantityCounter from "./QuantityCounter";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart, getCart } from "../features/cart/cartSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  addToWishlist,
+  getWishlist,
+  removeFromWishlist,
+} from "../features/wishlist/wishlistSlice";
 
 const ProductDialog = ({ product }) => {
   const [productQuantity, setProductQuantity] = useState(1);
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const [isWished, setIsWished] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const isProductInWishlist = wishlist.some(
+      (item) => item._id === product._id
+    );
+    setIsWished(isProductInWishlist);
+  }, [product._id, wishlist]);
+
+  // Handle wish list toggle
+  const handleWishlistToggle = () => {
+    setIsWished((prev) => !prev);
+    if (!isWished) {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      dispatch(addToWishlist(product));
+    } else {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const updatedWishlist = wishlist.filter(
+        (item) => item._id !== product._id
+      );
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      dispatch(removeFromWishlist(product._id));
+    }
+  };
+
   // Handle add to cart logic here
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -51,6 +85,7 @@ const ProductDialog = ({ product }) => {
     toast.success("Product added to cart");
     dispatch(getCart());
   };
+
   return (
     <div>
       <Dialog className="w-screen">
@@ -80,17 +115,20 @@ const ProductDialog = ({ product }) => {
               </div>
             </div>
             <div className="border-b-2 border-zinc-400 pb-4 flex  items-center justify-between">
-              <QuantityCounter
-                id={product?._id}
-                parent="productDialog"
-                productQuantity={productQuantity}
-                setProductQuantity={setProductQuantity}
-              />
-              {/* <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
-                <p className="px-2.5 py-0.5">-</p>
-                <p className="px-2.5 py-0.5">10</p>
-                <p className="px-2.5 py-0.5">+</p>
-              </div> */}
+              <div className="flex items-center gap-x-2">
+                <QuantityCounter
+                  id={product?._id}
+                  parent="productDialog"
+                  productQuantity={productQuantity}
+                  setProductQuantity={setProductQuantity}
+                />
+                <Heart
+                  className="bg-white   rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
+                  size={"30px"}
+                  fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
+                  onClick={handleWishlistToggle}
+                />
+              </div>
               <p className="text-lg ml-1">
                 <strong>{product?.stock}</strong> items left
               </p>

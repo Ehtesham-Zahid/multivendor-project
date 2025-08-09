@@ -4,45 +4,42 @@ import { Badge } from "../shadcn/badge";
 import ProductDialog from "./ProductDialog";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addToWishlist,
+  getWishlist,
   removeFromWishlist,
 } from "../features/wishlist/wishlistSlice";
 import { addToCart, getCart } from "../features/cart/cartSlice";
 import { toast } from "react-toastify";
 
 const ProductCard = ({ product }) => {
+  const { wishlist } = useSelector((state) => state.wishlist);
   const [isWished, setIsWished] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    // const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     const isProductInWishlist = wishlist.some(
       (item) => item._id === product._id
     );
     setIsWished(isProductInWishlist);
-  }, [product._id]);
+  }, [product._id, wishlist]);
 
   // Handle wish list toggle
   const handleWishlistToggle = () => {
     setIsWished((prev) => !prev);
     if (!isWished) {
-      // Add to wishlist logic here
-      console.log("Added to wishlist:", product._id);
       const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
       wishlist.push(product);
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      // Dispatch action to add to wishlist
       dispatch(addToWishlist(product));
     } else {
-      console.log("Removed from wishlist:", product._id);
       const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
       const updatedWishlist = wishlist.filter(
         (item) => item._id !== product._id
       );
       localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-      // Dispatch action to remove from wishlist
       dispatch(removeFromWishlist(product._id));
     }
   };
@@ -75,7 +72,7 @@ const ProductCard = ({ product }) => {
         <Heart
           className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
           size={"28px"}
-          fill={isWished ? "red" : "white"}
+          fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
           onClick={handleWishlistToggle}
         />
         <ProductDialog product={product} />

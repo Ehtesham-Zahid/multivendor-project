@@ -19,8 +19,7 @@ const WishlistSheet = () => {
 
   useEffect(() => {
     // Fetch wishlist items if needed
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    dispatch(getWishlist(wishlist));
+    dispatch(getWishlist());
   }, []);
 
   const { wishlist } = useSelector((state) => state.wishlist);

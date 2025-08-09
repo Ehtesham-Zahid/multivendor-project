@@ -12,17 +12,35 @@ import { intervalToDuration } from "date-fns";
 import { addToCart, getCart } from "../../features/cart/cartSlice";
 import Spinner from "../Spinner";
 import { toast } from "react-toastify";
+import {
+  addToWishlist,
+  getWishlist,
+  removeFromWishlist,
+} from "../../features/wishlist/wishlistSlice";
+
 const SingleProductSection = () => {
-  const [productQuantity, setProductQuantity] = useState(1);
-  const { productId } = useParams();
-  const dispatch = useDispatch();
   const { singleProduct, isLoading } = useSelector((state) => state.product);
+  const { wishlist } = useSelector((state) => state.wishlist);
+
+  const [productQuantity, setProductQuantity] = useState(1);
+  const [duration, setDuration] = useState({});
+  const [isWished, setIsWished] = useState(false);
+
+  const { productId } = useParams();
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    // This effect can be used for any side effects needed on component mount
     dispatch(getProductByIdThunk(productId));
   }, []);
 
-  const [duration, setDuration] = useState({});
+  useEffect(() => {
+    const isProductInWishlist = wishlist.some(
+      (item) => item._id === singleProduct?._id
+    );
+    setIsWished(isProductInWishlist);
+  }, [singleProduct?._id, wishlist]);
+
   useEffect(() => {
     const updateDuration = () => {
       const now = new Date();
@@ -46,7 +64,7 @@ const SingleProductSection = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const existingItemIndex = cart.findIndex(
-      (item) => item._id === singleProduct._id
+      (item) => item._id === singleProduct?._id
     );
 
     if (existingItemIndex !== -1) {
@@ -63,6 +81,24 @@ const SingleProductSection = () => {
     toast.success("Product added to cart");
     setProductQuantity(1);
     dispatch(getCart());
+  };
+
+  // Handle wish list toggle
+  const handleWishlistToggle = () => {
+    setIsWished((prev) => !prev);
+    if (!isWished) {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      wishlist.push(singleProduct);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      dispatch(addToWishlist(singleProduct));
+    } else {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const updatedWishlist = wishlist.filter(
+        (item) => item._id !== singleProduct?._id
+      );
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      dispatch(removeFromWishlist(singleProduct?._id));
+    }
   };
   return isLoading ? (
     <div className="flex justify-center items-center h-screen pb-52">
@@ -93,7 +129,13 @@ const SingleProductSection = () => {
       <div>
         <div className="border-zinc-300 border-b-2 pb-5">
           <p className="text-3xl font-bold text-sky-800 mb-3 flex items-center justify-between ">
-            {singleProduct?.name} <Heart className="cursor-pointer" />
+            {singleProduct?.name}{" "}
+            <Heart
+              className="cursor-pointer bg-white rounded-sm p-1 hover:bg-sky-200"
+              size={"32px"}
+              fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
+              onClick={handleWishlistToggle}
+            />
           </p>
           <p className=" leading-5">{singleProduct?.description}</p>
         </div>

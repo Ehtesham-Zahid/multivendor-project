@@ -2,30 +2,32 @@ import React from "react";
 import Logo from "../assets/images/category-1.jpg";
 import QuantityCounter from "./QuantityCounter";
 import { ShoppingCart, ShoppingCartIcon } from "lucide-react";
-import { removeFromWishlist } from "../features/wishlist/wishlistSlice";
+import {
+  getWishlist,
+  removeFromWishlist,
+} from "../features/wishlist/wishlistSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
 import { addToCart, getCart, removeFromCart } from "../features/cart/cartSlice";
+import { toast } from "react-toastify";
 
 const MiniCard = ({ sheet, product }) => {
   const dispatch = useDispatch();
+
   const handleRemoveItem = () => {
-    // Logic to remove item from wishlist or cart
     if (sheet === "wishlist") {
-      console.log("Remove from wishlist:", product.id);
       const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
       const updatedWishlist = wishlist.filter(
         (item) => item._id !== product._id
       );
       localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-      // Dispatch action to remove from wishlist
+      // dispatch(getWishlist());
       dispatch(removeFromWishlist(product._id));
     } else {
-      console.log("Remove from cart:", product.id);
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       const updatedCart = cart.filter((item) => item._id !== product._id);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-      // Dispatch action to remove from cart
+      // dispatch(getCart());
       dispatch(removeFromCart(product._id));
     }
   };
@@ -38,7 +40,6 @@ const MiniCard = ({ sheet, product }) => {
     );
 
     if (existingItemIndex !== -1) {
-      // Product already in cart, increase quantity by 1
       cart[existingItemIndex].quantity =
         (cart[existingItemIndex].quantity || 1) + 1;
     } else {
@@ -47,6 +48,7 @@ const MiniCard = ({ sheet, product }) => {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
+    toast.success("Product added to cart");
     dispatch(getCart());
   };
   return (
