@@ -38,6 +38,7 @@ import UserOrdersSection from "./components/sections/UserOrdersSection.jsx";
 import UserRefundsSection from "./components/sections/UserRefundsSection.jsx";
 import UserChangePasswordSection from "./components/sections/UserChangePasswordSection.jsx";
 import UserAddressesSection from "./components/sections/UserAddressesSection.jsx";
+import CheckoutLayout from "./pages/CheckoutLayout.jsx";
 
 let router = createBrowserRouter([
   {
@@ -91,9 +92,15 @@ let router = createBrowserRouter([
       { path: "order/:orderId", Component: SingleOrderPage },
     ],
   },
-  { path: "checkout", Component: CheckoutPage },
-  { path: "success", Component: SuccessPage },
-  { path: "cancel", Component: CancelPage },
+  {
+    path: "checkout",
+    Component: CheckoutLayout,
+    children: [
+      { index: true, Component: CheckoutPage },
+      { path: "success", Component: SuccessPage },
+      { path: "cancel", Component: CancelPage },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(

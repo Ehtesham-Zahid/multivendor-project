@@ -5,6 +5,7 @@ import Slider from "./Slider";
 import AuthForm from "./AuthForm";
 import CreateShopForm from "./CreateShopForm";
 import EmailVerification from "./EmailVerification";
+import CheckoutHeader from "./CheckoutHeader";
 // import CreateProductDialog from "./CreateProductDialog";
 import Categories from "./sections/Categories";
 import BestSelling from "./sections/BestSelling";
@@ -64,5 +65,6 @@ export {
   UserRefundsSection,
   UserChangePasswordSection,
   UserAddressesSection,
+  CheckoutHeader,
   // UserInboxSection,
 };

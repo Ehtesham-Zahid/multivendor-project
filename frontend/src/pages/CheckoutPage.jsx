@@ -3,7 +3,7 @@ import { CheckoutSection } from "../components";
 
 const CheckoutPage = () => {
   return (
-    <div className="border-2 my-5 ">
+    <div className="border-2">
       <div className="w-full">
         <CheckoutSection />
       </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const Footer = () => {
   return (
-    <div className="bg-dark  text-white grid grid-cols-4 gap-10 p-10 mt-20  ">
+    <div className="bg-dark  text-white grid grid-cols-4 gap-10 p-10   ">
       <div className="flex flex-col gap-y-8">
         <p className="text-5xl font-black">
           Swift<span className="text-primary">Cart</span>
