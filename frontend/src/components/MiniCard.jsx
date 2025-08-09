@@ -5,7 +5,7 @@ import { ShoppingCart, ShoppingCartIcon } from "lucide-react";
 import { removeFromWishlist } from "../features/wishlist/wishlistSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router";
-import { addToCart, removeFromCart } from "../features/cart/cartSlice";
+import { addToCart, getCart, removeFromCart } from "../features/cart/cartSlice";
 
 const MiniCard = ({ sheet, product }) => {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ const MiniCard = ({ sheet, product }) => {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    dispatch(addToCart({ ...product, quantity: 1 }));
+    dispatch(getCart());
   };
   return (
     <div className="flex gap-5 w-full p-2">
@@ -80,6 +80,7 @@ const MiniCard = ({ sheet, product }) => {
             <QuantityCounter
               // quantityValue={product?.quantity}
               id={product?._id}
+              parent="cart"
             />
           )}
           <p

@@ -9,7 +9,8 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../features/wishlist/wishlistSlice";
-import { addToCart } from "../features/cart/cartSlice";
+import { addToCart, getCart } from "../features/cart/cartSlice";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }) => {
   const [isWished, setIsWished] = useState(false);
@@ -64,7 +65,8 @@ const ProductCard = ({ product }) => {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    dispatch(addToCart({ ...product, quantity: 1 }));
+    toast.success("Product added to cart");
+    dispatch(getCart());
   };
 
   return (

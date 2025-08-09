@@ -9,11 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getProductByIdThunk } from "../../features/product/productSlice";
 import { intervalToDuration } from "date-fns";
-import { addToCart } from "../../features/cart/cartSlice";
+import { addToCart, getCart } from "../../features/cart/cartSlice";
+import Spinner from "../Spinner";
+import { toast } from "react-toastify";
 const SingleProductSection = () => {
+  const [productQuantity, setProductQuantity] = useState(1);
   const { productId } = useParams();
   const dispatch = useDispatch();
-  const { singleProduct } = useSelector((state) => state.product);
+  const { singleProduct, isLoading } = useSelector((state) => state.product);
   useEffect(() => {
     // This effect can be used for any side effects needed on component mount
     dispatch(getProductByIdThunk(productId));
@@ -47,18 +50,25 @@ const SingleProductSection = () => {
     );
 
     if (existingItemIndex !== -1) {
-      // Product already in cart, increase quantity by 1
       cart[existingItemIndex].quantity =
-        (cart[existingItemIndex].quantity || 1) + 1;
+        (cart[existingItemIndex].quantity || 1) + productQuantity;
+
+      localStorage.setItem("cart", JSON.stringify(cart));
     } else {
       // Product not in cart, add with quantity 1
-      cart.push({ ...singleProduct, quantity: 1 });
+      cart.push({ ...singleProduct, quantity: productQuantity });
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    dispatch(addToCart({ ...singleProduct, quantity: 1 }));
+    toast.success("Product added to cart");
+    setProductQuantity(1);
+    dispatch(getCart());
   };
-  return (
+  return isLoading ? (
+    <div className="flex justify-center items-center h-screen pb-52">
+      <Spinner />
+    </div>
+  ) : (
     <section className="xl:w-5/6 2xl:w-4/5 m-auto grid grid-cols-1 lg:grid-cols-2 my-20 gap-x-10">
       <div className="flex gap-8 col-span-1 flex-col 2xl:flex-row border-2 border-zinc-300 pb-5 rounded-md">
         {singleProduct?.images.length > 1 && (
@@ -144,7 +154,12 @@ const SingleProductSection = () => {
           <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">
               <p className="text-xl font-semibold">Quantity: </p>{" "}
-              <QuantityCounter />
+              <QuantityCounter
+                id={singleProduct?._id}
+                parent="singleProductSection"
+                productQuantity={productQuantity}
+                setProductQuantity={setProductQuantity}
+              />
             </div>
             <p className="font-m">
               <strong>{singleProduct?.stock}</strong> items left

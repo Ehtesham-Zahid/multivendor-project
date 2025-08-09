@@ -2,7 +2,12 @@ import { useState } from "react";
 import { updateQuantity } from "../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 
-const QuantityCounter = ({ id }) => {
+const QuantityCounter = ({
+  id,
+  parent,
+  setProductQuantity,
+  productQuantity,
+}) => {
   const dispatch = useDispatch();
 
   // Get initial quantity from localStorage or default to 1
@@ -12,22 +17,33 @@ const QuantityCounter = ({ id }) => {
     return item?.quantity || 1;
   };
 
-  const [quantity, setQuantity] = useState(getInitialQuantity());
+  const [quantity, setQuantity] = useState(
+    parent === "productDialog" || parent === "singleProductSection"
+      ? 1
+      : getInitialQuantity()
+  );
 
   const handleQuantityChange = (newQuantity) => {
     if (newQuantity < 1) return;
 
     setQuantity(newQuantity);
-
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const itemIndex = cart.findIndex((item) => item._id === id);
-
-    if (itemIndex !== -1) {
-      cart[itemIndex].quantity = newQuantity;
-      localStorage.setItem("cart", JSON.stringify(cart));
+    if (parent === "productDialog" || parent === "singleProductSection") {
+      setProductQuantity(newQuantity);
     }
 
-    dispatch(updateQuantity({ _id: id, quantity: newQuantity }));
+    if (parent === "cart") {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const existingItemIndex = cart.findIndex((item) => item._id === id);
+
+      if (existingItemIndex !== -1) {
+        // Product already in cart, increase quantity by 1
+        cart[existingItemIndex].quantity = newQuantity;
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      dispatch(getCart());
+    }
   };
 
   return (

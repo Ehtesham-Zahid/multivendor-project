@@ -22,11 +22,12 @@ import Logo from "../assets/images/logo.png";
 import { Badge } from "../shadcn/badge";
 import QuantityCounter from "./QuantityCounter";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice";
+import { addToCart, getCart } from "../features/cart/cartSlice";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const ProductDialog = ({ product }) => {
-  const [quantity, setQuantity] = useState(1);
+  const [productQuantity, setProductQuantity] = useState(1);
   const dispatch = useDispatch();
   // Handle add to cart logic here
   const handleAddToCart = () => {
@@ -37,16 +38,18 @@ const ProductDialog = ({ product }) => {
     );
 
     if (existingItemIndex !== -1) {
-      // Product already in cart, increase quantity by 1
       cart[existingItemIndex].quantity =
-        (cart[existingItemIndex].quantity || 1) + 1;
+        (cart[existingItemIndex].quantity || 1) + productQuantity;
+
+      localStorage.setItem("cart", JSON.stringify(cart));
     } else {
       // Product not in cart, add with quantity 1
-      cart.push({ ...product, quantity: 1 });
+      cart.push({ ...product, quantity: productQuantity });
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    dispatch(addToCart({ ...product, quantity: 1 }));
+    toast.success("Product added to cart");
+    dispatch(getCart());
   };
   return (
     <div>
@@ -77,7 +80,12 @@ const ProductDialog = ({ product }) => {
               </div>
             </div>
             <div className="border-b-2 border-zinc-400 pb-4 flex  items-center justify-between">
-              <QuantityCounter id={product?._id} />
+              <QuantityCounter
+                id={product?._id}
+                parent="productDialog"
+                productQuantity={productQuantity}
+                setProductQuantity={setProductQuantity}
+              />
               {/* <div className="rounded-sm border-2 border-dark flex max-w-fit font-semibold text-lg">
                 <p className="px-2.5 py-0.5">-</p>
                 <p className="px-2.5 py-0.5">10</p>
