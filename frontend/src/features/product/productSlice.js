@@ -63,9 +63,15 @@ export const updateProductThunk = createAsyncThunk(
 
 export const getAllProductsThunk = createAsyncThunk(
   "product/getAllProducts",
-  async ({ page, limit, category, sortBy }, thunkAPI) => {
+  async ({ page, limit, category, sortBy, search }, thunkAPI) => {
     try {
-      const res = await getAllProductsApi({ page, limit, category, sortBy });
+      const res = await getAllProductsApi({
+        page,
+        limit,
+        category,
+        sortBy,
+        search,
+      });
       console.log(res);
       return res.data;
     } catch (error) {
@@ -106,6 +112,7 @@ const initialState = {
   shopProducts: [],
   categoryProducts: [],
   bestSellingProducts: [],
+  searchProducts: [],
   singleProduct: null,
   isLoading: false,
   error: null,
@@ -116,7 +123,11 @@ const initialState = {
 const productSlice = createSlice({
   name: "product",
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchTermReducer: (state, action) => {
+      state.searchTerm = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createProductThunk.pending, (state) => {
@@ -203,7 +214,7 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.success = true;
 
-        const { sortBy, limit, category } = action.meta.arg;
+        const { sortBy, limit, category, search } = action.meta.arg;
 
         if (sortBy === "sales") {
           console.log("MAIN CHAL RAHA");
@@ -215,12 +226,19 @@ const productSlice = createSlice({
           state.totalPages = action.payload.totalPages;
         }
 
+        if (search) {
+          state.searchProducts = action.payload.products;
+          state.totalPages = action.payload.totalPages;
+        }
+
         // This block should be your fallback when no specific filters are passed
         console.log(!category && !(sortBy === "sales"));
-        if (!category && !(sortBy === "sales")) {
+        console.log(search);
+        if (!category && !(sortBy === "sales") && search === undefined) {
           console.log(action.payload.products);
           state.allProducts = action.payload.products;
           state.totalPages = action.payload.totalPages;
+          state.searchProducts = [];
         }
       })
 
@@ -264,5 +282,5 @@ const productSlice = createSlice({
   },
 });
 
-// export const { logout, resetError } = productSlice.actions;
+export const { setSearchTermReducer } = productSlice.actions;
 export default productSlice.reducer;

@@ -6,7 +6,6 @@ import {
   Heart,
   ShoppingCart,
 } from "lucide-react";
-import { Search } from "lucide-react";
 
 import { Button } from "@/shadcn/button";
 import {
@@ -33,29 +32,19 @@ import CategoryImage8 from "../assets/images/category-8.png";
 import CategoryImage9 from "../assets/images/category-9.png";
 import CategoryImage10 from "../assets/images/category-10.png";
 import CategoryDropdown from "./CategoryDropdown";
+import SearchInput from "./SearchInput";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const [category, setCategory] = useState("bottom");
 
   return (
-    <div className="header  backdrop-blur-3xl  w-full flex flex-col items-center">
+    <div className="header   backdrop-blur-3xl  w-full flex flex-col items-center">
       <div className="primary-nav flex justify-between py-5 border-b-2 border-transparent w-custom  items-center">
         <Link className="text-5xl font-black" to="/">
           Swift<span className="text-primary">Cart</span>
         </Link>
-        <div className="w-1/2 border-2  border-primary outline-none flex justify-center  rounded-md px-5 py-2">
-          <input
-            type="text"
-            placeholder="Search for Products"
-            name="search"
-            id="search"
-            className="w-full outline-none"
-          />
-          <button className="border-s-2 border-primary ps-3 font text-dark cursor-pointer">
-            <Search strokeWidth={3} color="#1f2937" />
-          </button>
-        </div>
+        <SearchInput />
         {user ? (
           user.hasShop ? (
             <Link

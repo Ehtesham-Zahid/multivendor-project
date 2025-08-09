@@ -24,13 +24,20 @@ export const deleteProductApi = async (id) => {
   });
 };
 
-export const getAllProductsApi = async ({ page, limit, category, sortBy }) => {
+export const getAllProductsApi = async ({
+  page,
+  limit,
+  category,
+  sortBy,
+  search,
+}) => {
   const params = new URLSearchParams();
 
   if (page) params.append("page", page);
   if (limit) params.append("limit", limit);
   if (category) params.append("category", category);
   if (sortBy) params.append("sortBy", sortBy);
+  if (search) params.append("search", search);
 
   return await API.get(`/products?${params.toString()}`);
 };

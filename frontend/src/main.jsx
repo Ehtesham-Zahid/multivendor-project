@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
 import App from "./App.jsx";
-import Home from "./pages/Home.jsx";
+import HomePage from "./pages/HomePage.jsx";
 import Auth from "./pages/Auth.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -32,6 +32,7 @@ import CheckoutPage from "./pages/CheckoutPage.jsx";
 import SuccessPage from "./pages/SuccessPage.jsx";
 import CancelPage from "./pages/CancelPage.jsx";
 import SingleOrderPage from "./pages/SingleOrderPage.jsx";
+import SearchPage from "./pages/SearchPage.jsx";
 import ProfileLayout from "./pages/ProfileLayout.jsx";
 import UserProfileSection from "./components/sections/UserProfileSection.jsx";
 import UserOrdersSection from "./components/sections/UserOrdersSection.jsx";
@@ -45,10 +46,11 @@ let router = createBrowserRouter([
     path: "/",
     Component: App, // This will act as a layout for its children
     children: [
-      { index: true, Component: Home },
+      { index: true, Component: HomePage },
       { path: "best-selling", Component: BestSellingPage },
       { path: "all-products", Component: AllProductsPage },
       { path: "all-events", Component: AllEventsPage },
+      { path: "search/:search", Component: SearchPage },
       { path: "category/:category", Component: CategoryPage },
       { path: "product/:productId", Component: SingleProductPage },
       { path: "order/:orderId", Component: SingleOrderPage },
