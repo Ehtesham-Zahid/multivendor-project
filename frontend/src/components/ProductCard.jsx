@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400 w-80 h-90 ">
+    <div className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400 w-80 h-80 ">
       <div className="flex flex-col absolute right-5 top-5 gap-y-2 z-10">
         <Heart
           className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
@@ -82,7 +82,7 @@ const ProductCard = ({ product }) => {
           onClick={handleAddToCart}
         />
       </div>
-      <div className="overflow-hidden rounded-md   aspect-square w-48 h-48 mx-auto  ">
+      <div className="overflow-hidden rounded-md   aspect-square w-44 h-44 mx-auto  ">
         <img
           src={product?.images[0]}
           className="rounded-md hover:scale-103 transition duration-300 object-contain"

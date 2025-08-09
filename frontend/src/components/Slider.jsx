@@ -18,7 +18,6 @@ import { Button } from "../shadcn/button";
 const Slider = () => {
   return (
     <div>
-      {" "}
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         slidesPerView={1}
@@ -27,60 +26,61 @@ const Slider = () => {
         pagination={{ clickable: true }}
         className="h-[750px] [&_.swiper-pagination-bullet]:!bg-gray-400 [&_.swiper-pagination-bullet-active]:!bg-background [&_.swiper-pagination-bullet]:p-1.5"
       >
-        <SwiperSlide className="slider-1 ">
-          <div className=" flex flex-col justify-center items-center w-full h-full gap-y-10">
-            <p className="text-7xl font-black text-center w-1/2 text-white">
+        {/* Slide 1 */}
+        <SwiperSlide className="slider-1 p-2">
+          <div className="flex flex-col justify-center items-center w-full h-full gap-y-10">
+            <p className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-center max-[500px]:w-full w-5/6 sm:w-3/4 lg:w-2/3 2xl:w-1/2 text-white">
               Your One-Stop Shop For
               <span className="text-primary"> Everything</span> Online
             </p>
-            <p className="text-xl w-2/5 text-center font-semibold text-white">
+            <p className="text-md sm:text-lg lg:text-xl w-5/6 sm:w-2/3 lg:w-1/2 xl:w-2/5 text-center font-semibold text-white">
               Discover unbeatable deals on electronics, fashion, and more. Enjoy
               secure payments, fast delivery, and 24/7 support at Buyno. Start
               Shopping
             </p>
             <Button
               className="text-white cursor-pointer text-lg py-6"
-              size={"lg"}
+              size="lg"
             >
               Start Shopping
             </Button>
           </div>
         </SwiperSlide>
-        <SwiperSlide className="slider-2">
-          <div className=" flex flex-col justify-center items-center w-full h-full gap-y-10">
-            <p className="text-7xl font-black text-center w-1/2 text-white">
-              Your One-Stop Shop For
-              <span className="text-dark"> Everything</span> Online
+
+        {/* Slide 2 */}
+        <SwiperSlide className="slider-1 p-2">
+          <div className="flex flex-col justify-center items-center w-full h-full gap-y-10">
+            <p className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-center max-[500px]:w-full w-5/6 sm:w-3/4 lg:w-2/3 2xl:w-1/2 text-white">
+              Hot Deals On <span className="text-primary">Top Brands</span>
             </p>
-            <p className="text-xl w-2/5 text-center font-semibold text-dark">
-              Discover unbeatable deals on electronics, fashion, and more. Enjoy
-              secure payments, fast delivery, and 24/7 support at Buyno. Start
-              Shopping
+            <p className="text-md sm:text-lg lg:text-xl w-5/6 sm:w-2/3 lg:w-1/2 xl:w-2/5 text-center font-semibold text-white">
+              Save big on the brands you love. From Apple to Nike — enjoy
+              discounts, quality, and style all in one place.
             </p>
             <Button
               className="text-white cursor-pointer text-lg py-6"
-              size={"lg"}
+              size="lg"
             >
-              Start Shopping
+              Shop Deals
             </Button>
           </div>
         </SwiperSlide>
-        <SwiperSlide className="slider-3">
-          <div className=" flex flex-col justify-center items-center w-full h-full gap-y-10">
-            <p className="text-7xl font-black text-center w-1/2 text-white">
-              Your One-Stop Shop For
-              <span className="text-dark"> Everything</span> Online
+
+        {/* Slide 3 */}
+        <SwiperSlide className="slider-1 p-2">
+          <div className="flex flex-col justify-center items-center w-full h-full gap-y-10">
+            <p className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-center max-[500px]:w-full w-5/6 sm:w-3/4 lg:w-2/3 2xl:w-1/2 text-white">
+              Fresh Finds For <span className="text-primary">Every Season</span>
             </p>
-            <p className="text-xl w-2/5 text-center font-semibold text-dark">
-              Discover unbeatable deals on electronics, fashion, and more. Enjoy
-              secure payments, fast delivery, and 24/7 support at Buyno. Start
-              Shopping
+            <p className="text-md sm:text-lg lg:text-xl w-5/6 sm:w-2/3 lg:w-1/2 xl:w-2/5 text-center font-semibold text-white">
+              Stay ahead with the latest arrivals in fashion, tech, and home
+              essentials — curated just for you.
             </p>
             <Button
               className="text-white cursor-pointer text-lg py-6"
-              size={"lg"}
+              size="lg"
             >
-              Start Shopping
+              Explore Now
             </Button>
           </div>
         </SwiperSlide>

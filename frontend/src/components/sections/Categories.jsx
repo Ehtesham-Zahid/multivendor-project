@@ -17,14 +17,14 @@ const Categories = () => {
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         Product Categories
       </p>
-      <div className="grid grid-cols-6 gap-4">
+      <div className="grid max-[500px]:grid-cols-1 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
         <CategoryCard
           categoryTitle="Clothing & Shoes"
           productTitle="Sneakers"
           image={CategoryImage1}
           bgColor="bg-red-100"
           textColor="text-red-500"
-          span={2}
+          // span={1}
         />
         <CategoryCard
           categoryTitle="Mobile & Electronics"
@@ -87,7 +87,7 @@ const Categories = () => {
           productTitle="Train"
           image={CategoryImage8}
           bgColor="bg-yellow-100"
-          span={2}
+          span={1}
           textColor="text-yellow-500"
         />
         {/* <CategoryCard

@@ -27,20 +27,22 @@ const BestSelling = ({ limit }) => {
       dispatch(getAllProductsThunk({ sortBy: "sales", limit, page }));
     }
   }, [limit, dispatch, page]);
-
+  // grid max-[500px]:grid-cols-1 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 justify-around
   return (
     <section className="w-custom m-auto">
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         Best Selling
       </p>
-      <div className="grid grid-cols-5 gap-8">
+      <div className=" ">
         {isLoading ? (
           <Spinner />
         ) : (
           <>
-            {bestSellingProducts?.map((product) => {
-              return <ProductCard key={product._id} product={product} />;
-            })}{" "}
+            <div className="flex flex-wrap gap-5 justify-around">
+              {bestSellingProducts?.map((product) => {
+                return <ProductCard key={product._id} product={product} />;
+              })}{" "}
+            </div>
             {limit !== 5 && totalPages > 1 && (
               <div className="mt-10 flex justify-center items-center col-span-full">
                 <Pagination>

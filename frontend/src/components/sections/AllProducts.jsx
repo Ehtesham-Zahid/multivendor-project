@@ -30,7 +30,7 @@ const AllProducts = () => {
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         All Products
       </p>
-      <div className="grid grid-cols-5 gap-8">
+      <div>
         {isLoading ? (
           <Spinner />
         ) : error ? (
@@ -39,9 +39,11 @@ const AllProducts = () => {
           <p>No products available</p>
         ) : (
           <>
-            {allProducts?.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
+            <div className="flex flex-wrap gap-5 justify-around md:justify-start">
+              {allProducts?.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
             {totalPages > 1 && (
               <div className="mt-10 flex justify-center">
                 <Pagination>

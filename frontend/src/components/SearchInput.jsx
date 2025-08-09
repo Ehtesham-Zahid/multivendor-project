@@ -24,7 +24,7 @@ const SearchInput = () => {
   }, [debouncedSearchTerm]);
 
   return (
-    <div className="w-1/2 border-2  border-primary outline-none flex justify-center  rounded-md px-5 py-2 mx-auto">
+    <div className="lg:w-1/2 w-full border-2  border-primary outline-none flex justify-center  rounded-md px-5 py-2 mx-auto">
       <input
         type="text"
         placeholder="Search for Products"

@@ -28,7 +28,7 @@ const Home = () => {
         <Categories />
         <BestSelling limit={5} />
         <PopularEvents />
-        <FeaturedProducts />
+        {/*   <FeaturedProducts /> */}
       </div>
     </div>
   );
