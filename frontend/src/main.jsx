@@ -40,6 +40,8 @@ import UserRefundsSection from "./components/sections/UserRefundsSection.jsx";
 import UserChangePasswordSection from "./components/sections/UserChangePasswordSection.jsx";
 import UserAddressesSection from "./components/sections/UserAddressesSection.jsx";
 import CheckoutLayout from "./pages/CheckoutLayout.jsx";
+import ShopPage from "./pages/ShopPage.jsx";
+import ShopLayout from "./pages/ShopLayout.jsx";
 
 let router = createBrowserRouter([
   {
@@ -54,6 +56,7 @@ let router = createBrowserRouter([
       { path: "category/:category", Component: CategoryPage },
       { path: "product/:productId", Component: SingleProductPage },
       { path: "order/:orderId", Component: SingleOrderPage },
+      // { path: "shop/:shopId", Component: ShopPage },
       {
         path: "profile",
         Component: ProfileLayout,
@@ -102,6 +105,11 @@ let router = createBrowserRouter([
       { path: "success", Component: SuccessPage },
       { path: "cancel", Component: CancelPage },
     ],
+  },
+  {
+    path: "dashboard/shop/:shopId",
+    Component: ShopPage,
+    // children: [{ path: ":shopId", Component: ShopPage }],
   },
 ]);
 

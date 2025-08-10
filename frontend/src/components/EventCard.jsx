@@ -5,7 +5,7 @@ import { Button } from "../shadcn/button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, small }) => {
   const [duration, setDuration] = useState({});
   useEffect(() => {
     const updateDuration = () => {
@@ -25,7 +25,9 @@ const EventCard = ({ event }) => {
     return () => clearInterval(intervalId); // cleanup
   }, [event?.endDate]);
   return (
-    <div className="bg-zinc-300 grid grid-cols-1 lg:grid-cols-2 gap-5 p-3 sm:p-5 rounded-md  ">
+    <div
+      className={`bg-zinc-300 grid ${small ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1 lg:grid-cols-2"} gap-5 p-3 sm:p-5 rounded-md  `}
+    >
       <div className="bg-white rounded-md p-10 h-[300px] sm:h-[500px] w-full">
         <img
           src={event?.productId?.images[0]}
@@ -43,11 +45,11 @@ const EventCard = ({ event }) => {
           {/* <p className="text-sm mt-5">{event?.productId?.description}</p> */}
           <div className="flex justify-between mt-8">
             <div className="flex items-center gap-2">
-              <p className="font-bold text-2xl line-through">
-                ${event?.productId?.price}
-              </p>
               <p className="font-bold text-3xl text-primary">
                 ${event?.eventPrice}
+              </p>
+              <p className="font-bold text-xl  line-through text-gray-500">
+                ${event?.originalPrice}
               </p>
             </div>
             <Badge variant="default" className="text-white bg-secondary">

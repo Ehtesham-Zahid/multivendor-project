@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 const DashboardSection = () => {
   const { shop } = useSelector((state) => state.shop);
+  const { shopOrders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -14,21 +15,24 @@ const DashboardSection = () => {
   }, []);
 
   return (
-    <div className="flex gap-10 flex-wrap justify-center md:justify-start">
+    <div className="flex gap-5 sm:gap-10 flex-wrap justify-center md:justify-start">
       <DashboardCard
         title="Account Balance"
-        amount={shop?.accountBalance}
+        subtitle={`${shop?.accountBalance} $`}
         link="Withdraw Money"
+        linkUrl="/dashboard/withdraw"
       />
       <DashboardCard
         title="Total Orders"
-        amount={shop?.orders?.length}
+        subtitle={`${shopOrders?.length} Orders`}
         link="View Orders"
+        linkUrl="/dashboard/orders"
       />
       <DashboardCard
         title="Total Products"
-        amount={shop?.products?.length}
+        subtitle={`${shop?.products?.length} Products`}
         link="View Products"
+        linkUrl="/dashboard/products"
       />
     </div>
   );

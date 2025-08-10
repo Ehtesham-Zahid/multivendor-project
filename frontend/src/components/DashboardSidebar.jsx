@@ -20,9 +20,16 @@ import {
   SidebarMenuItem,
 } from "@/shadcn/sidebar";
 import { Link } from "react-router";
-import { SidebarFooter, SidebarHeader } from "../shadcn/sidebar";
+import {
+  SidebarFooter,
+  SidebarHeader,
+  SidebarTrigger,
+  useSidebar,
+} from "../shadcn/sidebar";
 
 import Logo from "../assets/images/logo.png";
+import { SheetClose } from "../shadcn/sheet";
+import { useSelector } from "react-redux";
 
 // Menu items.
 const items = [
@@ -69,8 +76,16 @@ const items = [
 ];
 
 const DashboardSidebar = () => {
+  const { setOpenMobile, setOpen, isMobile } = useSidebar();
+  const { currentUserShop } = useSelector((state) => state.shop);
+
+  const handleClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
   return (
-    <Sidebar className="text-l">
+    <Sidebar className="text-l h-full">
       <SidebarContent className="flex  ">
         <SidebarHeader className={"border-b-2 border-dark "}>
           <Link className="text-4xl xl:text-5xl font-black  py-2 " to="/">
@@ -81,7 +96,7 @@ const DashboardSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title} onClick={handleClick}>
                   <SidebarMenuButton asChild className="my-1.5">
                     <Link to={item.url} className="flex items-center gap-4">
                       <item.icon size={28} className="text-primary w-36" />
@@ -94,14 +109,19 @@ const DashboardSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarFooter className="border-t-2 flex flex-row items-center mt-auto">
-          <img
-            src={Logo}
-            className="w-12 h-12 rounded-full border-2 border-dark"
-          />
-          <div>
-            <p className="font-bold">Hyper products</p>
-            <p className="">Rating</p>
-          </div>
+          <Link
+            to={`/shop/${currentUserShop?._id}`}
+            className="flex items-center gap-2"
+          >
+            <img
+              src={currentUserShop?.imageUrl}
+              className="w-12 h-12 rounded-full border-2 border-dark"
+            />
+            <div>
+              <p className="font-bold">{currentUserShop?.shopName}</p>
+              <p className="">Rating: {currentUserShop?.rating}/5</p>
+            </div>
+          </Link>
         </SidebarFooter>
       </SidebarContent>
     </Sidebar>

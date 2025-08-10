@@ -6,6 +6,7 @@ const {
   getCurrentUserShop,
   deleteShop,
   updateCurrentUserShop,
+  getShopById,
 } = require("../controllers/shopControllers.js");
 
 const upload = require("../middlewares/uploadMiddleware.js");
@@ -20,5 +21,6 @@ router.patch(
   updateCurrentUserShop
 );
 router.delete("/:shopId", protect, deleteShop);
+router.get("/:shopId", getShopById);
 
 module.exports = router;

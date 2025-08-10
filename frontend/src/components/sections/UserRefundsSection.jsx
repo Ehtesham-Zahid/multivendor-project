@@ -16,6 +16,7 @@ import {
 } from "../../features/order/orderSlice";
 import Spinner from "../Spinner";
 import { formatDate } from "../../utils";
+import { Link } from "react-router";
 
 const UserRefundsSection = () => {
   const dispatch = useDispatch();
@@ -35,10 +36,10 @@ const UserRefundsSection = () => {
   return (
     <>
       <p className="text-2xl font-bold text-dark md:hidden">My Refunds</p>
-      <div className="w-full  min-h-[500px]  overflow-y-scroll rounded-sm p-3 shadow-2xl">
+      <div className="w-full  min-h-[500px]  overflow-y-scroll rounded-sm shadow-2xl">
         <Table>
-          <TableHeader>
-            <TableRow className="text-primary">
+          <TableHeader className="bg-primary rounded-md">
+            <TableRow className="text-white">
               <TableHead className="w-[100px]">REFUND ID</TableHead>
               <TableHead>DATE</TableHead>
               <TableHead>PAYMENT METHOD</TableHead>
@@ -61,9 +62,11 @@ const UserRefundsSection = () => {
                   <TableCell>{formatDate(order.createdAt)}</TableCell>
                   <TableCell>{order.paymentMethod || "COD"}</TableCell>
                   <TableCell>{order.refundStatus || "Pending"}</TableCell>
-                  <TableCell>$250.00</TableCell>{" "}
+                  <TableCell>${order.totalAmount || "250.00"}</TableCell>
                   <TableCell>
-                    <ArrowRight className="ml-auto text-primary" />
+                    <Link to={`/profile/order/${order._id}`}>
+                      <ArrowRight className="ml-auto text-primary" />
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))

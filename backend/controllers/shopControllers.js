@@ -110,10 +110,28 @@ const getAllShops = asyncHandler(async (req, res) => {
   res.status(200).json(shops);
 });
 
+const getShopById = asyncHandler(async (req, res) => {
+  const { shopId } = req.params;
+  const shop = await Shop.findById(shopId)
+    .populate("products")
+    .populate({
+      path: "events",
+      populate: {
+        path: "productId",
+      },
+    });
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+  res.status(200).json(shop);
+});
+
 module.exports = {
   createShop,
   getCurrentUserShop,
   updateCurrentUserShop,
   deleteShop,
   getAllShops,
+  getShopById,
 };

@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Event = require("../models/eventModel");
 const Product = require("../models/productModel");
+const Shop = require("../models/shopModel");
 
 // @desc    Create a new event
 // @route   POST /api/events
@@ -46,6 +47,15 @@ const createEvent = asyncHandler(async (req, res) => {
 
   product.eventId = event._id;
   await product.save();
+
+  const shop = await Shop.findById(req.user.shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+
+  shop.events.push(event._id);
+  await shop.save();
 
   await event.populate("productId");
 

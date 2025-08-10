@@ -13,7 +13,7 @@ import {
 import { addToCart, getCart } from "../features/cart/cartSlice";
 import { toast } from "react-toastify";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, small }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const [isWished, setIsWished] = useState(false);
   const dispatch = useDispatch();
@@ -67,44 +67,70 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400 w-80 h-80 ">
-      <div className="flex flex-col absolute right-5 top-5 gap-y-2 z-10">
+    <div
+      className={`col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400  ${
+        small ? "w-56 h-56" : "w-80 h-80 "
+      }`}
+    >
+      <div
+        className={`flex flex-col absolute right-5 top-5 gap-y-2 z-10 ${
+          small ? "gap-y-0" : "gap-y-2"
+        }`}
+      >
         <Heart
           className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
-          size={"28px"}
+          size={`${small ? "24px" : "28px"}`}
           fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
           onClick={handleWishlistToggle}
         />
-        <ProductDialog product={product} />
+        <ProductDialog product={product} small={small} />
         <ShoppingCart
           className="bg-white rounded-sm p-1 hover:bg-sky-200  cursor-pointer"
-          size={"28px"}
+          size={`${small ? "24px" : "28px"}`}
           onClick={handleAddToCart}
         />
       </div>
-      <div className="overflow-hidden rounded-md   aspect-square w-44 h-44 mx-auto  ">
+      <div
+        className={`overflow-hidden rounded-md   aspect-square mx-auto  ${
+          small ? "w-28 h-28" : "w-44 h-44"
+        }`}
+      >
         <img
           src={product?.images[0]}
           className="rounded-md hover:scale-103 transition duration-300 object-contain"
         />
       </div>
-      <p className="text-sm font-bold text-primary hover:underline underline-offset-[4px] decoration-2  cursor-pointer">
-        {product?.shopId?.shopName}
-      </p>
+
+      {!small && (
+        <p className="text-sm font-bold text-primary hover:underline underline-offset-[4px] decoration-2  cursor-pointer">
+          {product?.shopId?.shopName}
+        </p>
+      )}
       <Link to={`/product/${product?._id}`}>
-        <p className="text-xl font-bold mt-2">{product?.name}</p>
+        <p className={`${small ? "text-md" : "text-xl"} font-bold mt-2`}>
+          {product?.name}
+        </p>
       </Link>
-      <div className="flex text-sm gap-0.5 items-center mt-4">
-        <Star size="18px" />
-        <Star size="18px" />
-        <Star size="18px" />
-        <Star size="18px" />
-        <Star size="18px" />
-        <p className="font-semibold ml-1">({product?.rating})</p>
+      <div
+        className={`flex text-sm gap-0.5 items-center ${small ? "mt-1" : "mt-4"}`}
+      >
+        <Star size={`${small ? "14px" : "18px"}`} />
+        <Star size={`${small ? "14px" : "18px"}`} />
+        <Star size={`${small ? "14px" : "18px"}`} />
+        <Star size={`${small ? "14px" : "18px"}`} />
+        <Star size={`${small ? "14px" : "18px"}`} />
+        <p className={`font-semibold ${small ? "text-sm" : "text-md"} ml-1`}>
+          ({product?.rating})
+        </p>
       </div>
-      <div className="flex justify-between mt-5">
-        <p className="font-bold text-2xl">{product?.price}$</p>
-        <Badge variant="default" className="text-white bg-secondary">
+      <div className={`flex justify-between ${small ? "mt-2" : "mt-5"}`}>
+        <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
+          {product?.price}$
+        </p>
+        <Badge
+          variant="default"
+          className={`text-white bg-secondary ${small ? "text-[11px]" : "text-sm"}`}
+        >
           {product?.sold} Sold
         </Badge>
       </div>

@@ -13,7 +13,7 @@ import {
   getOrderThunk,
   requestRefundThunk,
 } from "../../features/order/orderSlice";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { Button } from "../../shadcn/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
@@ -62,7 +62,9 @@ const SingleOrderSection = () => {
                         alt={item.productId.name}
                         className="w-16 h-16 object-cover rounded-sm bg-zinc-300"
                       />
-                      {item.productId.name}
+                      <Link to={`/product/${item.productId._id}`}>
+                        {item.productId.name}
+                      </Link>
                     </TableCell>
                     <TableCell>{item.quantity}</TableCell>
                     <TableCell className="capitalize">{item.price}</TableCell>
@@ -75,7 +77,7 @@ const SingleOrderSection = () => {
             </Table>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mt-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
             <div className="flex flex-col gap-2 bg-zinc-300 p-4 rounded-md">
               <p className="font-bold">SHIPPING ADDRESS</p>
               <p>{singleOrder?.shippingAddress?.addressDetails}</p>
@@ -87,22 +89,31 @@ const SingleOrderSection = () => {
               </div>
             </div>
 
-            <div className="flex gap-2 bg-zinc-300 p-4 rounded-md justify-between">
+            <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col lg:flex-row gap-5">
               <div>
                 <p className="font-bold">TOTAL AMOUNT</p>
                 <p>${singleOrder?.totalAmount}</p>
               </div>
-              <Button
-                disabled={singleOrder?.refundStatus !== "none" || isLoading}
-                className="bg-danger text-white hover:bg-red-600 cursor-pointer"
-                onClick={handleRequestRefund}
-              >
-                {isLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <p>Request a Refund</p>
-                )}
-              </Button>
+              {singleOrder?.refundStatus === "none" ? (
+                <Button
+                  className="bg-danger text-white hover:bg-red-600 cursor-pointer"
+                  onClick={handleRequestRefund}
+                >
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <p>Request a Refund</p>
+                  )}
+                </Button>
+              ) : (
+                <Button className="bg-danger text-white hover:bg-danger   capitalize">
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <p>Refund Status: {singleOrder?.refundStatus}</p>
+                  )}
+                </Button>
+              )}
             </div>
           </div>
         </>

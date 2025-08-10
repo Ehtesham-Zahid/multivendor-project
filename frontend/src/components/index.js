@@ -33,6 +33,7 @@ import UserChangePasswordSection from "./sections/UserChangePasswordSection";
 import UserAddressesSection from "./sections/UserAddressesSection";
 import SearchSection from "./sections/SearchSection";
 import Home from "./sections/Home";
+import ShopSection from "./sections/ShopSection";
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -70,5 +71,6 @@ export {
   CheckoutHeader,
   Home,
   SearchSection,
+  ShopSection,
   // UserInboxSection,
 };

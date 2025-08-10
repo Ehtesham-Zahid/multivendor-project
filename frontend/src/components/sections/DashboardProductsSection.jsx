@@ -39,10 +39,10 @@ const DashboardProductsSection = () => {
   };
 
   return (
-    <div className="w-full min-h-[500px] overflow-y-scroll rounded-sm p-3 shadow-2xl">
+    <div className="w-full min-h-[500px] overflow-y-scroll rounded-sm  shadow-2xl">
       <Table>
-        <TableHeader>
-          <TableRow className="text-primary">
+        <TableHeader className="bg-primary rounded-md">
+          <TableRow className="text-white">
             <TableHead className="w-[100px]">PRODUCT ID</TableHead>
             <TableHead>NAME</TableHead>
             <TableHead>PRICE</TableHead>

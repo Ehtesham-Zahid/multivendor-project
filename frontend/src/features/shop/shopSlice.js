@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createShopApi,
   getCurrentUserShopApi,
+  getShopByIdApi,
   updateCurrentUserShopApi,
 } from "./shopAPI";
 
@@ -42,7 +43,21 @@ export const updateCurrentUserShopThunk = createAsyncThunk(
     }
   }
 );
+
+export const getShopByIdThunk = createAsyncThunk(
+  "shop/getShopById",
+  async (shopId, thunkAPI) => {
+    try {
+      const res = await getShopByIdApi(shopId);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
+  currentUserShop: null,
   shop: null,
   isLoading: false,
   error: null,
@@ -69,7 +84,7 @@ const shopSlice = createSlice({
       })
       .addCase(createShopThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.shop = action.payload;
+        state.currentUserShop = action.payload;
         state.success = true;
       })
       .addCase(createShopThunk.rejected, (state, action) => {
@@ -85,7 +100,7 @@ const shopSlice = createSlice({
       })
       .addCase(getCurrentUserShopThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.shop = action.payload;
+        state.currentUserShop = action.payload;
         state.success = true;
       })
       .addCase(getCurrentUserShopThunk.rejected, (state, action) => {
@@ -101,10 +116,26 @@ const shopSlice = createSlice({
       })
       .addCase(updateCurrentUserShopThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.shop = action.payload;
+        state.currentUserShop = action.payload;
         state.success = true;
       })
       .addCase(updateCurrentUserShopThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getShopByIdThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getShopByIdThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.shop = action.payload;
+        state.success = true;
+      })
+      .addCase(getShopByIdThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

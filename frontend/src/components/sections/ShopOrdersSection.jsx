@@ -24,11 +24,11 @@ const ShopOrdersSection = () => {
   }, []);
 
   return (
-    <div className="w-full    overflow-y-scroll rounded-sm p-3 shadow-2xl overflow-x-scroll">
+    <div className="w-full    overflow-y-scroll rounded-sm shadow-2xl overflow-x-scroll">
       <Table>
         {/* Always render the table header */}
-        <TableHeader>
-          <TableRow className="text-primary">
+        <TableHeader className="bg-primary rounded-md">
+          <TableRow className="text-white">
             <TableHead className="w-[100px]">ORDER ID</TableHead>
             <TableHead>DATE</TableHead>
             <TableHead>PAYMENT METHOD</TableHead>

@@ -31,7 +31,7 @@ import {
   removeFromWishlist,
 } from "../features/wishlist/wishlistSlice";
 
-const ProductDialog = ({ product }) => {
+const ProductDialog = ({ product, small }) => {
   const [productQuantity, setProductQuantity] = useState(1);
   const { wishlist } = useSelector((state) => state.wishlist);
   const [isWished, setIsWished] = useState(false);
@@ -92,7 +92,7 @@ const ProductDialog = ({ product }) => {
         <DialogTrigger>
           <Eye
             className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
-            size={"28px"}
+            size={small ? "24px" : "28px"}
           />
         </DialogTrigger>
         <DialogContent className="rounded-lg w-screen    grid grid-cols-2 gap-10">
