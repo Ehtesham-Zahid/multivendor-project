@@ -89,21 +89,23 @@ const UpdateEventDialog = ({ event }) => {
       <DialogTrigger>
         <Edit className="" size={20} />
       </DialogTrigger>
-      <DialogContent className="w-fit">
+      <DialogContent className="w-sm md:w-md lg:w-lg max-h-screen  h-fit overflow-y-scroll">
         <DialogHeader>
-          <DialogTitle className="mb-5 font-bold">Update Event</DialogTitle>
+          <DialogTitle className="mb-5 font-bold text-start text-lg sm:text-xl">
+            Update Event
+          </DialogTitle>
           {shopProducts?.length > 0 ? (
             <form
-              className="flex flex-col gap-5"
+              className="flex flex-col gap-3 sm:gap-5"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="flex flex-col">
-                <label className="text-sm font-bold text-zinc-600">
+                <label className="text-sm text-start font-bold text-zinc-600 mb-1">
                   Event Name
                 </label>
                 <input
                   type="text"
-                  className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md"
+                  className="p-2 px-3 rounded-md border-2 border-zinc-300 outline-primary w-full text-sm sm:text-base"
                   placeholder="Enter event name"
                   {...register("name", { required: true })}
                 />{" "}
@@ -126,24 +128,24 @@ const UpdateEventDialog = ({ event }) => {
                 onDateChange={(date) => setEndDate(date)}
               />
               <div className="flex flex-col">
-                <label className="text-sm font-bold text-zinc-600">
+                <label className="text-sm text-start font-bold text-zinc-600 mb-1">
                   Original Price
                 </label>
                 <input
                   readOnly
                   value={productPrice}
                   type="number"
-                  className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md font-bold"
+                  className="p-2 px-3 rounded-md border-2 border-zinc-300 outline-primary w-full text-sm sm:text-base font-bold"
                   // placeholder="Enter product name"
                 />
               </div>
               <div className="flex flex-col">
-                <label className="text-sm font-bold text-zinc-600">
+                <label className="text-sm text-start font-bold text-zinc-600 mb-1">
                   Event price
                 </label>
                 <input
                   type="number"
-                  className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md"
+                  className="p-2 px-3 rounded-md border-2 border-zinc-300 outline-primary w-full text-sm sm:text-base"
                   placeholder="Enter event price"
                   {...register("eventPrice", { required: true })}
                 />{" "}

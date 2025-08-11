@@ -18,8 +18,8 @@ export const getUserOrdersApi = async () => {
   });
 };
 
-export const getOrderApi = async (orderId) => {
-  return await API.get(`/orders/${orderId}`, {
+export const getOrderApi = async (orderId, shopId) => {
+  return await API.get(`/orders/${orderId}?shopId=${shopId}`, {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };

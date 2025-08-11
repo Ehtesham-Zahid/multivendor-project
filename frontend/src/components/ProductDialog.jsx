@@ -88,23 +88,23 @@ const ProductDialog = ({ product, small }) => {
 
   return (
     <div>
-      <Dialog className="w-screen">
+      <Dialog className="w-screen max-h-screen">
         <DialogTrigger>
           <Eye
             className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
             size={small ? "24px" : "28px"}
           />
         </DialogTrigger>
-        <DialogContent className="rounded-lg w-screen    grid grid-cols-2 gap-10">
-          <div className="flex justify-center  items-center aspect-square w-96 h-96 mx-auto ">
+        <DialogContent className="rounded-lg min-w-[300px]  w-fit lg:w-screen     grid grid-cols-1 lg:grid-cols-2 lg:gap-10 py-3 md:py-5 px-5">
+          <div className="flex justify-center  items-center aspect-square w-40 h-40 sm:w-64 sm:h-64 lg:w-96 lg:h-96 mx-auto ">
             <img
               src={product?.images[0]}
               className="w-full h-full  object-contain rounded-md"
             />
           </div>
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between lg:gap-0 gap-3">
             <div className="border-b-2 border-zinc-400 pb-5">
-              <p className="text-3xl font-bold text-sky-700  ">
+              <p className="text-3xl font-bold text-sky-800  ">
                 {product?.name}
               </p>
               <div className="flex justify-between  mt-3">
@@ -148,15 +148,15 @@ const ProductDialog = ({ product, small }) => {
                 <MessageCirclePlus /> Contact
               </Button>
             </div>
-            <div className="flex py-5 gap-5">
+            <div className="flex lg:flex-row flex-col py-5 gap-3 lg:gap-5">
               <Button
-                className=" text-white w-48  bg-secondary text-md cursor-pointer hover:bg-amber-400"
+                className=" text-white w-full lg:w-48  bg-secondary text-md cursor-pointer hover:bg-amber-400"
                 size={"lg"}
               >
                 View Full Details
               </Button>
               <Button
-                className=" text-white w-48  text-md cursor-pointer"
+                className=" text-white w-full lg:w-48  text-md cursor-pointer"
                 size={"lg"}
                 onClick={handleAddToCart}
               >

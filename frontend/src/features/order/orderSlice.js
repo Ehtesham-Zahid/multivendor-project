@@ -49,9 +49,9 @@ export const getUserOrdersThunk = createAsyncThunk(
 
 export const getOrderThunk = createAsyncThunk(
   "order/getOrder",
-  async (orderId, thunkAPI) => {
+  async ({ orderId, shopId }, thunkAPI) => {
     try {
-      const res = await getOrderApi(orderId);
+      const res = await getOrderApi(orderId, shopId);
       return res.data;
     } catch (error) {
       console.log("order slice", error);

@@ -45,7 +45,11 @@ const CreateAddressDialog = ({ page }) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="overflow-y-scroll"
+    >
       <DialogTrigger>
         {page === "checkout" ? (
           <div
@@ -60,23 +64,25 @@ const CreateAddressDialog = ({ page }) => {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="w-fit">
+      <DialogContent className="w-fit max-h-screen  h-fit overflow-y-scroll flex flex-col    p-3 min-[400px]:p-5">
         <DialogHeader>
-          <DialogTitle className="mb-5 font-bold">Add Address</DialogTitle>
+          <DialogTitle className="mb-5 font-bold text-start">
+            Add Address
+          </DialogTitle>
           <form
             className="flex flex-col gap-5"
             onSubmit={handleSubmit(onSubmit)}
           >
             {/* Full Name */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
                 Full Name
               </label>
               <input
                 type="text"
                 {...register("fullName", { required: true })}
                 placeholder="John Doe"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
               />
               {errors.fullName && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -85,13 +91,15 @@ const CreateAddressDialog = ({ page }) => {
               )}
             </div>
 
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">Email</label>
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
+                Email
+              </label>
               <input
                 type="tel"
                 {...register("email", { required: true })}
                 placeholder="johndoe@gmail.com"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
               />
               {errors.email && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -101,15 +109,15 @@ const CreateAddressDialog = ({ page }) => {
             </div>
 
             {/* Phone Number */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
                 Phone Number
               </label>
               <input
                 type="tel"
                 {...register("phoneNumber", { required: true })}
                 placeholder="0300-1234567"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
               />
               {errors.phoneNumber && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -119,15 +127,15 @@ const CreateAddressDialog = ({ page }) => {
             </div>
 
             {/* Street */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
                 Address Details
               </label>
               <input
                 type="text"
                 {...register("addressDetails", { required: true })}
                 placeholder="123 Street Name"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
               />
               {errors.addressDetails && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -136,13 +144,15 @@ const CreateAddressDialog = ({ page }) => {
               )}
             </div>
             {/* Country */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">Country</label>
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
+                Country
+              </label>
               <input
                 type="text"
                 {...register("country", { required: true })}
                 placeholder="Pakistan"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
               />
               {errors.country && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -152,13 +162,15 @@ const CreateAddressDialog = ({ page }) => {
             </div>
 
             {/* State */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">State</label>
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
+                State
+              </label>
               <input
                 type="text"
                 {...register("state", { required: true })}
                 placeholder="Punjab"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
               />
               {errors.state && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -168,13 +180,15 @@ const CreateAddressDialog = ({ page }) => {
             </div>
 
             {/* City */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">City</label>
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
+                City
+              </label>
               <input
                 type="text"
                 {...register("city", { required: true })}
                 placeholder="Lahore"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
               />
               {errors.city && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -184,15 +198,15 @@ const CreateAddressDialog = ({ page }) => {
             </div>
 
             {/* Zip Code */}
-            <div className="flex flex-col">
-              <label className="text-sm font-bold text-zinc-600">
+            <div className="flex flex-col ">
+              <label className="text-sm text-start font-bold text-zinc-600">
                 ZIP Code
               </label>
               <input
                 type="text"
                 {...register("zipCode", { required: true })}
                 placeholder="54000"
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm lg:w-md"
               />
               {errors.zipCode && (
                 <span className="text-red-500 text-sm font-semibold">
@@ -217,7 +231,6 @@ const CreateAddressDialog = ({ page }) => {
                 </label>
               </div>
             )}
-
             {error && (
               <span className="text-red-500 text-sm font-semibold">
                 {error}

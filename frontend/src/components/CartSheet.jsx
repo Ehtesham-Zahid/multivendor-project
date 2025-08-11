@@ -32,7 +32,7 @@ const CartSheet = () => {
         </p>
         <ShoppingCart />
       </SheetTrigger>
-      <SheetContent className="flex flex-col  items-center max-[450px]:w-[325px] overflow-y-scroll overflow-x-hidden pb-20">
+      <SheetContent className="flex flex-col w-80 sm:w-full  items-center   overflow-y-scroll overflow-x-hidden pb-20">
         <p className=" font-bold text-2xl w-full ml-5 mt-2">CART</p>
         {cart?.length === 0 ? (
           <p className="text-gray-500 text-center mt-5">Your Cart is empty</p>
@@ -42,7 +42,7 @@ const CartSheet = () => {
           ))
         )}
         {cart?.length > 0 && (
-          <div className=" fixed bottom-0 w-[366px]  border-t-2 border-primary   py-5 flex justify-center  bg-background">
+          <div className=" fixed bottom-0 w-[302px] sm:w-[366px]  border-t-2 border-primary   py-5 flex justify-center  bg-background">
             <Link to="/checkout" className="">
               <Button
                 className={

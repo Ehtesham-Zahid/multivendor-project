@@ -54,7 +54,7 @@ const MiniCard = ({ sheet, product }) => {
   return (
     <div className="flex gap-5 w-full p-2">
       <img
-        className="w-32 h-32  rounded-sm object-cover"
+        className="w-24 h-24 md:w-32 md:h-32  rounded-sm object-cover"
         src={product?.images[0]}
       />
       <div className="flex flex-col justify-between">
@@ -69,7 +69,9 @@ const MiniCard = ({ sheet, product }) => {
             <p className="    tracking-tight text-gray-500  text-sm">$55 * 5</p>
           ) : null}
 
-          <p className="font-bold text-xl   text-sky-500">${product?.price}</p>
+          <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
+            ${product?.price}
+          </p>
         </div>
         <div className="flex items-center gap-x-2">
           {sheet === "wishlist" ? (

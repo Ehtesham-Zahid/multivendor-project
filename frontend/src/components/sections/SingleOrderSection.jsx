@@ -15,17 +15,26 @@ import {
 } from "../../features/order/orderSlice";
 import { Link, useParams } from "react-router";
 import { Button } from "../../shadcn/button";
-import { Loader2 } from "lucide-react";
+import { ArrowLeftIcon, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import { useSearchParams } from "react-router";
 
 const SingleOrderSection = () => {
   const { orderId } = useParams();
+  const [searchParams] = useSearchParams(); // Destructure the array
+  const shopId = searchParams.get("shopId");
+
   const { singleOrder, isLoading } = useSelector((state) => state.order);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  console.log(shopId);
 
   useEffect(() => {
-    dispatch(getOrderThunk(orderId));
-  }, [orderId, dispatch]);
+    dispatch(getOrderThunk({ orderId, shopId }));
+  }, [orderId, dispatch, shopId]);
 
   const handleRequestRefund = async () => {
     const resultAction = await dispatch(requestRefundThunk(orderId));
@@ -42,10 +51,16 @@ const SingleOrderSection = () => {
         <Spinner />
       ) : (
         <>
-          <div className="w-full min-h-[500px] overflow-y-scroll rounded-sm p-3 shadow-2xl">
+          <div className="w-full min-h-[500px] overflow-y-scroll rounded-sm shadow-2xl">
+            <Link
+              onClick={() => navigate(-1)}
+              className="text-primary underline font-bold flex items-center   gap-1 mb-3 ml-2"
+            >
+              <ArrowLeftIcon className="w-5 h-5 " /> Back
+            </Link>
             <Table>
-              <TableHeader>
-                <TableRow className="text-primary">
+              <TableHeader className="bg-primary rounded-md">
+                <TableRow className="text-white">
                   <TableHead>PRODUCT</TableHead>
                   <TableHead>QUANTITY</TableHead>
                   <TableHead>PRICE</TableHead>

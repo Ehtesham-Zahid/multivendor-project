@@ -49,6 +49,7 @@ const createOrder = asyncHandler(async (req, res) => {
 
 const getOrder = asyncHandler(async (req, res) => {
   const orderId = req.params.orderId;
+  const shopId = req.query.shopId;
   if (!orderId) {
     res.status(400);
     throw new Error("Order ID is required");
@@ -63,6 +64,22 @@ const getOrder = asyncHandler(async (req, res) => {
   if (!order) {
     res.status(404);
     throw new Error("Order not found");
+  }
+
+  if (shopId && shopId !== "null" && shopId !== "undefined") {
+    const shop = await Shop.findById(shopId);
+    console.log("shop", shop);
+    if (!shop) {
+      res.status(404);
+      throw new Error("Shop not found");
+    }
+
+    console.log("order", order);
+    const orderItems = order.items.filter(
+      (item) => item.shopId._id.toString() === shopId.toString()
+    );
+
+    order.items = orderItems;
   }
 
   res.status(200).json(order);

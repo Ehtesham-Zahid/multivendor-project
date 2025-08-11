@@ -69,13 +69,16 @@ const UpdateAddressDialog = ({ address }) => {
           Edit
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-fit">
+      <DialogContent className="w-sm md:w-md lg:w-lg max-h-screen  h-fit overflow-y-scroll">
         <DialogHeader>
-          <DialogTitle className="mb-5 font-bold">
+          <DialogTitle className="mb-5 font-bold text-lg sm:text-xl">
             Update Address
           </DialogTitle>{" "}
         </DialogHeader>
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="flex flex-col gap-3 sm:gap-5"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {[
             { name: "fullName", label: "Full Name", placeholder: "John Doe" },
             {
@@ -99,14 +102,14 @@ const UpdateAddressDialog = ({ address }) => {
             { name: "zipCode", label: "ZIP Code", placeholder: "54000" },
           ].map((field) => (
             <div className="flex flex-col" key={field.name}>
-              <label className="text-sm font-bold text-zinc-600">
+              <label className="text-sm font-bold text-zinc-600 mb-1">
                 {field.label}
               </label>
               <input
                 type="text"
                 {...register(field.name, { required: true })}
                 placeholder={field.placeholder}
-                className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-md"
+                className="p-2 px-3 rounded-md border-2 border-zinc-300 outline-primary w-full text-sm sm:text-base"
               />
               {errors[field.name] && (
                 <span className="text-red-500 text-sm font-semibold">

@@ -76,7 +76,7 @@ const ProfileSidebar = () => {
     }
   };
   return (
-    <div className="bg-white shadow-2xl   rounded-md p-5 w-full md:w-[280px]">
+    <div className="bg-white shadow-2xl   rounded-md p-5  w-full md:w-[280px] h-fit">
       <ul className="flex md:hidden gap-5 sm:gap-8 text-lg justify-around ">
         <li>
           <Link to="/profile" className="flex font-medium gap-3 items-center">

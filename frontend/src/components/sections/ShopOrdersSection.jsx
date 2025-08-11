@@ -13,10 +13,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getShopOrdersThunk } from "../../features/order/orderSlice";
 import Spinner from "../Spinner";
 import { formatDate } from "../../utils";
+import { Link } from "react-router";
 
 const ShopOrdersSection = () => {
   // const { shop } = useSelector((state) => state.shop);
   const { shopOrders, isLoading } = useSelector((state) => state.order);
+
+  const { currentUserShop } = useSelector((state) => state.shop);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -68,7 +72,11 @@ const ShopOrdersSection = () => {
                 </TableCell>
                 <TableCell>${order.totalAmount || "250.00"}</TableCell>
                 <TableCell className="text-primary">
-                  <ArrowRight className="ml-auto" />
+                  <Link
+                    to={`/dashboard/order/${order._id}?shopId=${currentUserShop?._id}`}
+                  >
+                    <ArrowRight className="ml-auto" />
+                  </Link>
                 </TableCell>
               </TableRow>
             ))
