@@ -44,6 +44,10 @@ const userSchema = mongoose.Schema(
       ref: "Shop",
       default: null,
     },
+    accountBalance: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

@@ -68,9 +68,14 @@ const DashboardEventsSection = () => {
         </TableHeader>
         <TableBody>
           {isLoading ? (
-            <div className="w-full h-full flex justify-center items-center">
-              <Spinner />
-            </div>
+            <TableRow>
+              <TableCell
+                colSpan={9}
+                className="text-center py-6 font-semibold text-md pt-48"
+              >
+                <Spinner />
+              </TableCell>
+            </TableRow>
           ) : shopEvents?.length > 0 ? (
             shopEvents.map((event) => (
               <TableRow key={event._id}>
@@ -95,7 +100,7 @@ const DashboardEventsSection = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan="7" className="text-center">
+              <TableCell colSpan="9" className="text-center py-4 font-semibold">
                 No events found
               </TableCell>
             </TableRow>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,30 +11,37 @@ import Spinner from "../Spinner";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getOrderThunk,
+  getShopOrderByIdThunk,
   requestRefundThunk,
 } from "../../features/order/orderSlice";
-import { Link, useParams } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 import { Button } from "../../shadcn/button";
 import { ArrowLeftIcon, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router";
+import DeliveryStatusSelector from "../DeliveryStatusSelector";
+import RefundStatusSelector from "../RefundStatusSelector";
 
 const SingleOrderSection = () => {
+  const [page, setPage] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    setPage(location.pathname.split("/")[1]);
+  }, [location]);
+
   const { orderId } = useParams();
-  const [searchParams] = useSearchParams(); // Destructure the array
-  const shopId = searchParams.get("shopId");
 
   const { singleOrder, isLoading } = useSelector((state) => state.order);
+  const { currentUserShop } = useSelector((state) => state.shop);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(shopId);
-
   useEffect(() => {
-    dispatch(getOrderThunk({ orderId, shopId }));
-  }, [orderId, dispatch, shopId]);
+    dispatch(getShopOrderByIdThunk(orderId));
+  }, [orderId, dispatch]);
 
   const handleRequestRefund = async () => {
     const resultAction = await dispatch(requestRefundThunk(orderId));
@@ -48,7 +55,9 @@ const SingleOrderSection = () => {
   return (
     <>
       {isLoading ? (
-        <Spinner />
+        <div className="flex justify-center items-center h-full mt-52">
+          <Spinner />
+        </div>
       ) : (
         <>
           <div className="w-full min-h-[500px] overflow-y-scroll rounded-sm shadow-2xl">
@@ -59,7 +68,7 @@ const SingleOrderSection = () => {
               <ArrowLeftIcon className="w-5 h-5 " /> Back
             </Link>
             <Table>
-              <TableHeader className="bg-primary rounded-md">
+              <TableHeader className="bg-primary ">
                 <TableRow className="text-white">
                   <TableHead>PRODUCT</TableHead>
                   <TableHead>QUANTITY</TableHead>
@@ -93,43 +102,111 @@ const SingleOrderSection = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
-            <div className="flex flex-col gap-2 bg-zinc-300 p-4 rounded-md">
-              <p className="font-bold">SHIPPING ADDRESS</p>
-              <p>{singleOrder?.shippingAddress?.addressDetails}</p>
-              <div className="flex flex-row gap-2">
-                <p>{singleOrder?.shippingAddress?.city}</p>
-                <p>{singleOrder?.shippingAddress?.state}</p>
-                <p>{singleOrder?.shippingAddress?.zipCode}</p>
-                <p>{singleOrder?.shippingAddress?.country}</p>
+            <div className="flex flex-col gap-3 bg-zinc-300 p-4 rounded-md">
+              <div className="flex flex-col gap-1">
+                <p className="font-bold">USER DETAILS</p>
+                <p>{singleOrder?.parentOrderId?.shippingAddress?.fullName}</p>
+                <p>
+                  {singleOrder?.parentOrderId?.shippingAddress?.phoneNumber}
+                </p>
               </div>
-            </div>
 
-            <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col lg:flex-row gap-5">
-              <div>
-                <p className="font-bold">TOTAL AMOUNT</p>
-                <p>${singleOrder?.totalAmount}</p>
+              <div className="flex flex-col gap-1">
+                <p className="font-bold">SHIPPING ADDRESS</p>
+                <p>
+                  {singleOrder?.parentOrderId?.shippingAddress?.addressDetails}
+                </p>
+                <div className="flex flex-row gap-2">
+                  <p>{singleOrder?.parentOrderId?.shippingAddress?.city}</p>
+                  <p>{singleOrder?.parentOrderId?.shippingAddress?.state}</p>
+                  <p>{singleOrder?.parentOrderId?.shippingAddress?.zipCode}</p>
+                  <p>{singleOrder?.parentOrderId?.shippingAddress?.country}</p>
+                </div>
               </div>
-              {singleOrder?.refundStatus === "none" ? (
-                <Button
-                  className="bg-danger text-white hover:bg-red-600 cursor-pointer"
-                  onClick={handleRequestRefund}
-                >
-                  {isLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <p>Request a Refund</p>
-                  )}
-                </Button>
-              ) : (
-                <Button className="bg-danger text-white hover:bg-danger   capitalize">
-                  {isLoading ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <p>Refund Status: {singleOrder?.refundStatus}</p>
-                  )}
-                </Button>
-              )}
             </div>
+            {page === "dashboard" ? (
+              <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
+                <div className="flex justify-between w-full">
+                  <div className="flex gap-1 items-center">
+                    <p className="font-semibold text-zinc-600 text-md">
+                      TOTAL AMOUNT:
+                    </p>
+                    <p className="text-lg text-black  font-bold capitalize">
+                      ${singleOrder?.subtotal}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <p className="font-semibold text-zinc-600 text-md">
+                      PAYMENT STATUS:
+                    </p>
+                    <p className="text-lg text-black font-bold capitalize">
+                      {singleOrder?.paymentStatus}
+                    </p>
+                  </div>
+                </div>
+                {singleOrder?.refundStatus !== "none" ? (
+                  <div className="flex justify-between">
+                    <RefundStatusSelector
+                      currentStatus={singleOrder?.refundStatus}
+                      shopOrderId={singleOrder?._id}
+                    />
+                  </div>
+                ) : (
+                  <div className="flex justify-between">
+                    <DeliveryStatusSelector
+                      currentStatus={singleOrder?.deliveryStatus}
+                      shopOrderId={singleOrder?._id}
+                    />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
+                <div className="flex justify-between w-full">
+                  <div className="flex gap-1 items-center">
+                    <p className="font-semibold text-zinc-600 text-md">
+                      TOTAL AMOUNT:
+                    </p>
+                    <p className="text-lg text-black  font-bold capitalize">
+                      ${singleOrder?.subtotal}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <p className="font-semibold text-zinc-600 text-md">
+                      PAYMENT STATUS:
+                    </p>
+                    <p className="text-lg text-black font-bold capitalize">
+                      {singleOrder?.paymentStatus}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <Button className="bg-primary    text-white hover:bg-primary/80 cursor-pointer">
+                    Contact Seller
+                  </Button>
+                  {singleOrder?.paymentStatus === "paid" &&
+                  singleOrder?.refundStatus === "none" ? (
+                    <Button
+                      className="bg-danger text-white hover:bg-red-600 cursor-pointer"
+                      onClick={handleRequestRefund}
+                    >
+                      {isLoading ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <p>Request a Refund</p>
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="bg-danger text-white hover:bg-red-600 cursor-pointer"
+                      disabled={true}
+                    >
+                      <p>Refund Status: {singleOrder?.refundStatus}</p>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}

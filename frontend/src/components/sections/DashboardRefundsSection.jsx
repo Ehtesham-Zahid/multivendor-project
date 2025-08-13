@@ -11,32 +11,32 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getShopOrdersByCurrentShopThunk,
   getShopOrdersThunk,
-  getUserShopOrdersThunk,
 } from "../../features/order/orderSlice";
 import Spinner from "../Spinner";
 import { formatDate } from "../../utils";
 import { Link } from "react-router";
 
-const UserRefundsSection = () => {
+const DashboardRefundsSection = () => {
   const dispatch = useDispatch();
   const { refundOrders, isLoading } = useSelector((state) => state.order);
 
   useEffect(() => {
-    dispatch(getUserShopOrdersThunk(true));
-  }, []);
+    dispatch(getShopOrdersByCurrentShopThunk(true));
+  }, [dispatch]);
 
   return (
     <>
-      <p className="text-2xl font-bold text-dark md:hidden">My Refunds</p>
+      <p className="text-2xl font-bold text-dark md:hidden">Refunds</p>
       <div className="w-full  min-h-[500px]  overflow-y-scroll rounded-sm shadow-2xl">
         <Table>
           <TableHeader className="bg-primary rounded-md">
             <TableRow className="text-white">
               <TableHead className="w-[100px]">REFUND ID</TableHead>
-              <TableHead>DATE</TableHead>
               <TableHead>PAYMENT METHOD</TableHead>
-              <TableHead>Refund STATUS</TableHead>
+              <TableHead>REFUND STATUS</TableHead>
+              <TableHead>ITEMS QTY</TableHead>
               <TableHead>TOTAL AMOUNT</TableHead>
               <TableHead className="text-right">See Details</TableHead>
             </TableRow>
@@ -45,7 +45,7 @@ const UserRefundsSection = () => {
             {isLoading ? (
               <TableRow>
                 <TableCell
-                  colSpan={6}
+                  colSpan={7}
                   className="text-center py-6 font-semibold text-md pt-48"
                 >
                   <Spinner />
@@ -57,14 +57,14 @@ const UserRefundsSection = () => {
                   <TableCell className="font-medium">
                     {`SCR${1000 + index + 1}`}
                   </TableCell>
-                  <TableCell>{formatDate(order.createdAt)}</TableCell>
                   <TableCell>
                     {order?.parentOrderId?.paymentMethod || "COD"}
                   </TableCell>
-                  <TableCell>{order?.refundStatus || "Pending"}</TableCell>
+                  <TableCell>{order.refundStatus || "Pending"}</TableCell>
+                  <TableCell>{order?.items?.length}</TableCell>
                   <TableCell>${order?.subtotal || "250.00"}</TableCell>
                   <TableCell>
-                    <Link to={`/profile/order/${order._id}`}>
+                    <Link to={`/dashboard/order/${order._id}`}>
                       <ArrowRight className="ml-auto text-primary" />
                     </Link>
                   </TableCell>
@@ -73,10 +73,10 @@ const UserRefundsSection = () => {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={6}
+                  colSpan={7}
                   className="text-center py-6 font-semibold text-md"
                 >
-                  No refunds found
+                  No orders found
                 </TableCell>
               </TableRow>
             )}
@@ -87,4 +87,4 @@ const UserRefundsSection = () => {
   );
 };
 
-export default UserRefundsSection;
+export default DashboardRefundsSection;

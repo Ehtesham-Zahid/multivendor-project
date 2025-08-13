@@ -1,16 +1,26 @@
 import { useDispatch, useSelector } from "react-redux";
 import ProfileImage from "../../assets/images/category-1.jpg";
 import { Button } from "../../shadcn/button";
-import { updateCurrentUserShopThunk } from "../../features/shop/shopSlice";
+import {
+  getCurrentUserShopThunk,
+  updateCurrentUserShopThunk,
+} from "../../features/shop/shopSlice";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Camera, Loader2 } from "lucide-react";
+import Spinner from "../Spinner";
 
 const DashboardSettingSection = () => {
-  const { shop, isLoading, error } = useSelector((state) => state.shop);
+  const { currentUserShop, isLoading, error } = useSelector(
+    (state) => state.shop
+  );
   const dispatch = useDispatch();
-  const [preview, setPreview] = useState(shop?.imageUrl);
+  const [preview, setPreview] = useState(currentUserShop?.imageUrl);
+
+  useEffect(() => {
+    dispatch(getCurrentUserShopThunk());
+  }, [dispatch]);
 
   const {
     register,
@@ -34,16 +44,16 @@ const DashboardSettingSection = () => {
   }, [avatarFile]);
 
   useEffect(() => {
-    if (shop) {
+    if (currentUserShop) {
       reset({
-        shopName: shop.shopName || "",
-        address: shop.address || "",
-        phoneNumber: shop.phoneNumber || "",
-        zipCode: shop.zipCode || "",
+        shopName: currentUserShop.shopName || "",
+        address: currentUserShop.address || "",
+        phoneNumber: currentUserShop.phoneNumber || "",
+        zipCode: currentUserShop.zipCode || "",
       });
-      setPreview(shop.imageUrl || "");
+      setPreview(currentUserShop.imageUrl || "");
     }
-  }, [shop, reset]);
+  }, [currentUserShop, reset]);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -65,7 +75,11 @@ const DashboardSettingSection = () => {
       toast.error("Error in updating shop");
     }
   };
-  return (
+  return isLoading ? (
+    <div className="flex justify-center items-center h-full mt-52">
+      <Spinner />
+    </div>
+  ) : (
     <div className="flex justify-center items-center flex-col      w-full rounded-md ">
       <form
         className="w-full flex flex-col gap-8 justify-center items-center"
@@ -106,7 +120,7 @@ const DashboardSettingSection = () => {
             className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md"
             placeholder="Update shop name"
             {...register("shopName", { required: true })}
-            defaultValue={shop?.shopName || ""}
+            defaultValue={currentUserShop?.shopName || ""}
           />
           {errors.shopName && (
             <span className="text-red-500 text-sm font-semibold">
@@ -124,7 +138,7 @@ const DashboardSettingSection = () => {
             className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md"
             placeholder="Update shop address"
             {...register("address", { required: true })}
-            defaultValue={shop?.address || ""}
+            defaultValue={currentUserShop?.address || ""}
           />
           {errors.address && (
             <span className="text-red-500 text-sm font-semibold">
@@ -141,7 +155,7 @@ const DashboardSettingSection = () => {
             className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md"
             placeholder="Update shop phone number"
             {...register("phoneNumber", { required: true })}
-            defaultValue={shop?.phoneNumber || ""}
+            defaultValue={currentUserShop?.phoneNumber || ""}
           />
           {errors.phoneNumber && (
             <span className="text-red-500 text-sm font-semibold">
@@ -158,7 +172,7 @@ const DashboardSettingSection = () => {
             className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary w-md"
             placeholder="Update shop zip code"
             {...register("zipCode", { required: true })}
-            defaultValue={shop?.zipCode || ""}
+            defaultValue={currentUserShop?.zipCode || ""}
           />
           {errors.zipCode && (
             <span className="text-red-500 text-sm font-semibold">

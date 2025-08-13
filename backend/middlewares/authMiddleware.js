@@ -15,6 +15,7 @@ const protect = asyncHandler(async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decoded.id).select("-password");
+    console.log("req.user", req.user);
     next();
   } catch (error) {
     res.status(401);
@@ -36,7 +37,25 @@ const optionalAuth = asyncHandler(async (req, res, next) => {
   next();
 });
 
+const isAdmin = asyncHandler(async (req, res, next) => {
+  if (req.user.role !== "admin") {
+    res.status(401);
+    throw new Error("Not authorized, admin only");
+  }
+  next();
+});
+
+const isVendor = asyncHandler(async (req, res, next) => {
+  if (req.user.role !== "vendor") {
+    res.status(401);
+    throw new Error("Not authorized, vendor only");
+  }
+  next();
+});
+
 module.exports = {
   protect,
   optionalAuth,
+  isAdmin,
+  isVendor,
 };

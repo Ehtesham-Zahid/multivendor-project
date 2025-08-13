@@ -42,6 +42,13 @@ import UserAddressesSection from "./components/sections/UserAddressesSection.jsx
 import CheckoutLayout from "./pages/CheckoutLayout.jsx";
 import ShopPage from "./pages/ShopPage.jsx";
 import ShopLayout from "./pages/ShopLayout.jsx";
+import AdminLayout from "./pages/AdminLayout.jsx";
+import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
+import AdminOrdersPage from "./pages/AdminOrdersPage.jsx";
+import AdminProductsPage from "./pages/AdminProductsPage.jsx";
+import AdminEventsPage from "./pages/AdminEventsPage.jsx";
+import AdminCouponCodesPage from "./pages/AdminCouponCodesPage.jsx";
+import AdminRefundsPage from "./pages/AdminRefundsPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -110,6 +117,18 @@ let router = createBrowserRouter([
     path: "dashboard/shop/:shopId",
     Component: ShopPage,
     // children: [{ path: ":shopId", Component: ShopPage }],
+  },
+  {
+    path: "admin",
+    Component: AdminLayout,
+    children: [
+      { index: true, Component: AdminDashboardPage },
+      { path: "orders", Component: AdminOrdersPage },
+      { path: "products", Component: AdminProductsPage },
+      { path: "events", Component: AdminEventsPage },
+      { path: "coupon-codes", Component: AdminCouponCodesPage },
+      { path: "refunds", Component: AdminRefundsPage },
+    ],
   },
 ]);
 

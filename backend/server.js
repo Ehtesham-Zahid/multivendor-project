@@ -15,6 +15,8 @@ const addressesRouter = require("./routes/addressRoutes");
 const eventRouter = require("./routes/eventRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const couponRouter = require("./routes/couponRoutes");
+const shopOrderRouter = require("./routes/shopOrderRoutes");
+const parentOrderRouter = require("./routes/parentOrderRoutes");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -72,6 +74,8 @@ app.use("/api/addresses", addressesRouter);
 app.use("/api/events", eventRouter);
 app.use("/api/payments", paymentRouter);
 app.use("/api/coupons", couponRouter);
+app.use("/api/shop-orders", shopOrderRouter);
+app.use("/api/parent-orders", parentOrderRouter);
 
 app.use(errorHandler);
 

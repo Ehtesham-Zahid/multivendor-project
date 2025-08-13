@@ -1,7 +1,9 @@
 // server.js or wherever you handle routes
 const express = require("express");
 const asyncHandler = require("express-async-handler");
-const Order = require("../models/orderModel");
+const ParentOrder = require("../models/parentOrderModel");
+const Shop = require("../models/shopModel");
+const User = require("../models/userModel");
 const Stripe = require("stripe");
 const app = express();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // Your Stripe Secret Key
@@ -28,8 +30,8 @@ const createCheckoutSession = asyncHandler(async (req, res) => {
     payment_method_types: ["card"],
     line_items: data,
     mode: "payment",
-    success_url: "http://localhost:5173/success",
-    cancel_url: "http://localhost:5173/cancel",
+    success_url: "http://localhost:5173/checkout/success",
+    cancel_url: "http://localhost:5173/checkout/cancel",
     metadata: {
       orderId: orderId,
     },
@@ -59,9 +61,49 @@ const webhook = asyncHandler(async (req, res) => {
     const orderId = session.metadata.orderId;
     console.log("webhook orderId", orderId);
 
-    await Order.findByIdAndUpdate(orderId, {
-      paymentStatus: "paid",
-    });
+    // Retrieve PaymentIntent if you need full details
+    const paymentIntent = await stripe.paymentIntents.retrieve(
+      session.payment_intent
+    );
+
+    const parentOrder =
+      await ParentOrder.findById(orderId).populate("shopOrders");
+    if (!parentOrder) {
+      res.status(404);
+      throw new Error("Parent order not found");
+    }
+
+    parentOrder.paymentIntentId = paymentIntent.id;
+    parentOrder.paymentStatus = "paid";
+    await parentOrder.save();
+
+    // Add commission to admin here, if you want it on full payment
+    const admin = await User.findOne({ role: "admin" });
+    if (!admin) {
+      res.status(500);
+      throw new Error("Admin user not found");
+    }
+
+    const totalCommission = parentOrder.totalAmount * 0.1;
+
+    admin.accountBalance = (admin.accountBalance || 0) + totalCommission;
+
+    await admin.save();
+
+    for (const shopOrder of parentOrder.shopOrders) {
+      shopOrder.paymentStatus = "paid";
+      await shopOrder.save();
+
+      const shop = await Shop.findById(shopOrder.shopId);
+      if (!shop) {
+        res.status(404);
+        throw new Error("Shop not found");
+      }
+
+      const shopCommission = shopOrder.subtotal * 0.9;
+      shop.accountBalance = (shop.accountBalance || 0) + shopCommission;
+      await shop.save();
+    }
 
     console.log("✅ Order marked as paid:", orderId);
   }

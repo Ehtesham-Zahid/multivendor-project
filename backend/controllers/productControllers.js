@@ -235,6 +235,34 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
+// Admin Controllers
+
+const getAllProductsAdmin = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const onlyActive = req.query.onlyActive === "true";
+
+  const skip = (page - 1) * limit;
+
+  const filter = {};
+
+  if (onlyActive) {
+    filter.isDeleted = false;
+  }
+
+  const totalProducts = await Product.countDocuments(filter);
+  const totalPages = Math.ceil(totalProducts / limit);
+
+  const products = await Product.find(filter).skip(skip).limit(limit);
+
+  res.status(200).json({
+    products,
+    totalProducts,
+    totalPages,
+    currentPage: page,
+  });
+});
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -243,4 +271,5 @@ module.exports = {
   deleteProduct,
   getProductsByShop,
   getProductsByCategory,
+  getAllProductsAdmin,
 };

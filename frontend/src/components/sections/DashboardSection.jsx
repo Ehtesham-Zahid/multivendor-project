@@ -1,39 +1,50 @@
 import DashboardCard from "../DashboardCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUserShopThunk } from "../../features/shop/shopSlice";
-import { getShopOrdersThunk } from "../../features/order/orderSlice";
+import {
+  getShopOrdersByCurrentShopThunk,
+  getShopOrdersThunk,
+} from "../../features/order/orderSlice";
 import { useEffect } from "react";
+import DashboardOrdersSection from "./DashboardOrdersSection";
+import Spinner from "../Spinner";
 
 const DashboardSection = () => {
-  const { shop } = useSelector((state) => state.shop);
+  const { currentUserShop, isLoading } = useSelector((state) => state.shop);
   const { shopOrders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCurrentUserShopThunk());
-    dispatch(getShopOrdersThunk());
   }, []);
 
-  return (
+  return isLoading ? (
+    <div className="flex justify-center items-center h-full">
+      <Spinner />
+    </div>
+  ) : (
     <div className="flex gap-5 sm:gap-10 flex-wrap justify-center md:justify-start">
       <DashboardCard
         title="Account Balance"
-        subtitle={`${shop?.accountBalance} $`}
+        subtitle={`${currentUserShop?.accountBalance} $`}
         link="Withdraw Money"
         linkUrl="/dashboard/withdraw"
       />
       <DashboardCard
         title="Total Orders"
-        subtitle={`${shopOrders?.length} Orders`}
+        subtitle={`${shopOrders?.length}`}
         link="View Orders"
         linkUrl="/dashboard/orders"
       />
       <DashboardCard
         title="Total Products"
-        subtitle={`${shop?.products?.length} Products`}
+        subtitle={`${currentUserShop?.products?.length}`}
         link="View Products"
         linkUrl="/dashboard/products"
       />
+      <div className="w-full    ">
+        <DashboardOrdersSection />
+      </div>
     </div>
   );
 };

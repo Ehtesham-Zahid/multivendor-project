@@ -28,7 +28,7 @@ const UserAddressesSection = () => {
         {isLoading ? (
           <Spinner />
         ) : addresses.length === 0 ? (
-          <p className="text-center font-semibold">
+          <p className="text-center font-semibold mx-auto">
             You don't have any Saved Address
           </p>
         ) : (

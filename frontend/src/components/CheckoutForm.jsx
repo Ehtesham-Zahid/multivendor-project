@@ -92,18 +92,20 @@ const CheckoutForm = () => {
         paymentMethod: selectedOption,
         totalAmount: coupon ? coupon.newTotal : totalAmount,
         shippingAddress: addressId,
+        paymentStatus: "pending",
       };
 
       const resultAction2 = await dispatch(createOrderThunk(orderData));
 
       if (createOrderThunk.fulfilled.match(resultAction2)) {
+        console.log("resultAction2", resultAction2);
         if (selectedOption === "card") {
           const total = coupon ? coupon.newTotal : totalAmount;
           const res = await API.post("/payments/create-checkout-session", {
             productsData: cart,
             totalAmount: total,
             discountPercentage: coupon?.discountPercentage || 0,
-            orderId: resultAction2.payload._id,
+            orderId: resultAction2.payload.parentOrder._id,
           });
 
           const stripe = await stripePromise;
@@ -114,7 +116,7 @@ const CheckoutForm = () => {
 
           await stripe.redirectToCheckout({ sessionId: res.data.id });
         } else {
-          navigate("/success");
+          navigate("/checkout/success");
         }
         localStorage.setItem("cart", JSON.stringify([]));
       }

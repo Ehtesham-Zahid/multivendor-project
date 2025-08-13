@@ -38,6 +38,9 @@ const createShop = asyncHandler(async (req, res) => {
 
   req.user.hasShop = true;
   req.user.shopId = shop._id;
+  if (req.user.role === "user") {
+    req.user.role = "vendor";
+  }
   await req.user.save();
 
   res.status(201).json(shop);
@@ -127,6 +130,36 @@ const getShopById = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
+// Admin Controllers
+const getAllShopsAdmin = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const onlyActive = req.query.onlyActive === "true";
+
+  const skip = (page - 1) * limit;
+
+  const filter = {};
+
+  if (onlyActive) {
+    filter.isDeleted = false;
+  }
+
+  const totalShops = await Shop.countDocuments(filter);
+  const totalPages = Math.ceil(totalShops / limit);
+
+  const shops = await Shop.find(filter)
+    .skip(skip)
+    .limit(limit)
+    .populate("ownerId", "name email");
+
+  res.status(200).json({
+    shops,
+    totalShops,
+    totalPages,
+    currentPage: page,
+  });
+});
+
 module.exports = {
   createShop,
   getCurrentUserShop,
@@ -134,4 +167,5 @@ module.exports = {
   deleteShop,
   getAllShops,
   getShopById,
+  getAllShopsAdmin,
 };

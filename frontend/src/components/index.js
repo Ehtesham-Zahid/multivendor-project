@@ -17,7 +17,7 @@ import SingleProductSection from "./sections/SingleProductSection";
 import DashboardSection from "./sections/DashboardSection";
 import OrdersSection from "./sections/UserOrdersSection";
 import DashboardProductsSection from "./sections/DashboardProductsSection";
-import ShopOrdersSection from "./sections/ShopOrdersSection";
+import DashboardOrdersSection from "./sections/DashboardOrdersSection";
 import DashboardCouponCodesSection from "./sections/DashboardCouponCodesSection";
 import RefundsSection from "./sections/UserRefundsSection";
 import CheckoutSection from "./sections/CheckoutSection";
@@ -34,6 +34,16 @@ import UserAddressesSection from "./sections/UserAddressesSection";
 import SearchSection from "./sections/SearchSection";
 import Home from "./sections/Home";
 import ShopSection from "./sections/ShopSection";
+import AdminSidebar from "./AdminSidebar";
+import AdminDashboardSection from "./sections/admin/AdminDashboardSection";
+import AdminProductsSection from "./sections/admin/AdminProductsSection";
+import AdminShopsSection from "./sections/admin/AdminShopsSection";
+import AdminOrdersSection from "./sections/admin/AdminOrdersSection";
+import AdminEventsSection from "./sections/admin/AdminEventsSection";
+import AdminCouponCodesSection from "./sections/admin/AdminCouponCodesSection";
+import AdminRefundsSection from "./sections/admin/AdminRefundsSection";
+import DashboardRefundsSection from "./sections/DashboardRefundsSection";
+
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -61,7 +71,7 @@ export {
   DashboardCouponCodesSection,
   DashboardSettingsSection,
   RefundsSection,
-  ShopOrdersSection,
+  DashboardOrdersSection,
   CheckoutSection,
   UserProfileSection,
   UserOrdersSection,
@@ -72,5 +82,14 @@ export {
   Home,
   SearchSection,
   ShopSection,
+  AdminSidebar,
+  AdminDashboardSection,
+  AdminProductsSection,
+  AdminShopsSection,
+  AdminOrdersSection,
+  AdminEventsSection,
+  AdminCouponCodesSection,
+  AdminRefundsSection,
+  DashboardRefundsSection,
   // UserInboxSection,
 };

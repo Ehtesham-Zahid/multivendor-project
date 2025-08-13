@@ -13,13 +13,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProductThunk,
   getProductsByShopThunk,
-} from "../../features/product/productSlice";
-import Spinner from "../Spinner";
+} from "../../../features/product/productSlice";
+import Spinner from "../../Spinner";
 import { toast } from "react-toastify";
-import UpdateProductDialog from "../updateProductDialog";
+import UpdateProductDialog from "../../updateProductDialog";
 import { Link } from "react-router";
 
-const DashboardProductsSection = () => {
+const AdminProductsSection = () => {
   const { shopProducts, isLoading, error } = useSelector(
     (state) => state.product
   );
@@ -97,7 +97,7 @@ const DashboardProductsSection = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={8} className="text-center py-4 font-semibold">
+              <TableCell colSpan={7} className="text-center py-4 font-semibold">
                 No products yet.
               </TableCell>
             </TableRow>
@@ -108,4 +108,4 @@ const DashboardProductsSection = () => {
   );
 };
 
-export default DashboardProductsSection;
+export default AdminProductsSection;

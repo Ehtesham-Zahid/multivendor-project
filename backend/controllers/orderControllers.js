@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Order = require("../models/orderModel");
+const Order = require("../models/parentOrderModel");
 const Address = require("../models/addressModel");
 const Product = require("../models/productModel");
 const Shop = require("../models/shopModel");
@@ -97,15 +97,17 @@ const getOrdersByUser = asyncHandler(async (req, res) => {
 
 const getOrdersByShop = asyncHandler(async (req, res) => {
   const shopId = req.user.shopId;
+  const refundStatus = req.query.refundStatus === "true";
+
   console.log("shopId", shopId);
 
-  // const orders = await Order.find({ "items.shopId": shopId })
-  //   .populate("shippingAddress")
-  //   .sort({ createdAt: -1 });
+  let orders = await Order.find({ items: { $elemMatch: { shopId } } })
+    .populate("shippingAddress")
+    .sort({ createdAt: -1 });
 
-  const orders = await Order.find({ items: { $elemMatch: { shopId } } })
-    .populate("shippingAddress") // optional, if you want full address details
-    .sort({ createdAt: -1 }); // latest first
+  if (refundStatus) {
+    orders = orders.filter((order) => order.refundStatus !== "none");
+  }
 
   // Filter items and calculate shop-specific total
   const shopSpecificOrders = orders.map((order) => {
@@ -145,6 +147,18 @@ const requestRefund = asyncHandler(async (req, res) => {
   await order.save();
 
   res.status(200).json(order);
+});
+
+// Admin Controllers
+const getAllOrdersAdmin = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  const skip = (page - 1) * limit;
+
+  const orders = await Order.find({}).skip(skip).limit(limit);
+
+  res.status(200).json(orders);
 });
 
 module.exports = {

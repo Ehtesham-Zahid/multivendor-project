@@ -10,12 +10,12 @@ import {
 import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getShopOrdersThunk } from "../../features/order/orderSlice";
-import Spinner from "../Spinner";
-import { formatDate } from "../../utils";
+import { getShopOrdersThunk } from "../../../features/order/orderSlice";
+import Spinner from "../../Spinner";
+import { formatDate } from "../../../utils";
 import { Link } from "react-router";
 
-const ShopOrdersSection = () => {
+const AdminOrdersSection = () => {
   // const { shop } = useSelector((state) => state.shop);
   const { shopOrders, isLoading } = useSelector((state) => state.order);
 
@@ -28,7 +28,7 @@ const ShopOrdersSection = () => {
   }, []);
 
   return (
-    <div className="w-full    overflow-y-scroll rounded-sm shadow-2xl overflow-x-scroll">
+    <div className="w-full min-h-[500px]    overflow-y-scroll rounded-sm shadow-2xl  ">
       <Table>
         {/* Always render the table header */}
         <TableHeader className="bg-primary rounded-md">
@@ -49,7 +49,7 @@ const ShopOrdersSection = () => {
             <TableRow>
               <TableCell
                 colSpan={6}
-                className="text-center py-6 font-semibold text-md"
+                className="text-center py-6 font-semibold text-md pt-48"
               >
                 <Spinner />
               </TableCell>
@@ -96,4 +96,4 @@ const ShopOrdersSection = () => {
   );
 };
 
-export default ShopOrdersSection;
+export default AdminOrdersSection;
