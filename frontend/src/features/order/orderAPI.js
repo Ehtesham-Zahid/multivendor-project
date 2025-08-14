@@ -34,10 +34,19 @@ export const requestRefundApi = async (orderId) => {
   );
 };
 
-export const getShopOrdersByCurrentShopApi = async (refundOnly = false) => {
-  return await API.get(`/shop-orders/current-shop?refundOnly=${refundOnly}`, {
-    withCredentials: true, // <== required to receive Set-Cookie
-  });
+export const getShopOrdersByCurrentShopApi = async (
+  refundOnly = false,
+  deliveryStatus = "",
+  page = 1,
+  limit = 10,
+  refundStatus = ""
+) => {
+  return await API.get(
+    `/shop-orders/current-shop?refundOnly=${refundOnly}&deliveryStatus=${deliveryStatus}&page=${page}&limit=${limit}&refundStatus=${refundStatus}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
 };
 
 export const getShopOrderByIdApi = async (orderId) => {

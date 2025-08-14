@@ -13,20 +13,27 @@ import EventDateSelector from "./EventDateSelector";
 import ProductSelector from "./ProductSelector";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createEventThunk } from "../features/event/eventSlice";
 import { toast } from "react-toastify";
+import { getProductsByShopThunk } from "../features/product/productSlice";
 
 const CreateEventDialog = () => {
   const { shopProducts } = useSelector((state) => state.product);
   const [productId, setProductId] = useState("");
-  const [productPrice, setProductPrice] = useState("");
+  const [productPrice, setProductPrice] = useState("0");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { isLoading, error } = useSelector((state) => state.event);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(getProductsByShopThunk({ page: 1, limit: 10000 }));
+    }
+  }, [dispatch, isOpen]);
 
   const {
     register,
@@ -37,6 +44,11 @@ const CreateEventDialog = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    if (productId === "") {
+      toast.error("Please select a product");
+      return;
+    }
+
     const payload = {
       name: data.name,
       productId: productId,

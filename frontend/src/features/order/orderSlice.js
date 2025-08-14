@@ -81,9 +81,24 @@ export const requestRefundThunk = createAsyncThunk(
 
 export const getShopOrdersByCurrentShopThunk = createAsyncThunk(
   "order/getShopOrdersByCurrentShop",
-  async (refundOnly = false, thunkAPI) => {
+  async (
+    {
+      refundOnly = false,
+      deliveryStatus = "",
+      page = 1,
+      limit = 10,
+      refundStatus = "",
+    },
+    thunkAPI
+  ) => {
     try {
-      const res = await getShopOrdersByCurrentShopApi(refundOnly);
+      const res = await getShopOrdersByCurrentShopApi(
+        refundOnly,
+        deliveryStatus,
+        page,
+        limit,
+        refundStatus
+      );
       return res.data;
     } catch (error) {
       console.log("order slice", error);
@@ -153,6 +168,8 @@ const initialState = {
   isLoading: false,
   error: null,
   success: false,
+  totalPages: 0,
+  totalShopOrders: 0,
 };
 
 const orderSlice = createSlice({
@@ -243,12 +260,15 @@ const orderSlice = createSlice({
       .addCase(getShopOrdersByCurrentShopThunk.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        const refundOnly = action.meta.arg;
+        const { refundOnly, deliveryStatus, page, limit, refundStatus } =
+          action.meta.arg;
         if (refundOnly) {
           state.refundOrders = action.payload.shopOrders;
         } else {
           state.shopOrders = action.payload.shopOrders;
         }
+        state.totalPages = action.payload.totalPages;
+        state.totalShopOrders = action.payload.totalShopOrders;
       })
       .addCase(getShopOrdersByCurrentShopThunk.rejected, (state, action) => {
         state.isLoading = false;

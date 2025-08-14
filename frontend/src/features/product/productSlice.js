@@ -24,9 +24,9 @@ export const createProductThunk = createAsyncThunk(
 
 export const getProductsByShopThunk = createAsyncThunk(
   "product/getProductsByShop",
-  async (_, thunkAPI) => {
+  async ({ page, limit }, thunkAPI) => {
     try {
-      const res = await getProductsByShopApi();
+      const res = await getProductsByShopApi({ page, limit });
       console.log(res);
       return res.data;
     } catch (error) {
@@ -118,6 +118,7 @@ const initialState = {
   error: null,
   success: false,
   totalPages: 0,
+  totalProducts: 0,
 };
 
 const productSlice = createSlice({
@@ -154,7 +155,9 @@ const productSlice = createSlice({
       })
       .addCase(getProductsByShopThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.shopProducts = action.payload;
+        state.shopProducts = action.payload.products;
+        state.totalPages = action.payload.totalPages;
+        state.totalProducts = action.payload.totalProducts;
         state.success = true;
       })
       .addCase(getProductsByShopThunk.rejected, (state, action) => {
@@ -174,6 +177,7 @@ const productSlice = createSlice({
         state.shopProducts = state.shopProducts.filter(
           (product) => action.payload !== product._id
         );
+        state.totalProducts = state.totalProducts - 1;
       })
       .addCase(deleteProductThunk.rejected, (state, action) => {
         state.isLoading = false;

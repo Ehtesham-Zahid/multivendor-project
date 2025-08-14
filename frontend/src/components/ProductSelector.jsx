@@ -35,6 +35,11 @@ const ProductSelector = ({ setProductId, setProductPrice }) => {
       </SelectTrigger>
       <SelectContent className="bg-background outline-none">
         <SelectGroup className="outline-none">
+          {products.length === 0 && (
+            <SelectItem value="no-products" disabled>
+              No products available
+            </SelectItem>
+          )}
           {products?.map((product) => (
             <SelectItem
               key={product._id}

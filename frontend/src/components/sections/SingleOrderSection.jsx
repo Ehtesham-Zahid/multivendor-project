@@ -24,12 +24,15 @@ import DeliveryStatusSelector from "../DeliveryStatusSelector";
 import RefundStatusSelector from "../RefundStatusSelector";
 
 const SingleOrderSection = () => {
-  const [page, setPage] = useState("");
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page");
+  // const [page, setPage] = useState("");
+  // const location = useLocation();
 
-  useEffect(() => {
-    setPage(location.pathname.split("/")[1]);
-  }, [location]);
+  // useEffect(() => {
+  //   setPage(location.pathname.split("/")[2]);
+  //   console.log(location.pathname.split("/")[2]);
+  // }, [location]);
 
   const { orderId } = useParams();
 
@@ -124,7 +127,7 @@ const SingleOrderSection = () => {
                 </div>
               </div>
             </div>
-            {page === "dashboard" ? (
+            {page === "refunds" || page === "orders" ? (
               <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
                 <div className="flex justify-between w-full">
                   <div className="flex gap-1 items-center">
@@ -144,21 +147,21 @@ const SingleOrderSection = () => {
                     </p>
                   </div>
                 </div>
-                {singleOrder?.refundStatus !== "none" ? (
+                {page === "refunds" ? (
                   <div className="flex justify-between">
                     <RefundStatusSelector
                       currentStatus={singleOrder?.refundStatus}
                       shopOrderId={singleOrder?._id}
                     />
                   </div>
-                ) : (
+                ) : page === "orders" ? (
                   <div className="flex justify-between">
                     <DeliveryStatusSelector
                       currentStatus={singleOrder?.deliveryStatus}
                       shopOrderId={singleOrder?._id}
                     />
                   </div>
-                )}
+                ) : null}
               </div>
             ) : (
               <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
@@ -184,26 +187,27 @@ const SingleOrderSection = () => {
                   <Button className="bg-primary    text-white hover:bg-primary/80 cursor-pointer">
                     Contact Seller
                   </Button>
-                  {singleOrder?.paymentStatus === "paid" &&
-                  singleOrder?.refundStatus === "none" ? (
-                    <Button
-                      className="bg-danger text-white hover:bg-red-600 cursor-pointer"
-                      onClick={handleRequestRefund}
-                    >
-                      {isLoading ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <p>Request a Refund</p>
-                      )}
-                    </Button>
-                  ) : (
-                    <Button
-                      className="bg-danger text-white hover:bg-red-600 cursor-pointer"
-                      disabled={true}
-                    >
-                      <p>Refund Status: {singleOrder?.refundStatus}</p>
-                    </Button>
-                  )}
+                  {singleOrder?.paymentStatus === "paid" ? (
+                    singleOrder?.refundStatus === "none" ? (
+                      <Button
+                        className="bg-danger text-white hover:bg-red-600 cursor-pointer"
+                        onClick={handleRequestRefund}
+                      >
+                        {isLoading ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <p>Request a Refund</p>
+                        )}
+                      </Button>
+                    ) : (
+                      <Button
+                        className="bg-danger text-white hover:bg-red-600 cursor-pointer"
+                        disabled={true}
+                      >
+                        <p>Refund Status: {singleOrder?.refundStatus}</p>
+                      </Button>
+                    )
+                  ) : null}
                 </div>
               </div>
             )}

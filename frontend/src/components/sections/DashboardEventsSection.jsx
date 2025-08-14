@@ -1,27 +1,14 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/shadcn/table";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Delete,
-  Edit,
-  Edit2,
-  Edit3,
-  FileEdit,
-  ShoppingBasket,
-  Trash,
-  Trash2,
-} from "lucide-react";
-import { getProductsByShopThunk } from "../../features/product/productSlice";
+import { Trash2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   deleteEventThunk,
   getShopEventsThunk,
@@ -30,15 +17,25 @@ import Spinner from "../Spinner";
 import { toast } from "react-toastify";
 import UpdateEventDialog from "../updateEventDialog";
 import { formatDate } from "../../utils";
+import LimitSelector from "../LimitSelector";
+import { Pagination } from "../../shadcn/pagination";
+import { PaginationContent } from "../../shadcn/pagination";
+import { PaginationItem } from "../../shadcn/pagination";
+import { PaginationPrevious } from "../../shadcn/pagination";
+import { PaginationNext } from "../../shadcn/pagination";
+import { PaginationLink } from "../../shadcn/pagination";
 
 const DashboardEventsSection = () => {
-  const { shopEvents, isLoading, error } = useSelector((state) => state.event);
+  const [limit, setLimit] = useState("10");
+  const [page, setPage] = useState(1);
+
+  const { shopEvents, isLoading, error, totalPages, totalShopEvents } =
+    useSelector((state) => state.event);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProductsByShopThunk());
-    dispatch(getShopEventsThunk());
-  }, []);
+    dispatch(getShopEventsThunk({ page, limit }));
+  }, [dispatch, page, limit]);
 
   const handleDeleteEvent = async (id) => {
     const resultAction = await dispatch(deleteEventThunk(id));
@@ -50,64 +47,117 @@ const DashboardEventsSection = () => {
   };
 
   return (
-    <div className="w-full h-[500px]  overflow-y-scroll rounded-sm shadow-2xl">
-      <Table>
-        <TableHeader className="bg-primary rounded-md">
-          <TableRow className="text-white">
-            <TableHead className="w-[100px]">EVENT ID</TableHead>
-            <TableHead>EVENT NAME</TableHead>
-            <TableHead>PRODUCT</TableHead>
-            <TableHead>ORIGINAL PRICE</TableHead>
-            <TableHead>EVENT PRICE</TableHead>
-            <TableHead>START DATE</TableHead>
-            <TableHead>END DATE</TableHead>
-            <TableHead>Edit</TableHead>
-            <TableHead>Delete</TableHead>
-            {/* <TableHead className="text-right">See Details</TableHead> */}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isLoading ? (
-            <TableRow>
-              <TableCell
-                colSpan={9}
-                className="text-center py-6 font-semibold text-md pt-48"
-              >
-                <Spinner />
-              </TableCell>
+    <>
+      <div className="w-full h-[500px]  overflow-y-scroll rounded-sm shadow-2xl">
+        <Table>
+          <TableHeader className="bg-primary rounded-md">
+            <TableRow className="text-white">
+              <TableHead className="w-[100px]">EVENT ID</TableHead>
+              <TableHead>EVENT NAME</TableHead>
+              <TableHead>PRODUCT</TableHead>
+              <TableHead>ORIGINAL PRICE</TableHead>
+              <TableHead>EVENT PRICE</TableHead>
+              <TableHead>START DATE</TableHead>
+              <TableHead>END DATE</TableHead>
+              {/* <TableHead>Edit</TableHead> */}
+              <TableHead>Delete</TableHead>
+              {/* <TableHead className="text-right">See Details</TableHead> */}
             </TableRow>
-          ) : shopEvents?.length > 0 ? (
-            shopEvents.map((event) => (
-              <TableRow key={event._id}>
-                <TableCell className="font-medium">{event._id}</TableCell>
-                <TableCell>{event.name}</TableCell>
-                <TableCell>{event.productId.name}</TableCell>
-                <TableCell>${event.originalPrice}</TableCell>
-                <TableCell>${event.eventPrice}</TableCell>
-                <TableCell>{formatDate(event.startDate)}</TableCell>
-                <TableCell>{formatDate(event.endDate)}</TableCell>
-                <TableCell className="text-primary">
-                  <UpdateEventDialog event={event} />
-                </TableCell>
-                <TableCell className="text-primary">
-                  <Trash2
-                    className="cursor-pointer"
-                    size={20}
-                    onClick={() => handleDeleteEvent(event._id)}
-                  />
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-6 font-semibold text-md pt-48"
+                >
+                  <Spinner />
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan="9" className="text-center py-4 font-semibold">
-                No events found
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+            ) : shopEvents?.length > 0 ? (
+              shopEvents.map((event) => (
+                <TableRow key={event._id}>
+                  <TableCell className="font-medium">{event._id}</TableCell>
+                  <TableCell>{event.name}</TableCell>
+                  <TableCell>{event.productId.name}</TableCell>
+                  <TableCell>${event.originalPrice}</TableCell>
+                  <TableCell>${event.eventPrice}</TableCell>
+                  <TableCell>{formatDate(event.startDate)}</TableCell>
+                  <TableCell>{formatDate(event.endDate)}</TableCell>
+                  {/* <TableCell className="text-primary">
+                    <UpdateEventDialog event={event} />
+                  </TableCell> */}
+                  <TableCell className="text-primary">
+                    <Trash2
+                      className="cursor-pointer"
+                      size={20}
+                      onClick={() => handleDeleteEvent(event._id)}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan="8"
+                  className="text-center py-4 font-semibold"
+                >
+                  No events found
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex justify-between items-center mt-4 w-full">
+        {totalShopEvents > 10 && (
+          <div className="flex items-center gap-2 text-sm w-fit">
+            <span>Show</span>
+            <LimitSelector
+              setLimit={setLimit}
+              defaultValue={limit}
+              setPage={setPage}
+            />
+            <span className="text-sm flex items-center text-nowrap">
+              entries of {totalShopEvents} total events
+            </span>
+          </div>
+        )}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink
+                      href="#"
+                      onClick={() => setPage(index + 1)}
+                      className={page === index + 1 ? "active" : ""}
+                    >
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={() =>
+                      setPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

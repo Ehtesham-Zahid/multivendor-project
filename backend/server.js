@@ -17,6 +17,8 @@ const paymentRouter = require("./routes/paymentRoutes");
 const couponRouter = require("./routes/couponRoutes");
 const shopOrderRouter = require("./routes/shopOrderRoutes");
 const parentOrderRouter = require("./routes/parentOrderRoutes");
+const ParentOrder = require("./models/parentOrderModel");
+const ShopOrder = require("./models/shopOrderModel");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -47,7 +49,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-// Runs every hour
+// Runs every hour to delete unverified users
 cron.schedule("0 * * * *", async () => {
   console.log("[CRON] Running cleanup job..."); // this should show hourly
 
@@ -61,6 +63,47 @@ cron.schedule("0 * * * *", async () => {
     console.log(`[CRON] Deleted ${result.deletedCount} unverified users`);
   } catch (error) {
     console.error("[CRON] Error deleting unverified users:", error);
+  }
+});
+
+// Runs every 10 minutes to mark abandoned orders as failed
+cron.schedule("*/10 * * * *", async () => {
+  console.log("[CRON] Running abandoned order cleanup...");
+
+  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+
+  try {
+    // Find abandoned parent orders
+    const abandonedParents = await ParentOrder.find({
+      paymentStatus: "pending",
+      paymentMethod: "card",
+      createdAt: { $lt: tenMinutesAgo },
+    });
+
+    if (abandonedParents.length === 0) {
+      console.log("No abandoned orders found.");
+      return;
+    }
+
+    const parentIds = abandonedParents.map((order) => order._id);
+
+    // Mark related shop orders as failed
+    const updatedShopOrders = await ShopOrder.updateMany(
+      { parentOrderId: { $in: parentIds } },
+      { $set: { paymentStatus: "failed" } }
+    );
+
+    // Mark parent orders as failed
+    const updatedParents = await ParentOrder.updateMany(
+      { _id: { $in: parentIds } },
+      { $set: { paymentStatus: "failed" } }
+    );
+
+    console.log(
+      `Marked ${updatedParents.modifiedCount} parent orders and ${updatedShopOrders.modifiedCount} shop orders as failed.`
+    );
+  } catch (err) {
+    console.error("[CRON ERROR]", err);
   }
 });
 

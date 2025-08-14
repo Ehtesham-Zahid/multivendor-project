@@ -108,6 +108,38 @@ const webhook = asyncHandler(async (req, res) => {
     console.log("✅ Order marked as paid:", orderId);
   }
 
+  if (
+    event.type === "payment_intent.payment_failed" ||
+    event.type === "checkout.session.expired"
+  ) {
+    console.log("payment failed or expired");
+    const session = event.data.object;
+    const orderId =
+      session.metadata?.orderId || event.data.object.metadata?.orderId;
+
+    if (!orderId) {
+      console.error("No orderId found in failed payment event");
+      return res.status(400).send("Missing orderId");
+    }
+
+    const parentOrder =
+      await ParentOrder.findById(orderId).populate("shopOrders");
+    if (!parentOrder) {
+      console.error("Parent order not found for failed payment:", orderId);
+      return res.status(404).send("Order not found");
+    }
+
+    parentOrder.paymentStatus = "failed";
+    await parentOrder.save();
+
+    for (const shopOrder of parentOrder.shopOrders) {
+      shopOrder.paymentStatus = "failed";
+      await shopOrder.save();
+    }
+
+    console.log("❌ Order and shop orders marked as failed:", orderId);
+  }
+
   res.status(200).json({ received: true });
 });
 

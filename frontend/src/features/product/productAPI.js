@@ -6,10 +6,13 @@ export const createProductApi = async (data) => {
   });
 };
 
-export const getProductsByShopApi = async () => {
-  return await API.get("/products/getProductsByShop", {
-    withCredentials: true, // <== required to receive Set-Cookie
-  });
+export const getProductsByShopApi = async ({ page, limit }) => {
+  return await API.get(
+    `/products/getProductsByShop?page=${page}&limit=${limit}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
 };
 
 export const updateProductApi = async (id, data) => {

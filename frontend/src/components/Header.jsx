@@ -49,12 +49,19 @@ const Header = () => {
           </Link>
           <SearchInput />
           {user ? (
-            user?.hasShop ? (
+            user?.role === "vendor" ? (
               <Link
                 className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5"
                 to="/dashboard"
               >
                 Dashboard <ArrowRight />
+              </Link>
+            ) : user?.role === "admin" ? (
+              <Link
+                className="bg-primary text-white px-5 py-3 flex rounded-md font-semibold gap-2.5"
+                to="/admin/dashboard"
+              >
+                Admin Dashboard <ArrowRight />
               </Link>
             ) : (
               <Link

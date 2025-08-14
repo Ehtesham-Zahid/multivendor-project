@@ -118,7 +118,6 @@ const CheckoutForm = () => {
         } else {
           navigate("/checkout/success");
         }
-        localStorage.setItem("cart", JSON.stringify([]));
       }
     }
   };

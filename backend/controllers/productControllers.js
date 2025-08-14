@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
 const Shop = require("../models/shopModel");
 const uploadAvatar = require("../utils/cloudinary");
+const Event = require("../models/eventModel");
 
 const createProduct = asyncHandler(async (req, res) => {
   const { name, description, price, discountPrice, stock, category } = req.body;
@@ -162,16 +163,39 @@ const deleteProduct = asyncHandler(async (req, res) => {
   product.isDeleted = true;
   await product.save();
 
+  const event = await Event.findById(product.eventId);
+  if (event) {
+    await event.deleteOne();
+    product.eventId = null;
+    await product.save();
+  }
+
   res.status(200).json({ message: "Product marked as deleted" });
 });
 
 const getProductsByShop = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
   const products = await Product.find({
     shopId: req.user.shopId,
-    isDeleted: false, // ✅ Add this
+    isDeleted: false,
+  })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Product.countDocuments({
+    shopId: req.user.shopId,
+    isDeleted: false,
   });
 
-  res.status(200).json(products);
+  res.status(200).json({
+    products,
+    currentPage: page,
+    totalPages: Math.ceil(total / limit),
+    totalProducts: total, // total products in the shop
+  });
 });
 
 const getAllProducts = asyncHandler(async (req, res) => {

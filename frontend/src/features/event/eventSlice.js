@@ -35,9 +35,9 @@ export const deleteEventThunk = createAsyncThunk(
 
 export const getShopEventsThunk = createAsyncThunk(
   "event/getShopEvents",
-  async (_, thunkAPI) => {
+  async ({ page, limit }, thunkAPI) => {
     try {
-      const res = await getShopEventsApi();
+      const res = await getShopEventsApi({ page, limit });
       console.log(res);
       return res.data;
     } catch (error) {
@@ -80,6 +80,8 @@ const initialState = {
   isLoading: false,
   error: null,
   success: false,
+  totalPages: 0,
+  totalShopEvents: 0,
 };
 
 const eventSlice = createSlice({
@@ -112,7 +114,9 @@ const eventSlice = createSlice({
       .addCase(getShopEventsThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.success = true;
-        state.shopEvents = action.payload;
+        state.shopEvents = action.payload.events;
+        state.totalPages = action.payload.totalPages;
+        state.totalShopEvents = action.payload.totalEvents;
       })
       .addCase(getShopEventsThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -131,6 +135,7 @@ const eventSlice = createSlice({
         state.shopEvents = state.shopEvents.filter(
           (event) => event._id !== action.payload
         );
+        state.totalShopEvents = state.totalShopEvents - 1;
       })
       .addCase(deleteEventThunk.rejected, (state, action) => {
         state.isLoading = false;

@@ -156,16 +156,35 @@ const deleteEvent = asyncHandler(async (req, res) => {
   }
 
   await event.deleteOne();
+  const product = await Product.findById(event.productId);
+  if (product) {
+    product.eventId = null;
+    await product.save();
+  }
   res.json({ message: "Event deleted successfully" });
 });
 
 const getShopEvents = asyncHandler(async (req, res) => {
   const shopId = req.user.shopId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
 
   const events = await Event.find({ shopId })
     .populate("productId")
-    .sort({ startDate: -1 }); // Sort by start date, latest first
-  res.status(200).json(events);
+    .sort({ startDate: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const totalEvents = await Event.countDocuments({ shopId });
+  const totalPages = Math.ceil(totalEvents / limit);
+
+  res.status(200).json({
+    events,
+    totalEvents,
+    totalPages,
+    currentPage: page,
+  });
 });
 
 // Admin Controllers

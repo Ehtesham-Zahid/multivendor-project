@@ -12,8 +12,8 @@ export const deleteEventApi = async (eventId) => {
   });
 };
 
-export const getShopEventsApi = async () => {
-  return await API.get("/events/getShopEvents", {
+export const getShopEventsApi = async ({ page, limit }) => {
+  return await API.get(`/events/getShopEvents?page=${page}&limit=${limit}`, {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };

@@ -37,16 +37,36 @@ const getShopOrderById = asyncHandler(async (req, res) => {
 const getShopOrdersByCurrentShop = asyncHandler(async (req, res) => {
   // const { shopId } = req.params;
   const { shopId } = req.user;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
   const refundOnly = String(req.query.refundOnly || "false").toLowerCase();
+  const deliveryStatus = req.query.deliveryStatus || "";
+  const refundStatus = req.query.refundStatus || "";
 
-  const filter = {};
-  console.log("refundOnly", refundOnly);
+  const filter = {
+    refundStatus: { $ne: "refunded" },
+  };
 
   if (refundOnly === "true") {
+    console.log("refundOnly", refundOnly);
     filter.refundStatus = { $ne: "none" };
   }
+  if (refundStatus) {
+    filter.refundStatus = refundStatus;
+
+    console.log("filter", filter);
+  }
+  if (deliveryStatus) {
+    filter.deliveryStatus = deliveryStatus;
+  }
+
+  const totalShopOrders = await ShopOrder.countDocuments({ shopId, ...filter });
+  const totalPages = Math.ceil(totalShopOrders / limit);
 
   const shopOrders = await ShopOrder.find({ shopId, ...filter })
+    .skip(skip)
+    .limit(limit)
     .populate("items.productId", "name images price")
     .populate(
       "parentOrderId",
@@ -55,12 +75,12 @@ const getShopOrdersByCurrentShop = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .lean();
 
-  console.log("shopOrders", shopOrders);
-
   res.status(200).json({
     message: "Shop orders fetched successfully",
-    count: shopOrders.length,
     shopOrders,
+    totalShopOrders,
+    totalPages,
+    currentPage: page,
   });
 });
 
@@ -161,7 +181,16 @@ const updateShopOrderDeliveryStatus = asyncHandler(async (req, res) => {
   const { shopOrderId } = req.params;
   const { deliveryStatus } = req.body; // expected "pending", "delivered", "cancelled"
 
-  const shopOrder = await ShopOrder.findById(shopOrderId);
+  const shopOrder = await ShopOrder.findById(shopOrderId)
+    .populate({
+      path: "parentOrderId",
+      select:
+        "userId shippingAddress paymentMethod paymentStatus totalAmount createdAt",
+      populate: {
+        path: "shippingAddress",
+      },
+    })
+    .populate("items.productId");
   if (!shopOrder) {
     res.status(404);
     throw new Error("ShopOrder not found");
