@@ -52,3 +52,17 @@ export const getProductByIdApi = async (id) => {
 export const getProductsByCategoryApi = async (category) => {
   return await API.get(`/products/category/${category}`);
 };
+
+export const getAllProductsAdminApi = async ({
+  page,
+  limit,
+  onlyActive,
+  sortBy,
+}) => {
+  return await API.get(
+    `/products/admin/all-products?page=${page}&limit=${limit}&onlyActive=${onlyActive}&sortBy=${sortBy}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
+};

@@ -80,17 +80,31 @@ const createParentOrder = asyncHandler(async (req, res) => {
 
 const getOrdersByUser = asyncHandler(async (req, res) => {
   const userId = req.user._id;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const deliveryStatus = req.query.deliveryStatus || "";
+  const skip = (page - 1) * limit;
 
-  const orders = await ParentOrder.find({ userId })
+  const filter = {};
+
+  if (deliveryStatus) {
+    filter.deliveryStatus = deliveryStatus;
+  }
+
+  const orders = await ParentOrder.find({ userId, ...filter })
     .sort({ createdAt: -1 }) // latest first
+    .skip(skip)
+    .limit(limit)
     .populate({
       path: "shopOrders",
       populate: [{ path: "shopId" }, { path: "items.productId" }],
     })
     .populate("shippingAddress");
 
-  console.log("orders", orders);
-  res.status(200).json(orders);
+  const totalOrders = await ParentOrder.countDocuments({ userId, ...filter });
+  const totalPages = Math.ceil(totalOrders / limit);
+
+  res.status(200).json({ orders, totalPages, totalOrders });
 });
 
 // Update payment status for a parent order

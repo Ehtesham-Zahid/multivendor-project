@@ -11,7 +11,7 @@ import Spinner from "../Spinner";
 
 const DashboardSection = () => {
   const { currentUserShop, isLoading } = useSelector((state) => state.shop);
-  const { shopOrders } = useSelector((state) => state.order);
+  const { totalShopOrders } = useSelector((state) => state.order);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,8 +31,14 @@ const DashboardSection = () => {
         linkUrl="/dashboard/withdraw"
       />
       <DashboardCard
+        title="Shop Revenue"
+        subtitle={`${currentUserShop?.totalRevenue} $`}
+        link="View Revenue"
+        linkUrl="/dashboard/revenue"
+      />
+      <DashboardCard
         title="Total Orders"
-        subtitle={`${shopOrders?.length}`}
+        subtitle={`${totalShopOrders}`}
         link="View Orders"
         linkUrl="/dashboard/orders"
       />

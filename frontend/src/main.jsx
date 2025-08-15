@@ -49,6 +49,7 @@ import AdminProductsPage from "./pages/AdminProductsPage.jsx";
 import AdminEventsPage from "./pages/AdminEventsPage.jsx";
 import AdminCouponCodesPage from "./pages/AdminCouponCodesPage.jsx";
 import AdminRefundsPage from "./pages/AdminRefundsPage.jsx";
+import AdminShopsPage from "./pages/AdminShopsPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -128,6 +129,7 @@ let router = createBrowserRouter([
       { path: "events", Component: AdminEventsPage },
       { path: "coupon-codes", Component: AdminCouponCodesPage },
       { path: "refunds", Component: AdminRefundsPage },
+      { path: "shops", Component: AdminShopsPage },
     ],
   },
 ]);

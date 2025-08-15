@@ -30,7 +30,8 @@ const CheckoutForm = () => {
   const { user } = useSelector((state) => state.auth);
   const { coupon } = useSelector((state) => state.coupon);
   const { totalAmount, cart } = useSelector((state) => state.cart);
-  const { addresses, isLoading } = useSelector((state) => state.address);
+  const { addresses } = useSelector((state) => state.address);
+  const { isLoading } = useSelector((state) => state.order);
 
   const [selectedOption, setSelectedOption] = useState("card");
   const [selectedAddress, setSelectedAddress] = useState(addresses[0]?._id);

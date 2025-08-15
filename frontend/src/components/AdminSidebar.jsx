@@ -4,9 +4,8 @@ import {
   Inbox,
   Search,
   Settings,
-  MessageCircleMoreIcon,
-  GiftIcon,
-  SendToBackIcon,
+  CreditCard,
+  Wallet,
 } from "lucide-react";
 
 import {
@@ -14,22 +13,12 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shadcn/sidebar";
 import { Link } from "react-router";
-import {
-  SidebarFooter,
-  SidebarHeader,
-  SidebarTrigger,
-  useSidebar,
-} from "../shadcn/sidebar";
-
-import Logo from "../assets/images/logo.png";
-import { SheetClose } from "../shadcn/sheet";
-import { useSelector } from "react-redux";
+import { SidebarHeader, useSidebar } from "../shadcn/sidebar";
 
 // Menu items.
 const items = [
@@ -39,22 +28,27 @@ const items = [
     icon: Home,
   },
   {
-    title: "Shops",
+    title: "All Shops",
     url: "/admin/shops",
     icon: Inbox,
   },
   {
-    title: "Orders",
+    title: "All Orders",
     url: "/admin/orders",
-    icon: Inbox,
+    icon: CreditCard,
   },
   {
-    title: "Products",
+    title: "All Refunds",
+    url: "/admin/refunds",
+    icon: Wallet,
+  },
+  {
+    title: "All Products",
     url: "/admin/products",
     icon: Calendar,
   },
   {
-    title: "Events",
+    title: "All Events",
     url: "/admin/events",
     icon: Search,
   },
@@ -63,11 +57,7 @@ const items = [
     url: "#",
     icon: Settings,
   },
-  {
-    title: "Refunds",
-    url: "/admin/refunds",
-    icon: SendToBackIcon,
-  },
+
   {
     title: "Settings",
     url: "/dashboard/settings",
@@ -77,7 +67,6 @@ const items = [
 
 const AdminSidebar = () => {
   const { setOpenMobile, setOpen, isMobile } = useSidebar();
-  const { currentUserShop } = useSelector((state) => state.shop);
 
   const handleClick = () => {
     if (isMobile) {

@@ -192,23 +192,26 @@ const getShopEvents = asyncHandler(async (req, res) => {
 const getAllEventsAdmin = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const onlyActive = req.query.onlyActive === "true";
   const skip = (page - 1) * limit;
+  const onlyActive = req.query.onlyActive;
+  const sortBy = req.query.sortBy === "sales" ? { "productId.sold": -1 } : {};
 
   const filter = {};
 
-  if (onlyActive) {
-    filter.isActive = true;
+  if (onlyActive === "true" || onlyActive === "false") {
+    filter.isActive = onlyActive;
   }
 
   const totalEvents = await Event.countDocuments(filter);
   const totalPages = Math.ceil(totalEvents / limit);
 
   const events = await Event.find(filter)
+    .sort(sortBy)
     .skip(skip)
     .limit(limit)
     .populate("productId")
     .populate("shopId");
+
   res.status(200).json({
     events,
     totalEvents,

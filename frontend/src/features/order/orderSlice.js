@@ -11,6 +11,8 @@ import {
   requestRefundApi,
   updateDeliveryStatusApi,
   updateRefundStatusApi,
+  getAdminRefundsApi,
+  getAdminOrdersApi,
 } from "./orderAPI";
 
 export const createOrderThunk = createAsyncThunk(
@@ -41,9 +43,9 @@ export const getShopOrdersThunk = createAsyncThunk(
 
 export const getUserParentOrdersThunk = createAsyncThunk(
   "order/getUserOrders",
-  async (_, thunkAPI) => {
+  async ({ page, limit, deliveryStatus }, thunkAPI) => {
     try {
-      const res = await getUserParentOrdersApi();
+      const res = await getUserParentOrdersApi(page, limit, deliveryStatus);
       console.log("user parent orders", res.data);
       return res.data;
     } catch (error) {
@@ -135,9 +137,17 @@ export const updateDeliveryStatusThunk = createAsyncThunk(
 
 export const getUserShopOrdersThunk = createAsyncThunk(
   "order/getUserShopOrders",
-  async (refundOnly = false, thunkAPI) => {
+  async (
+    { refundOnly = false, refundStatus = "", page = 1, limit = 10 },
+    thunkAPI
+  ) => {
     try {
-      const res = await getUserShopOrdersApi(refundOnly);
+      const res = await getUserShopOrdersApi(
+        refundOnly,
+        refundStatus,
+        page,
+        limit
+      );
       return res.data;
     } catch (error) {
       console.log("order slice", error);
@@ -159,17 +169,55 @@ export const updateRefundStatusThunk = createAsyncThunk(
   }
 );
 
+export const getAdminOrdersThunk = createAsyncThunk(
+  "order/getAdminOrders",
+  async ({ deliveryStatus = "", page = 1, limit = 10 }, thunkAPI) => {
+    try {
+      const res = await getAdminOrdersApi(deliveryStatus, page, limit);
+      return res.data;
+    } catch (error) {
+      console.log("order slice", error);
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getAdminRefundsThunk = createAsyncThunk(
+  "order/getAdminRefunds",
+  async ({ page, limit, refundStatus, refundOnly }, thunkAPI) => {
+    try {
+      const res = await getAdminRefundsApi(
+        refundOnly,
+        refundStatus,
+        page,
+        limit
+      );
+      return res.data;
+    } catch (error) {
+      console.log("order slice", error);
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   order: null,
   userOrders: [],
   shopOrders: [],
   refundOrders: [],
+  adminOrders: [],
+  adminRefunds: [],
   singleOrder: null,
   isLoading: false,
   error: null,
   success: false,
   totalPages: 0,
   totalShopOrders: 0,
+  totalUserOrders: 0,
+  totalAdminOrders: 0,
+  totalAdminRefunds: 0,
+  adminOrderTotalPages: 0,
+  adminRefundTotalPages: 0,
 };
 
 const orderSlice = createSlice({
@@ -220,7 +268,9 @@ const orderSlice = createSlice({
       })
       .addCase(getUserParentOrdersThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.userOrders = action.payload;
+        state.userOrders = action.payload.orders;
+        state.totalPages = action.payload.totalPages;
+        state.totalUserOrders = action.payload.totalOrders;
       })
       .addCase(getUserParentOrdersThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -308,13 +358,14 @@ const orderSlice = createSlice({
       })
       .addCase(getUserShopOrdersThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log("action.payload", action.payload);
-        const refundOnly = action.meta.arg || false;
+        const { refundOnly, refundStatus, page, limit } = action.meta.arg;
         if (refundOnly) {
-          state.refundOrders = action.payload;
+          state.refundOrders = action.payload.shopOrders;
         } else {
-          state.userOrders = action.payload;
+          state.shopOrders = action.payload.shopOrders;
         }
+        state.totalPages = action.payload.totalPages;
+        state.totalShopOrders = action.payload.totalShopOrders;
       })
       .addCase(getUserShopOrdersThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -331,6 +382,36 @@ const orderSlice = createSlice({
         state.singleOrder = action.payload;
       })
       .addCase(updateRefundStatusThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getAdminOrdersThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getAdminOrdersThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.adminOrders = action.payload.shopOrders;
+        state.totalAdminOrders = action.payload.totalShopOrders;
+        state.adminOrderTotalPages = action.payload.totalPages;
+      })
+      .addCase(getAdminOrdersThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getAdminRefundsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getAdminRefundsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.adminRefunds = action.payload.shopOrders;
+        state.totalAdminRefunds = action.payload.totalShopOrders;
+        state.adminRefundTotalPages = action.payload.totalPages;
+      })
+      .addCase(getAdminRefundsThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

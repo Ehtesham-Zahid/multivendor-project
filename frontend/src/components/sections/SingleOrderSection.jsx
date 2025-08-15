@@ -38,6 +38,7 @@ const SingleOrderSection = () => {
 
   const { singleOrder, isLoading } = useSelector((state) => state.order);
   const { currentUserShop } = useSelector((state) => state.shop);
+  const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -106,6 +107,12 @@ const SingleOrderSection = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
             <div className="flex flex-col gap-3 bg-zinc-300 p-4 rounded-md">
+              {" "}
+              <div className="flex flex-col gap-1">
+                <p className="font-bold">SHOP DETAILS</p>
+                <p className="capitalize">{singleOrder?.shopId?.shopName}</p>
+                <p className="capitalize">{singleOrder?.shopId?.phoneNumber}</p>
+              </div>
               <div className="flex flex-col gap-1">
                 <p className="font-bold">USER DETAILS</p>
                 <p>{singleOrder?.parentOrderId?.shippingAddress?.fullName}</p>
@@ -113,7 +120,6 @@ const SingleOrderSection = () => {
                   {singleOrder?.parentOrderId?.shippingAddress?.phoneNumber}
                 </p>
               </div>
-
               <div className="flex flex-col gap-1">
                 <p className="font-bold">SHIPPING ADDRESS</p>
                 <p>
@@ -127,62 +133,59 @@ const SingleOrderSection = () => {
                 </div>
               </div>
             </div>
-            {page === "refunds" || page === "orders" ? (
-              <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
-                <div className="flex justify-between w-full">
-                  <div className="flex gap-1 items-center">
-                    <p className="font-semibold text-zinc-600 text-md">
-                      TOTAL AMOUNT:
-                    </p>
-                    <p className="text-lg text-black  font-bold capitalize">
-                      ${singleOrder?.subtotal}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <p className="font-semibold text-zinc-600 text-md">
-                      PAYMENT STATUS:
-                    </p>
-                    <p className="text-lg text-black font-bold capitalize">
-                      {singleOrder?.paymentStatus}
-                    </p>
-                  </div>
+            <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
+              <div className="flex justify-between w-full">
+                <div className="flex gap-1 items-center">
+                  <p className="font-semibold text-zinc-600 text-md">
+                    Total Amount:
+                  </p>
+                  <p className="text-lg text-black  font-bold capitalize">
+                    ${singleOrder?.subtotal}
+                  </p>
                 </div>
-                {page === "refunds" ? (
-                  <div className="flex justify-between">
-                    <RefundStatusSelector
-                      currentStatus={singleOrder?.refundStatus}
-                      shopOrderId={singleOrder?._id}
-                    />
-                  </div>
-                ) : page === "orders" ? (
-                  <div className="flex justify-between">
-                    <DeliveryStatusSelector
-                      currentStatus={singleOrder?.deliveryStatus}
-                      shopOrderId={singleOrder?._id}
-                    />
-                  </div>
-                ) : null}
+                <div className="flex items-center gap-1">
+                  <p className="font-semibold text-zinc-600 text-md">
+                    Payment Status:
+                  </p>
+                  <p className="text-lg text-black font-bold capitalize">
+                    {singleOrder?.paymentStatus}
+                  </p>
+                </div>
               </div>
-            ) : (
-              <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
+              {user?.role === "admin" ? (
                 <div className="flex justify-between w-full">
                   <div className="flex gap-1 items-center">
                     <p className="font-semibold text-zinc-600 text-md">
-                      TOTAL AMOUNT:
+                      Delivery Status:
                     </p>
                     <p className="text-lg text-black  font-bold capitalize">
-                      ${singleOrder?.subtotal}
+                      {singleOrder?.deliveryStatus}
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
                     <p className="font-semibold text-zinc-600 text-md">
-                      PAYMENT STATUS:
+                      Refund Status:
                     </p>
                     <p className="text-lg text-black font-bold capitalize">
-                      {singleOrder?.paymentStatus}
+                      {singleOrder?.refundStatus}
                     </p>
                   </div>
                 </div>
+              ) : page === "refunds" ? (
+                <div className="flex justify-between">
+                  <RefundStatusSelector
+                    currentStatus={singleOrder?.refundStatus}
+                    shopOrderId={singleOrder?._id}
+                  />
+                </div>
+              ) : page === "orders" ? (
+                <div className="flex justify-between">
+                  <DeliveryStatusSelector
+                    currentStatus={singleOrder?.deliveryStatus}
+                    shopOrderId={singleOrder?._id}
+                  />
+                </div>
+              ) : (
                 <div className="flex justify-between">
                   <Button className="bg-primary    text-white hover:bg-primary/80 cursor-pointer">
                     Contact Seller
@@ -209,8 +212,8 @@ const SingleOrderSection = () => {
                     )
                   ) : null}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </>
       )}

@@ -77,8 +77,8 @@ const getProductById = asyncHandler(async (req, res) => {
     _id: req.params.productId,
     isDeleted: false,
   })
-    .populate("shopId", "shopName imageUrl rating totalReviews")
-    .populate("eventId");
+    .populate("eventId")
+    .populate("shopId", "shopName imageUrl rating totalReviews isActive");
 
   if (!product) {
     res.status(404);
@@ -199,41 +199,53 @@ const getProductsByShop = asyncHandler(async (req, res) => {
 });
 
 const getAllProducts = asyncHandler(async (req, res) => {
-  console.log("1");
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const search = req.query.search || "";
-
   const skip = (page - 1) * limit;
-
   const { category, sortBy } = req.query;
 
+  // --- Build initial filter ---
   const filter = { isDeleted: false };
-
   if (search) {
     filter.name = { $regex: search, $options: "i" };
   }
-
   if (category) {
     filter.category = category;
   }
-  console.log("2");
-  let sortOption = {};
 
+  // --- Build sorting ---
+  let sortOption = {};
   if (sortBy === "sales") {
-    sortOption = { sold: -1 }; // Most sold
+    sortOption = { sold: -1 };
   } else if (sortBy === "latest") {
-    sortOption = { createdAt: -1 }; // Newest products
+    sortOption = { createdAt: -1 };
   }
 
-  console.log("3");
-  const total = await Product.countDocuments(filter);
+  const result = await Product.aggregate([
+    { $match: filter }, // Step 1: basic filter (isDeleted, search, category)
+    {
+      $lookup: {
+        from: "shops",
+        localField: "shopId",
+        foreignField: "_id",
+        as: "shop",
+      },
+    },
+    { $unwind: "$shop" }, // Turn shop array into object
+    { $match: { "shop.isActive": true } }, // Only active shops
+    {
+      $facet: {
+        products: [{ $sort: sortOption }, { $skip: skip }, { $limit: limit }],
+        totalCount: [{ $count: "total" }],
+      },
+    },
+  ]);
 
-  const products = await Product.find(filter)
-    .sort(sortOption)
-    .skip(skip)
-    .limit(limit);
-  console.log("4");
+  // Extract results
+  const products = result[0].products;
+  const total =
+    result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
 
   res.json({
     products,
@@ -254,7 +266,7 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
   const products = await Product.find({
     category,
     isDeleted: false,
-  });
+  }).populate("shopId", "shopName imageUrl rating totalReviews isActive");
 
   res.status(200).json(products);
 });
@@ -264,20 +276,27 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
 const getAllProductsAdmin = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const onlyActive = req.query.onlyActive === "true";
-
+  const onlyActive = req.query.onlyActive;
+  const sortBy = req.query.sortBy === "sales" ? { sold: -1 } : {};
   const skip = (page - 1) * limit;
 
   const filter = {};
 
-  if (onlyActive) {
+  if (onlyActive === "true") {
     filter.isDeleted = false;
+  }
+
+  if (onlyActive === "false") {
+    filter.isDeleted = true;
   }
 
   const totalProducts = await Product.countDocuments(filter);
   const totalPages = Math.ceil(totalProducts / limit);
 
-  const products = await Product.find(filter).skip(skip).limit(limit);
+  const products = await Product.find(filter)
+    .sort(sortBy)
+    .skip(skip)
+    .limit(limit);
 
   res.status(200).json({
     products,

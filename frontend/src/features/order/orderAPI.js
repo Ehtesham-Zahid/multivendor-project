@@ -12,10 +12,13 @@ export const getShopOrdersApi = async (refundStatus) => {
   });
 };
 
-export const getUserParentOrdersApi = async () => {
-  return await API.get(`/parent-orders/getOrdersByUser`, {
-    withCredentials: true, // <== required to receive Set-Cookie
-  });
+export const getUserParentOrdersApi = async (page, limit, deliveryStatus) => {
+  return await API.get(
+    `/parent-orders/getOrdersByUser?page=${page}&limit=${limit}&deliveryStatus=${deliveryStatus}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
 };
 
 export const getOrderApi = async (orderId, shopId) => {
@@ -67,9 +70,14 @@ export const updateDeliveryStatusApi = async (shopOrderId, deliveryStatus) => {
   );
 };
 
-export const getUserShopOrdersApi = async (refundOnly = false) => {
+export const getUserShopOrdersApi = async (
+  refundOnly = false,
+  refundStatus = "",
+  page = 1,
+  limit = 10
+) => {
   return await API.get(
-    `/shop-orders/getUserShopOrders?refundOnly=${refundOnly}`,
+    `/shop-orders/getUserShopOrders?refundOnly=${refundOnly}&refundStatus=${refundStatus}&page=${page}&limit=${limit}`,
     {
       withCredentials: true, // <== required to receive Set-Cookie
     }
@@ -82,6 +90,33 @@ export const updateRefundStatusApi = async (shopOrderId, refundStatus) => {
     {
       refundStatus,
     },
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
+};
+
+export const getAdminOrdersApi = async (
+  deliveryStatus = "",
+  page = 1,
+  limit = 10
+) => {
+  return await API.get(
+    `/shop-orders/admin/all-shop-orders?&deliveryStatus=${deliveryStatus}&page=${page}&limit=${limit}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
+};
+
+export const getAdminRefundsApi = async (
+  refundOnly = true,
+  refundStatus = "",
+  page = 1,
+  limit = 10
+) => {
+  return await API.get(
+    `/shop-orders/admin/all-shop-orders?refundOnly=${refundOnly}&refundStatus=${refundStatus}&page=${page}&limit=${limit}`,
     {
       withCredentials: true, // <== required to receive Set-Cookie
     }

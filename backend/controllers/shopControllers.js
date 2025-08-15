@@ -130,18 +130,41 @@ const getShopById = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
+const updateShopStatus = asyncHandler(async (req, res) => {
+  const { shopId } = req.params;
+
+  const shop = await Shop.findById(shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+
+  shop.isActive = !shop.isActive;
+  await shop.save();
+
+  res.status(200).json({
+    message: `Shop is now ${shop.isActive ? "active" : "inactive"}`,
+    shop,
+  });
+});
+
 // Admin Controllers
 const getAllShopsAdmin = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const onlyActive = req.query.onlyActive === "true";
+  const onlyActive = req.query.onlyActive;
 
   const skip = (page - 1) * limit;
 
   const filter = {};
+  console.log(onlyActive);
 
-  if (onlyActive) {
-    filter.isDeleted = false;
+  if (onlyActive === "true") {
+    filter.isActive = true;
+  }
+
+  if (onlyActive === "false") {
+    filter.isActive = false;
   }
 
   const totalShops = await Shop.countDocuments(filter);
@@ -150,7 +173,7 @@ const getAllShopsAdmin = asyncHandler(async (req, res) => {
   const shops = await Shop.find(filter)
     .skip(skip)
     .limit(limit)
-    .populate("ownerId", "name email");
+    .populate("ownerId", "fullName email");
 
   res.status(200).json({
     shops,
@@ -168,4 +191,5 @@ module.exports = {
   getAllShops,
   getShopById,
   getAllShopsAdmin,
+  updateShopStatus,
 };

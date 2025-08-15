@@ -4,6 +4,7 @@ import {
   getCurrentUserShopApi,
   getShopByIdApi,
   updateCurrentUserShopApi,
+  getAllShopsApi,
 } from "./shopAPI";
 
 export const createShopThunk = createAsyncThunk(
@@ -56,12 +57,28 @@ export const getShopByIdThunk = createAsyncThunk(
   }
 );
 
+export const getAllShopsThunk = createAsyncThunk(
+  "shop/getAllShops",
+  async ({ page, limit, onlyActive }, thunkAPI) => {
+    try {
+      const res = await getAllShopsApi({ page, limit, onlyActive });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   currentUserShop: null,
   shop: null,
   isLoading: false,
   error: null,
   success: false,
+  shops: [],
+  totalShops: 0,
+  totalPages: 0,
+  currentPage: 1,
 };
 
 const shopSlice = createSlice({
@@ -136,6 +153,25 @@ const shopSlice = createSlice({
         state.success = true;
       })
       .addCase(getShopByIdThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getAllShopsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getAllShopsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.shops = action.payload.shops;
+        state.totalShops = action.payload.totalShops;
+        state.totalPages = action.payload.totalPages;
+        state.currentPage = action.payload.currentPage;
+        state.success = true;
+      })
+      .addCase(getAllShopsThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

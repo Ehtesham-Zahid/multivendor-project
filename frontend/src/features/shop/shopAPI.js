@@ -21,3 +21,16 @@ export const updateCurrentUserShopApi = async (shopData) => {
 export const getShopByIdApi = async (shopId) => {
   return await API.get(`/shops/${shopId}`);
 };
+
+export const getAllShopsApi = async ({ page, limit, onlyActive }) => {
+  return await API.get(
+    `/shops/admin/all-shops?page=${page}&limit=${limit}&onlyActive=${onlyActive}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
+};
+
+export const updateShopStatusApi = async (shopId) => {
+  return await API.patch(`/shops/update-shop-status/${shopId}`);
+};

@@ -46,6 +46,14 @@ const shopSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    totalRevenue: {
+      type: Number,
+      default: 0,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,

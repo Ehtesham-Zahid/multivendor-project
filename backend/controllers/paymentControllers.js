@@ -87,6 +87,7 @@ const webhook = asyncHandler(async (req, res) => {
     const totalCommission = parentOrder.totalAmount * 0.1;
 
     admin.accountBalance = (admin.accountBalance || 0) + totalCommission;
+    admin.totalRevenue = (admin.totalRevenue || 0) + totalCommission;
 
     await admin.save();
 
@@ -102,6 +103,7 @@ const webhook = asyncHandler(async (req, res) => {
 
       const shopCommission = shopOrder.subtotal * 0.9;
       shop.accountBalance = (shop.accountBalance || 0) + shopCommission;
+      shop.totalRevenue = (shop.totalRevenue || 0) + shopCommission;
       await shop.save();
     }
 

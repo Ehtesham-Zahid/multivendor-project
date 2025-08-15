@@ -8,6 +8,7 @@ const {
   updateCurrentUserShop,
   getShopById,
   getAllShopsAdmin,
+  updateShopStatus,
 } = require("../controllers/shopControllers.js");
 
 const upload = require("../middlewares/uploadMiddleware.js");
@@ -23,6 +24,7 @@ router.patch(
 );
 router.delete("/:shopId", protect, deleteShop);
 router.get("/:shopId", getShopById);
+router.patch("/update-shop-status/:shopId", protect, updateShopStatus);
 
 // Admin Routes
 router.get("/admin/all-shops", protect, isAdmin, getAllShopsAdmin);
