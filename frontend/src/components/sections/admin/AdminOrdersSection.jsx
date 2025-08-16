@@ -66,8 +66,8 @@ const AdminOrdersSection = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center">
-        <p className="text-2xl sm:text-3xl font-bold mb-3">All Orders</p>
+      <div className="flex justify-between items-center ">
+        <p className="text-2xl sm:text-3xl font-bold ">All Orders</p>
         <DeliveryFilterSelector
           handleDeliveryStatusChange={handleDeliveryStatusChange}
         />

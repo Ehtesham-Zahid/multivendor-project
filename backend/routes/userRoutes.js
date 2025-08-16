@@ -9,10 +9,11 @@ const {
   updateMe,
   changePassword,
   logout,
+  getDashboardStats,
 } = require("../controllers/userControllers.js");
 
 const upload = require("../middlewares/uploadMiddleware.js");
-const { protect } = require("../middlewares/authMiddleware.js");
+const { protect, isAdmin } = require("../middlewares/authMiddleware.js");
 
 router.post("/register", upload.single("image"), registerUser);
 router.post("/login", loginUser);
@@ -21,5 +22,6 @@ router.get("/me", protect, me);
 router.patch("/update-me", upload.single("image"), protect, updateMe);
 router.patch("/change-password", protect, changePassword);
 router.post("/logout", protect, logout);
+router.get("/admin/dashboard-stats", protect, getDashboardStats);
 
 module.exports = router;

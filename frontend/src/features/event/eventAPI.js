@@ -34,3 +34,17 @@ export const getActiveEventsApi = async ({ sortBy, limit }) => {
 
   return await API.get(`/events/getActiveEvents/?${params.toString()}`);
 };
+
+export const getAllEventsAdminApi = async ({
+  page,
+  limit,
+  onlyActive = "",
+  sortBy,
+}) => {
+  return await API.get(
+    `/events/admin/all-events?page=${page}&limit=${limit}&onlyActive=${onlyActive}&sortBy=${sortBy}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
+};

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   changePasswordAPI,
+  getDashboardStatsAPI,
   getMe,
   login,
   logoutAPI,
@@ -93,11 +94,24 @@ export const logoutThunk = createAsyncThunk(
   }
 );
 
+export const getDashboardStatsThunk = createAsyncThunk(
+  "auth/getDashboardStats",
+  async (_, thunkAPI) => {
+    try {
+      const res = await getDashboardStatsAPI();
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   user: null,
   isLoading: false,
   error: null,
   success: false,
+  dashboardStats: null,
 };
 
 const authSlice = createSlice({
@@ -214,6 +228,22 @@ const authSlice = createSlice({
         state.user = null;
       })
       .addCase(logoutThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.success = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getDashboardStatsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getDashboardStatsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.dashboardStats = action.payload;
+      })
+      .addCase(getDashboardStatsThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
         state.error = action.payload;

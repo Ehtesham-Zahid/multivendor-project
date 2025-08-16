@@ -27,7 +27,8 @@ import {
   PaginationPrevious,
 } from "@/shadcn/pagination";
 
-import ProductFilterSelector from "../../ProductFilterSelector";
+import EventFilterSelector from "../../EventFilterSelector";
+import { formatDate } from "../../../utils";
 
 const AdminEventsSection = () => {
   const [page, setPage] = useState(1);
@@ -57,27 +58,30 @@ const AdminEventsSection = () => {
         onlyActive: "",
         page,
         limit,
+        sortBy: "sales",
       })
     );
   }, [dispatch, page, limit]);
 
-  const handleProductStatusChange = (value) => {
-    if (value === "sales") {
-      console.log("sales");
+  const handleEventStatusChange = (value) => {
+    // if (value === "sales") {
+    //   console.log("sales");
+    //   dispatch(
+    //     getAllEventsAdminThunk({
+    //       onlyActive: "",
+    //       sortBy: "sales",
+    //       page: 1,
+    //       limit,
+    //     })
+    //   );
+    // } else
+    if (value === "all") {
       dispatch(
         getAllEventsAdminThunk({
           onlyActive: "",
+          page: 1,
+          limit,
           sortBy: "sales",
-          page: 1,
-          limit,
-        })
-      );
-    } else if (value === "all") {
-      dispatch(
-        getAllEventsAdminThunk({
-          onlyActive: "",
-          page: 1,
-          limit,
         })
       );
     } else if (value === "true" || value === "false") {
@@ -86,6 +90,7 @@ const AdminEventsSection = () => {
           onlyActive: value,
           page: 1,
           limit,
+          sortBy: "sales",
         })
       );
     }
@@ -94,8 +99,8 @@ const AdminEventsSection = () => {
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <p className="text-2xl sm:text-3xl font-bold mb-3">All Events</p>
-        <ProductFilterSelector
-          handleProductStatusChange={handleProductStatusChange}
+        <EventFilterSelector
+          handleEventStatusChange={handleEventStatusChange}
         />
       </div>
       <div className="w-full min-h-[500px] overflow-y-scroll rounded-sm  shadow-2xl ">
@@ -103,11 +108,14 @@ const AdminEventsSection = () => {
           <TableHeader className="bg-primary rounded-md">
             <TableRow className="text-white">
               <TableHead className="w-[100px]">EVENT ID</TableHead>
-              <TableHead>NAME</TableHead>
-              <TableHead className="text-center">STATUS</TableHead>
-              <TableHead className="text-center">PREVIEW</TableHead>
-              <TableHead>Edit</TableHead>
-              <TableHead>Delete</TableHead>
+              <TableHead>EVENT NAME</TableHead>
+              <TableHead>PRODUCT</TableHead>
+              <TableHead>ORIGINAL PRICE</TableHead>
+              <TableHead>EVENT PRICE</TableHead>
+              <TableHead>STATUS</TableHead>
+              <TableHead>START DATE</TableHead>
+              <TableHead>END DATE</TableHead>
+              <TableHead>DELETE</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -127,37 +135,31 @@ const AdminEventsSection = () => {
                     {`EVT${1000 + index + 1 + (page - 1) * limit}`}
                   </TableCell>
                   <TableCell className="capitalize">
-                    {event.name || "Event Name"}
+                    {event?.name || "Event Name"}
                   </TableCell>
-                  <TableCell className="text-center">
-                    <Badge
-                      variant={"outline"}
-                      className="text-white bg-blue-500 w-10"
+                  <TableCell className=" text-primary font-semibold ">
+                    <Link
+                      to={`/product/${event?.productId?._id}`}
+                      className="hover:underline"
                     >
-                      {event.isDeleted ? "Inactive" : "Active"}
-                    </Badge>
+                      {event?.productId?.name}
+                    </Link>
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className=" ">${event?.originalPrice}</TableCell>
+                  <TableCell className="   ">${event?.eventPrice}</TableCell>
+                  <TableCell>
                     <Badge
                       variant={"outline"}
                       className={`text-white ${
-                        event.isActive ? "bg-green-500" : "bg-red-500"
+                        event.isActive ? "bg-green-500" : "bg-yellow-500"
                       }`}
                     >
-                      {event.isActive ? "Active" : "Inactive"}
+                      {event.isActive ? "Active" : "Upcoming"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-primary text-center flex justify-center items-center">
-                    <Link to={`/event/${event._id}`}>
-                      <Eye className="cursor-pointer" />
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-primary">
-                    <UpdateEventDialog
-                      event={event}
-                      disabled={event.isActive}
-                    />
-                  </TableCell>
+
+                  <TableCell>{formatDate(event?.startDate)}</TableCell>
+                  <TableCell>{formatDate(event?.endDate)}</TableCell>
                   <TableCell className="text-primary ">
                     {event.isActive ? (
                       <Trash2

@@ -5,6 +5,7 @@ import {
   getActiveEventsApi,
   getShopEventsApi,
   updateEventApi,
+  getAllEventsAdminApi,
 } from "./eventAPI";
 
 export const createEventThunk = createAsyncThunk(
@@ -73,6 +74,24 @@ export const getActiveEventsThunk = createAsyncThunk(
   }
 );
 
+export const getAllEventsAdminThunk = createAsyncThunk(
+  "event/getAllEventsAdmin",
+  async ({ page, limit, onlyActive, sortBy }, thunkAPI) => {
+    try {
+      const res = await getAllEventsAdminApi({
+        page,
+        limit,
+        onlyActive,
+        sortBy,
+      });
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   allEvents: [],
   shopEvents: [],
@@ -82,6 +101,9 @@ const initialState = {
   success: false,
   totalPages: 0,
   totalShopEvents: 0,
+  adminEvents: [],
+  totalAdminEventsPages: 0,
+  totalAdminEvents: 0,
 };
 
 const eventSlice = createSlice({
@@ -178,6 +200,24 @@ const eventSlice = createSlice({
         }
       })
       .addCase(getActiveEventsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(getAllEventsAdminThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(getAllEventsAdminThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.adminEvents = action.payload.events;
+        state.totalAdminEventsPages = action.payload.totalPages;
+        state.totalAdminEvents = action.payload.totalEvents;
+      })
+      .addCase(getAllEventsAdminThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

@@ -28,7 +28,17 @@ const createEvent = asyncHandler(async (req, res) => {
     throw new Error("Product not found");
   }
 
+  if (product.eventId) {
+    res.status(400);
+    throw new Error("This product already has an event");
+  }
+
   let event;
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  const isActive = start <= new Date() && end >= new Date();
 
   try {
     event = await Event.create({
@@ -36,9 +46,10 @@ const createEvent = asyncHandler(async (req, res) => {
       originalPrice,
       eventPrice,
       productId,
-      startDate,
-      endDate,
+      startDate: start,
+      endDate: end,
       shopId: req.user.shopId,
+      isActive,
     });
   } catch (error) {
     res.status(500);

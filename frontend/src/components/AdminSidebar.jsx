@@ -6,6 +6,8 @@ import {
   Settings,
   CreditCard,
   Wallet,
+  Package,
+  Banknote,
 } from "lucide-react";
 
 import {
@@ -24,13 +26,18 @@ import { SidebarHeader, useSidebar } from "../shadcn/sidebar";
 const items = [
   {
     title: "Dashboard",
-    url: "/dashboard",
+    url: "/admin",
     icon: Home,
   },
   {
     title: "All Shops",
     url: "/admin/shops",
     icon: Inbox,
+  },
+  {
+    title: "All Events",
+    url: "/admin/events",
+    icon: Calendar,
   },
   {
     title: "All Orders",
@@ -45,23 +52,13 @@ const items = [
   {
     title: "All Products",
     url: "/admin/products",
-    icon: Calendar,
-  },
-  {
-    title: "All Events",
-    url: "/admin/events",
-    icon: Search,
-  },
-  {
-    title: "Withdraw Money",
-    url: "#",
-    icon: Settings,
+    icon: Package,
   },
 
   {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings,
+    title: "Withdraw Money",
+    url: "/admin/withdraw-money",
+    icon: Banknote,
   },
 ];
 
@@ -87,10 +84,10 @@ const AdminSidebar = () => {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title} onClick={handleClick}>
-                  <SidebarMenuButton asChild className="my-1.5">
+                  <SidebarMenuButton asChild className="my-2">
                     <Link to={item.url} className="flex items-center gap-4">
-                      <item.icon size={28} className="text-primary w-36" />
-                      <span className="text-lg">{item.title}</span>
+                      <item.icon className="text-primary  " />
+                      <span className="text-xl">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

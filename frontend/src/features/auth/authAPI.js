@@ -41,3 +41,9 @@ export const logoutAPI = async () => {
     }
   );
 };
+
+export const getDashboardStatsAPI = async () => {
+  return await API.get(`/users/admin/dashboard-stats`, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};

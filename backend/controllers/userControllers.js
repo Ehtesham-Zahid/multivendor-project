@@ -4,6 +4,10 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const uploadAvatar = require("../utils/cloudinary");
 const POST = require("../utils/email");
+const ShopOrder = require("../models/shopOrderModel");
+const Product = require("../models/productModel");
+const Event = require("../models/eventModel");
+const Shop = require("../models/shopModel");
 
 const generateToken = (id, expire) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: expire });
@@ -202,6 +206,24 @@ const logout = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out" });
 });
 
+const getDashboardStats = asyncHandler(async (req, res) => {
+  const totalOrders = await ShopOrder.countDocuments();
+  const totalProducts = await Product.countDocuments();
+  const totalVendors = await User.countDocuments({ role: "vendor" });
+  const totalRefunds = await ShopOrder.countDocuments({
+    refundStatus: "refunded",
+  });
+
+  // Assuming `Order` has a field "totalPrice" and "status"
+
+  res.json({
+    totalOrders,
+    totalProducts,
+    totalShops: totalVendors,
+    totalRefunds,
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -210,4 +232,5 @@ module.exports = {
   updateMe,
   changePassword,
   logout,
+  getDashboardStats,
 };
