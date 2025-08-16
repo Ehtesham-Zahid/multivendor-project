@@ -1,10 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import ProfileImage from "../../assets/images/category-1.jpg";
 import { Button } from "../../shadcn/button";
-import {
-  getCurrentUserShopThunk,
-  updateCurrentUserShopThunk,
-} from "../../features/shop/shopSlice";
+import { updateCurrentUserShopThunk } from "../../features/shop/shopSlice";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -17,10 +13,6 @@ const DashboardSettingSection = () => {
   );
   const dispatch = useDispatch();
   const [preview, setPreview] = useState(currentUserShop?.imageUrl);
-
-  useEffect(() => {
-    dispatch(getCurrentUserShopThunk());
-  }, [dispatch]);
 
   const {
     register,

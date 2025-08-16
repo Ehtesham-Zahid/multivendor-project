@@ -3,7 +3,7 @@ import { BestSelling } from "../components";
 
 const BestSellingPage = () => {
   return (
-    <div>
+    <div className="mb-20">
       <BestSelling limit={10} />
     </div>
   );

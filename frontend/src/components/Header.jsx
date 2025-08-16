@@ -1,21 +1,5 @@
-// "use client";
-import {
-  ArrowRight,
-  ChevronDown,
-  CircleUserRound,
-  Heart,
-  ShoppingCart,
-} from "lucide-react";
+import { ArrowRight, CircleUserRound } from "lucide-react";
 
-import { Button } from "@/shadcn/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-} from "@/shadcn/dropdown-menu";
-import { useState } from "react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import CartSheet from "./CartSheet";
@@ -27,7 +11,6 @@ import Menubar from "./Menubar";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
-  const [category, setCategory] = useState("bottom");
 
   return (
     <>
@@ -118,9 +101,19 @@ const Header = () => {
             <div className="flex gap-5 py-5  ">
               <WishlistSheet />
               <CartSheet />
-              <Link to={`${user ? "/profile" : "/auth/login"}`}>
-                <CircleUserRound />
-              </Link>
+              {user ? (
+                <Link to={`/profile`}>
+                  <img
+                    src={user?.imageUrl}
+                    alt="avatar"
+                    className="w-8 h-8 rounded-full border-2 border-white"
+                  />
+                </Link>
+              ) : (
+                <Link to={`/auth/login`}>
+                  <CircleUserRound />
+                </Link>
+              )}
             </div>
           </div>
         </div>

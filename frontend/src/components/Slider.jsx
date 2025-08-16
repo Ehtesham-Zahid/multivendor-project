@@ -9,9 +9,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-import SliderImage1 from "../assets/images/slider-1.jpg";
-import SliderImage2 from "../assets/images/slider-2.jpg";
-
 import "./index.css";
 import { Button } from "../shadcn/button";
 

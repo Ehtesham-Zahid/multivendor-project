@@ -2,69 +2,65 @@ const asyncHandler = require("express-async-handler");
 const Review = require("../models/reviewModel");
 const Shop = require("../models/shopModel");
 const Product = require("../models/productModel");
+const mongoose = require("mongoose");
 
 const createReview = asyncHandler(async (req, res) => {
   const { shopId, productId, rating, comment } = req.body;
 
-  if (!shopId && !productId) {
+  if (!productId) {
     res.status(400);
-    throw new Error("shopId or productId is required");
+    throw new Error("productId is required");
   }
 
-  if (shopId && productId) {
-    res.status(400);
-    throw new Error("Review can only be for either a shop or a product");
-  }
-
-  if (shopId) {
-    const existing = await Review.findOne({ shopId, userId: req.user._id });
-    if (existing) {
-      res.status(400);
-      throw new Error("You have already reviewed this shop");
-    }
-  }
-
-  const reviewData = {
+  const review = await Review.create({
     rating,
     comment,
     userId: req.user._id,
-  };
+    shopId,
+    productId,
+  });
 
+  // Update shop rating (if shopId provided)
   if (shopId) {
-    reviewData.shopId = shopId;
-    const review = await Review.create(reviewData);
+    const shopStats = await Review.aggregate([
+      { $match: { shopId: new mongoose.Types.ObjectId(shopId) } },
+      {
+        $group: {
+          _id: null,
+          avgRating: { $avg: "$rating" },
+          total: { $sum: 1 },
+        },
+      },
+    ]);
 
-    const shop = await Shop.findById(shopId);
-
-    const reviews = await Review.find({ shopId });
-    const avg =
-      reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length;
-
-    shop.rating = avg;
-    shop.totalReviews = reviews.length;
-    shop.reviews.push(review._id);
-    await shop.save();
+    await Shop.findByIdAndUpdate(shopId, {
+      $set: {
+        rating: shopStats[0]?.avgRating || 0,
+        totalReviews: shopStats[0]?.total || 0,
+      },
+      $addToSet: { reviews: review._id },
+    });
   }
-  if (productId) {
-    reviewData.productId = productId;
-    const review = await Review.create(reviewData);
 
-    const product = await Product.findById(productId);
+  // Update product rating
+  const productStats = await Review.aggregate([
+    { $match: { productId: new mongoose.Types.ObjectId(productId) } },
+    {
+      $group: { _id: null, avgRating: { $avg: "$rating" }, total: { $sum: 1 } },
+    },
+  ]);
 
-    const reviews = await Review.find({ productId });
-    const avg =
-      reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length;
-
-    product.rating = avg;
-    product.totalReviews = reviews.length;
-    product.reviews.push(review._id);
-    await product.save();
-  }
+  await Product.findByIdAndUpdate(productId, {
+    $set: {
+      rating: productStats[0]?.avgRating || 0,
+      totalReviews: productStats[0]?.total || 0,
+    },
+    $addToSet: { reviews: review._id },
+  });
 
   res.status(201).json({
     message: "Review Created Successfully",
-    rating,
-    comment,
+    review,
   });
 });
 

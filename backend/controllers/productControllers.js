@@ -202,6 +202,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const search = req.query.search || "";
+  const isFeatured = req.query.isFeatured || false;
   const skip = (page - 1) * limit;
   const { category, sortBy } = req.query;
 
@@ -214,6 +215,12 @@ const getAllProducts = asyncHandler(async (req, res) => {
     filter.category = category;
   }
 
+  console.log("isFeatured", isFeatured);
+  if (isFeatured === "true") {
+    console.log("isFeatured is true");
+    filter.isFeatured = true;
+  }
+
   // --- Build sorting ---
   let sortOption = {};
   if (sortBy === "sales") {
@@ -222,7 +229,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
     sortOption = { createdAt: -1 };
   }
 
-  const result = await Product.aggregate([
+  const pipeline = [
     { $match: filter }, // Step 1: basic filter (isDeleted, search, category)
     {
       $lookup: {
@@ -234,14 +241,22 @@ const getAllProducts = asyncHandler(async (req, res) => {
     },
     { $unwind: "$shop" }, // Turn shop array into object
     { $match: { "shop.isActive": true } }, // Only active shops
-    {
-      $facet: {
-        products: [{ $sort: sortOption }, { $skip: skip }, { $limit: limit }],
-        totalCount: [{ $count: "total" }],
-      },
-    },
-  ]);
+  ];
 
+  const productsPipeline = [];
+  if (sortOption && Object.keys(sortOption).length > 0) {
+    productsPipeline.push({ $sort: sortOption });
+  }
+  productsPipeline.push({ $skip: skip }, { $limit: limit });
+
+  pipeline.push({
+    $facet: {
+      products: productsPipeline,
+      totalCount: [{ $count: "total" }],
+    },
+  });
+
+  const result = await Product.aggregate(pipeline);
   // Extract results
   const products = result[0].products;
   const total =

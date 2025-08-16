@@ -1,22 +1,11 @@
 import DashboardCard from "../DashboardCard";
-import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUserShopThunk } from "../../features/shop/shopSlice";
-import {
-  getShopOrdersByCurrentShopThunk,
-  getShopOrdersThunk,
-} from "../../features/order/orderSlice";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import DashboardOrdersSection from "./DashboardOrdersSection";
 import Spinner from "../Spinner";
 
 const DashboardSection = () => {
   const { currentUserShop, isLoading } = useSelector((state) => state.shop);
   const { totalShopOrders } = useSelector((state) => state.order);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getCurrentUserShopThunk());
-  }, []);
 
   return isLoading ? (
     <div className="flex justify-center items-center h-full">

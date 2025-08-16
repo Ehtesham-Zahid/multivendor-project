@@ -125,12 +125,79 @@ export const getAllProductsAdminThunk = createAsyncThunk(
     }
   }
 );
+
+export const getBestSellingProductsHomepageThunk = createAsyncThunk(
+  "product/getBestSellingProductsHomepage",
+  async ({ page, limit }, thunkAPI) => {
+    try {
+      const res = await getAllProductsApi({
+        sortBy: "sales",
+        limit: 5,
+        page,
+        limit,
+      });
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getBestSellingProductsThunk = createAsyncThunk(
+  "product/getBestSellingProducts",
+  async ({ page, limit }, thunkAPI) => {
+    try {
+      const res = await getAllProductsApi({
+        sortBy: "sales",
+        limit,
+        page,
+      });
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getFeaturedProductsThunk = createAsyncThunk(
+  "product/getFeaturedProducts",
+  async ({ limit }, thunkAPI) => {
+    try {
+      const res = await getAllProductsApi({
+        isFeatured: true,
+        limit,
+      });
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getSearchProductsThunk = createAsyncThunk(
+  "product/getSearchProducts",
+  async ({ search, limit, page }, thunkAPI) => {
+    try {
+      const res = await getAllProductsApi({ search, limit, page });
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const initialState = {
   allProducts: [],
   adminProducts: [],
   shopProducts: [],
   categoryProducts: [],
   bestSellingProducts: [],
+  bestSellingProductsHomepage: [],
+  featuredProducts: [],
   searchProducts: [],
   singleProduct: null,
   isLoading: false,
@@ -140,6 +207,10 @@ const initialState = {
   totalProducts: 0,
   totalAdminProducts: 0,
   totalAdminPages: 0,
+  bestSellingProductsTotalPages: 0,
+  totalSearchPages: 0,
+  totalSearchProducts: 0,
+  searchTerm: "",
 };
 
 const productSlice = createSlice({
@@ -148,6 +219,9 @@ const productSlice = createSlice({
   reducers: {
     setSearchTermReducer: (state, action) => {
       state.searchTerm = action.payload;
+    },
+    setSearchProductsReducer: (state, action) => {
+      state.searchProducts = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -322,8 +396,70 @@ const productSlice = createSlice({
         state.error = action.payload;
         state.success = false;
       });
+    builder
+      .addCase(getBestSellingProductsHomepageThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        getBestSellingProductsHomepageThunk.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.bestSellingProductsHomepage = action.payload.products;
+        }
+      )
+      .addCase(
+        getBestSellingProductsHomepageThunk.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        }
+      );
+    builder
+      .addCase(getBestSellingProductsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getBestSellingProductsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.bestSellingProducts = action.payload.products;
+        state.bestSellingProductsTotalPages = action.payload.totalPages;
+      })
+      .addCase(getBestSellingProductsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getFeaturedProductsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getFeaturedProductsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.featuredProducts = action.payload.products;
+      })
+      .addCase(getFeaturedProductsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getSearchProductsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getSearchProductsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.searchProducts = action.payload.products;
+        state.totalSearchPages = action.payload.totalPages;
+        state.totalSearchProducts = action.payload.totalProducts;
+      })
+      .addCase(getSearchProductsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { setSearchTermReducer } = productSlice.actions;
+export const { setSearchTermReducer, setSearchProductsReducer } =
+  productSlice.actions;
 export default productSlice.reducer;

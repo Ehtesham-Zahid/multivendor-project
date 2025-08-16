@@ -19,6 +19,8 @@ const shopOrderRouter = require("./routes/shopOrderRoutes");
 const parentOrderRouter = require("./routes/parentOrderRoutes");
 const ParentOrder = require("./models/parentOrderModel");
 const ShopOrder = require("./models/shopOrderModel");
+const Event = require("./models/eventModel");
+const Product = require("./models/productModel");
 
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
@@ -64,6 +66,36 @@ cron.schedule("0 * * * *", async () => {
   } catch (error) {
     console.error("[CRON] Error deleting unverified users:", error);
   }
+});
+
+cron.schedule("0 * * * *", async () => {
+  console.log("[CRON] Running event cleanup...");
+  const now = new Date();
+
+  // Find expired events
+  const eventsToUpdate = await Event.find({
+    endDate: { $lt: now },
+    isActive: true,
+  });
+
+  if (eventsToUpdate.length === 0) {
+    console.log("No expired events found.");
+    return;
+  }
+
+  // Mark them inactive
+  await Event.updateMany(
+    { _id: { $in: eventsToUpdate.map((e) => e._id) } },
+    { $set: { isActive: false } }
+  );
+
+  // Unlink from products
+  await Product.updateMany(
+    { eventId: { $in: eventsToUpdate.map((e) => e._id) } },
+    { $set: { eventId: null } }
+  );
+
+  console.log(`[CRON] Deactivated ${eventsToUpdate.length} expired events`);
 });
 
 // Runs every 10 minutes to mark abandoned orders as failed

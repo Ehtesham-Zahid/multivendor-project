@@ -2,7 +2,7 @@ import { AllProducts } from "../components";
 
 const AllProductsPage = () => {
   return (
-    <div>
+    <div className="mb-20">
       <AllProducts />
     </div>
   );

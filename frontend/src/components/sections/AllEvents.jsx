@@ -10,7 +10,8 @@ const AllEvents = () => {
 
   useEffect(() => {
     dispatch(getActiveEventsThunk({ sortBy: null, limit: null }));
-  }, []);
+  }, [dispatch]);
+
   return (
     <section className="w-custom m-auto min-h-screen ">
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">

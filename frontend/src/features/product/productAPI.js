@@ -33,6 +33,7 @@ export const getAllProductsApi = async ({
   category,
   sortBy,
   search,
+  isFeatured,
 }) => {
   const params = new URLSearchParams();
 
@@ -41,6 +42,7 @@ export const getAllProductsApi = async ({
   if (category) params.append("category", category);
   if (sortBy) params.append("sortBy", sortBy);
   if (search) params.append("search", search);
+  if (isFeatured) params.append("isFeatured", isFeatured);
 
   return await API.get(`/products?${params.toString()}`);
 };

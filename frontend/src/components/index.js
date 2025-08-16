@@ -43,6 +43,7 @@ import AdminEventsSection from "./sections/admin/AdminEventsSection";
 import AdminCouponCodesSection from "./sections/admin/AdminCouponCodesSection";
 import AdminRefundsSection from "./sections/admin/AdminRefundsSection";
 import DashboardRefundsSection from "./sections/DashboardRefundsSection";
+import FaqsSection from "./sections/FaqsSection";
 
 // import UserInboxSection from "./sections/UserInboxSection";
 
@@ -91,6 +92,6 @@ export {
   AdminCouponCodesSection,
   AdminRefundsSection,
   DashboardRefundsSection,
-
+  FaqsSection,
   // UserInboxSection,
 };

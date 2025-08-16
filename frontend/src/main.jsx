@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
@@ -10,7 +10,7 @@ import Register from "./pages/Register.jsx";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { store } from "./app/store.js";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import CreateShop from "./pages/CreateShop.jsx";
@@ -50,86 +50,96 @@ import AdminEventsPage from "./pages/AdminEventsPage.jsx";
 import AdminCouponCodesPage from "./pages/AdminCouponCodesPage.jsx";
 import AdminRefundsPage from "./pages/AdminRefundsPage.jsx";
 import AdminShopsPage from "./pages/AdminShopsPage.jsx";
+import FaqsPage from "./pages/FaqsPage.jsx";
+import AppLayout from "./pages/AppLayout.jsx";
 
 let router = createBrowserRouter([
   {
     path: "/",
-    Component: App, // This will act as a layout for its children
+    Component: AppLayout,
     children: [
-      { index: true, Component: HomePage },
-      { path: "best-selling", Component: BestSellingPage },
-      { path: "all-products", Component: AllProductsPage },
-      { path: "all-events", Component: AllEventsPage },
-      { path: "search/:search", Component: SearchPage },
-      { path: "category/:category", Component: CategoryPage },
-      { path: "product/:productId", Component: SingleProductPage },
-      { path: "order/:orderId", Component: SingleOrderPage },
-      // { path: "shop/:shopId", Component: ShopPage },
       {
-        path: "profile",
-        Component: ProfileLayout,
+        path: "/",
+        Component: App, // This will act as a layout for its children
         children: [
-          { index: true, Component: UserProfileSection },
-          { path: "orders", Component: UserOrdersSection },
-          { path: "refunds", Component: UserRefundsSection },
-          // { path: "inbox", Component: UserInboxSection },
-          { path: "change-password", Component: UserChangePasswordSection },
-          { path: "addresses", Component: UserAddressesSection },
+          { index: true, Component: HomePage },
+          { path: "best-selling", Component: BestSellingPage },
+          { path: "all-products", Component: AllProductsPage },
+          { path: "all-events", Component: AllEventsPage },
+          { path: "faqs", Component: FaqsPage },
+          { path: "search/:search", Component: SearchPage },
+          { path: "category/:category", Component: CategoryPage },
+          { path: "product/:productId", Component: SingleProductPage },
+          { path: "order/:orderId", Component: SingleOrderPage },
+
+          // { path: "shop/:shopId", Component: ShopPage },
+          {
+            path: "profile",
+            Component: ProfileLayout,
+            children: [
+              { index: true, Component: UserProfileSection },
+              { path: "orders", Component: UserOrdersSection },
+              { path: "refunds", Component: UserRefundsSection },
+              // { path: "inbox", Component: UserInboxSection },
+              { path: "change-password", Component: UserChangePasswordSection },
+              { path: "addresses", Component: UserAddressesSection },
+              { path: "order/:orderId", Component: SingleOrderPage },
+            ],
+          },
+        ],
+      },
+      {
+        path: "auth",
+        Component: Auth, // This will act as a layout for its children
+        children: [
+          { path: "login", Component: Login },
+          { path: "register", Component: Register },
+          { path: "verify-email/:token", Component: VerifyEmail },
+        ],
+      },
+      { path: "create-shop", Component: CreateShop },
+      {
+        path: "dashboard",
+        Component: DashboardLayout, // This will act as a layout for its children
+        children: [
+          { index: true, Component: DashboardPage },
+          { path: "orders", Component: DashboardOrdersPage },
+          { path: "products", Component: DashboardProductsPage },
+          { path: "events", Component: DashboardEventsPage },
+          { path: "coupon-codes", Component: DashboardCouponCodesPage },
+          { path: "refunds", Component: DashboardRefundsPage },
+          { path: "settings", Component: DashboardSettingsPage },
+          { path: "category/:cateogry", Component: CategoryPage },
           { path: "order/:orderId", Component: SingleOrderPage },
         ],
       },
-    ],
-  },
-  {
-    path: "auth",
-    Component: Auth, // This will act as a layout for its children
-    children: [
-      { path: "login", Component: Login },
-      { path: "register", Component: Register },
-      { path: "verify-email/:token", Component: VerifyEmail },
-    ],
-  },
-  { path: "create-shop", Component: CreateShop },
-  {
-    path: "dashboard",
-    Component: DashboardLayout, // This will act as a layout for its children
-    children: [
-      { index: true, Component: DashboardPage },
-      { path: "orders", Component: DashboardOrdersPage },
-      { path: "products", Component: DashboardProductsPage },
-      { path: "events", Component: DashboardEventsPage },
-      { path: "coupon-codes", Component: DashboardCouponCodesPage },
-      { path: "refunds", Component: DashboardRefundsPage },
-      { path: "settings", Component: DashboardSettingsPage },
-      { path: "category/:cateogry", Component: CategoryPage },
-      { path: "order/:orderId", Component: SingleOrderPage },
-    ],
-  },
-  {
-    path: "checkout",
-    Component: CheckoutLayout,
-    children: [
-      { index: true, Component: CheckoutPage },
-      { path: "success", Component: SuccessPage },
-      { path: "cancel", Component: CancelPage },
-    ],
-  },
-  {
-    path: "dashboard/shop/:shopId",
-    Component: ShopPage,
-    // children: [{ path: ":shopId", Component: ShopPage }],
-  },
-  {
-    path: "admin",
-    Component: AdminLayout,
-    children: [
-      { index: true, Component: AdminDashboardPage },
-      { path: "orders", Component: AdminOrdersPage },
-      { path: "products", Component: AdminProductsPage },
-      { path: "events", Component: AdminEventsPage },
-      { path: "coupon-codes", Component: AdminCouponCodesPage },
-      { path: "refunds", Component: AdminRefundsPage },
-      { path: "shops", Component: AdminShopsPage },
+      {
+        path: "checkout",
+        Component: CheckoutLayout,
+        children: [
+          { index: true, Component: CheckoutPage },
+          { path: "success", Component: SuccessPage },
+          { path: "cancel", Component: CancelPage },
+        ],
+      },
+      {
+        path: "dashboard/shop/:shopId",
+        Component: ShopPage,
+        // children: [{ path: ":shopId", Component: ShopPage }],
+      },
+      {
+        path: "admin",
+        Component: AdminLayout,
+        children: [
+          { index: true, Component: AdminDashboardPage },
+          { path: "orders", Component: AdminOrdersPage },
+          { path: "products", Component: AdminProductsPage },
+          { path: "events", Component: AdminEventsPage },
+          { path: "coupon-codes", Component: AdminCouponCodesPage },
+          { path: "refunds", Component: AdminRefundsPage },
+          { path: "shops", Component: AdminShopsPage },
+        ],
+      },
     ],
   },
 ]);
@@ -138,7 +148,7 @@ createRoot(document.getElementById("root")).render(
   // <StrictMode>
   <Provider store={store}>
     <RouterProvider router={router}>
-      <App />
+      <AppLayout />
     </RouterProvider>
   </Provider>
   // </StrictMode>

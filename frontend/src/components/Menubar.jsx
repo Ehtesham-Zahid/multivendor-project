@@ -22,9 +22,11 @@ import SearchInput from "./SearchInput";
 import { Button } from "../shadcn/button";
 import CategoryDropdown from "./CategoryDropdown";
 import { useSelector } from "react-redux";
+import SidebarSearchDetails from "./SidebarSearchDetails";
 
 const Menubar = () => {
   const { user } = useSelector((state) => state.auth);
+  const { searchProducts } = useSelector((state) => state.product);
   return (
     <div className="lg:hidden">
       <Sheet>
@@ -42,6 +44,7 @@ const Menubar = () => {
           </div>
         </div>
         <SheetContent side="left">
+          {searchProducts?.length > 0 && <SidebarSearchDetails />}
           <SheetHeader>
             <SheetTitle>
               <Link className="text-4xl font-black w-[120px]" to="/">

@@ -17,6 +17,7 @@ import {
   getWishlist,
   removeFromWishlist,
 } from "../../features/wishlist/wishlistSlice";
+import ProductTabsSection from "../ProductTabsSection";
 
 const SingleProductSection = () => {
   const { singleProduct, isLoading } = useSelector((state) => state.product);
@@ -25,7 +26,7 @@ const SingleProductSection = () => {
   const [productQuantity, setProductQuantity] = useState(1);
   const [duration, setDuration] = useState({});
   const [isWished, setIsWished] = useState(false);
-
+  const [currentImage, setCurrentImage] = useState(0);
   const { productId } = useParams();
 
   const dispatch = useDispatch();
@@ -105,134 +106,144 @@ const SingleProductSection = () => {
       <Spinner />
     </div>
   ) : (
-    <section className="xl:w-5/6 2xl:w-4/5 m-auto grid grid-cols-1 lg:grid-cols-2 my-20 gap-x-10">
-      <div className="flex gap-8 col-span-1 flex-col 2xl:flex-row border-2 border-zinc-300 pb-5 rounded-md">
-        {singleProduct?.images.length > 1 && (
-          <div className="flex flex-row  2xl:flex-col gap-5 justify-between 2xl:justify-center items-center max-w-[2xl]:w-full ">
-            {singleProduct?.images?.map((image, index) => (
-              <div
-                key={index}
-                className="w-36 aspect-square rounded-md overflow-hidden"
-              >
-                <img src={image} className="w-full h-full object-cover" />
-              </div>
-            ))}
-          </div>
-        )}
-        <div className="w-[500px] aspect-square overflow-hidden rounded-sm m-auto">
-          <img
-            src={singleProduct?.images[0]}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      </div>
-      <div>
-        <div className="border-zinc-300 border-b-2 pb-5">
-          <p className="text-3xl font-bold text-sky-800 mb-3 flex items-center justify-between ">
-            {singleProduct?.name}{" "}
-            <Heart
-              className="cursor-pointer bg-white rounded-sm p-1 hover:bg-sky-200"
-              size={"32px"}
-              fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
-              onClick={handleWishlistToggle}
-            />
-          </p>
-          <p className=" leading-5">{singleProduct?.description}</p>
-        </div>
-        <div className="my-3 flex flex-col gap-5 border-zinc-300 border-b-2 pb-5">
-          <div className="flex justify-between items-start">
-            {singleProduct?.eventId &&
-            new Date(singleProduct?.eventId?.startDate).getTime() <
-              Date.now() ? (
-              <div className=" bg-sky-200 rounded-md border-4 border-sky-500 flex flex-col p-3 gap-2">
-                <div className="flex justify-between flex-col gap-2">
-                  <p className="text-3xl font-bold text-yellow-500 uppercase">
-                    {singleProduct?.eventId?.name}
-                  </p>
-                  <p className="text-md font-bold text-black">
-                    🎉 Limited Time Event!
-                  </p>
+    <>
+      <section className="w-11/12 xl:w-5/6 2xl:w-4/5 m-auto grid grid-cols-1 lg:grid-cols-2 my-20 gap-x-10">
+        <div className="flex gap-3 col-span-1 flex-col 2xl:flex-row border- border-zinc-300 pb-5 rounded-md">
+          {singleProduct?.images.length > 1 && (
+            <div className="flex flex-row  2xl:flex-col gap-5 justify-around 2xl:justify-center items-center max-w-[2xl]:w-full ">
+              {singleProduct?.images?.map((image, index) => (
+                <div
+                  onClick={() => setCurrentImage(index)}
+                  key={index}
+                  className={`w-24 p-1 sm:w-36 aspect-square rounded-md overflow-hidden border sm:p-2   cursor-pointer ${
+                    currentImage === index
+                      ? "border-primary"
+                      : "border-zinc-300"
+                  }`}
+                >
+                  <img src={image} className="w-full h-full object-cover" />
                 </div>
-                <div className="flex items-center gap-2">
-                  <p className="font-bold text-2xl line-through">
-                    ${singleProduct?.price}
-                  </p>
-                  <p className="font-bold text-3xl text-primary">
-                    ${singleProduct?.eventId?.eventPrice}
-                  </p>
-                </div>
-                <div className="flex gap-5 mt-8">
-                  <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
-                    <p className="text-4xl font-bold">{duration?.days}</p>
-                    <p className="text-sm font-medium">DAYS</p>
-                  </div>
-                  <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
-                    <p className="text-4xl font-bold">{duration?.hours}</p>
-                    <p className="text-sm font-medium">HOURS</p>
-                  </div>
-                  <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
-                    <p className="text-4xl font-bold">{duration?.minutes}</p>
-                    <p className="text-sm font-medium">MINUTES</p>
-                  </div>
-                  <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
-                    <p className="text-4xl font-bold">{duration?.seconds}</p>
-                    <p className="text-sm font-medium">SECONDS</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="text-3xl font-bold text-sky-500 ">
-                ${singleProduct?.price}
-              </p>
-            )}
-
-            <Badge
-              variant="default"
-              className="text-white bg-secondary text-md"
-            >
-              {singleProduct?.sold} Sold
-            </Badge>
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-2 items-center">
-              <p className="text-xl font-semibold">Quantity: </p>{" "}
-              <QuantityCounter
-                id={singleProduct?._id}
-                parent="singleProductSection"
-                productQuantity={productQuantity}
-                setProductQuantity={setProductQuantity}
-              />
+              ))}
             </div>
-            <p className="font-m">
-              <strong>{singleProduct?.stock}</strong> items left
-            </p>
-          </div>
-        </div>
-        <div className="flex justify-between gap-5 w-full items-center border-b-2 border-zinc-300 pb-5">
-          <div className="flex gap-5 items-center">
+          )}
+          <div className="w-[300px] sm:w-[400px] xl:w-[500px] aspect-square overflow-hidden rounded-sm m-auto    p-2">
             <img
-              src={singleProduct?.shopId?.imageUrl}
-              className="rounded-md w-16 h-16  object-contain border-2 "
+              src={singleProduct?.images[currentImage]}
+              className="w-full h-full object-cover"
             />
-            <div className="flex flex-col">
-              <p className="font-bold">{singleProduct?.shopId?.shopName}</p>
-              <p>{singleProduct?.shopId?.rating} Ratings</p>
-            </div>
           </div>
-          <Button className="text-white cursor-pointer">
-            <MessageCirclePlus /> Contact
-          </Button>
         </div>
         <div>
-          <Button
-            className="w-full my-8 text-md text-white "
-            onClick={handleAddToCart}
-          >
-            Add To Cart
-          </Button>
+          <div className="border-zinc-300 border-b-2 pb-5">
+            <p className="text-3xl font-bold text-sky-800 mb-3 flex items-center justify-between ">
+              {singleProduct?.name}{" "}
+              <Heart
+                className="cursor-pointer bg-white rounded-sm p-1 hover:bg-sky-200"
+                size={"32px"}
+                fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
+                onClick={handleWishlistToggle}
+              />
+            </p>
+            <p className=" leading-5 text-sm sm:text-base sm:leading-6">
+              {singleProduct?.description}
+            </p>
+          </div>
+          <div className="my-3 flex flex-col gap-5 border-zinc-300 border-b-2 pb-5">
+            <div className="flex justify-between items-start">
+              {singleProduct?.eventId &&
+              new Date(singleProduct?.eventId?.startDate).getTime() <
+                Date.now() ? (
+                <div className=" bg-sky-200 rounded-md border-4 border-sky-500 flex flex-col p-3 gap-2">
+                  <div className="flex justify-between flex-col gap-2">
+                    <p className="text-3xl font-bold text-yellow-500 uppercase">
+                      {singleProduct?.eventId?.name}
+                    </p>
+                    <p className="text-md font-bold text-black">
+                      🎉 Limited Time Event!
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="font-bold text-2xl line-through">
+                      ${singleProduct?.price}
+                    </p>
+                    <p className="font-bold text-3xl text-primary">
+                      ${singleProduct?.eventId?.eventPrice}
+                    </p>
+                  </div>
+                  <div className="flex gap-5 mt-8">
+                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                      <p className="text-4xl font-bold">{duration?.days}</p>
+                      <p className="text-sm font-medium">DAYS</p>
+                    </div>
+                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                      <p className="text-4xl font-bold">{duration?.hours}</p>
+                      <p className="text-sm font-medium">HOURS</p>
+                    </div>
+                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                      <p className="text-4xl font-bold">{duration?.minutes}</p>
+                      <p className="text-sm font-medium">MINUTES</p>
+                    </div>
+                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                      <p className="text-4xl font-bold">{duration?.seconds}</p>
+                      <p className="text-sm font-medium">SECONDS</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-3xl font-bold text-sky-500 ">
+                  ${singleProduct?.price}
+                </p>
+              )}
+
+              <Badge
+                variant="default"
+                className="text-white bg-secondary text-md"
+              >
+                {singleProduct?.sold} Sold
+              </Badge>
+            </div>
+            <div className="flex justify-between items-center">
+              <div className="flex gap-2 items-center">
+                <p className="text-xl font-semibold">Quantity: </p>{" "}
+                <QuantityCounter
+                  id={singleProduct?._id}
+                  parent="singleProductSection"
+                  productQuantity={productQuantity}
+                  setProductQuantity={setProductQuantity}
+                />
+              </div>
+              <p className="font-m">
+                <strong>{singleProduct?.stock}</strong> items left
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-between gap-5 w-full items-center border-b-2 border-zinc-300 pb-5">
+            <div className="flex gap-5 items-center">
+              <img
+                src={singleProduct?.shopId?.imageUrl}
+                className="rounded-md w-16 h-16  object-contain border-2 "
+              />
+              <div className="flex flex-col">
+                <p className="font-bold">{singleProduct?.shopId?.shopName}</p>
+                <p>{singleProduct?.shopId?.rating} Ratings</p>
+              </div>
+            </div>
+            <Button className="text-white cursor-pointer">
+              <MessageCirclePlus /> Contact
+            </Button>
+          </div>
+          <div>
+            <Button
+              className="w-full my-8 text-md text-white "
+              onClick={handleAddToCart}
+            >
+              Add To Cart
+            </Button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <ProductTabsSection />
+    </>
   );
 };
 

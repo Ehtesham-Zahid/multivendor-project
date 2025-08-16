@@ -3,7 +3,6 @@ import DashboardHeader from "../components/DashboardHeader";
 import DashboardSidebar from "../components/DashboardSidebar";
 import { SidebarProvider, SidebarTrigger } from "../shadcn/sidebar";
 import { useDispatch } from "react-redux";
-import { getCurrentUser } from "../features/auth/authSlice";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { getCurrentUserShopThunk } from "../features/shop/shopSlice";
@@ -12,7 +11,6 @@ const DashboardLayout = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCurrentUser());
     dispatch(getCurrentUserShopThunk());
   }, []);
   return (
