@@ -14,30 +14,24 @@ import {
   getShopOrderByIdThunk,
   requestRefundThunk,
 } from "../../features/order/orderSlice";
-import { Link, useLocation, useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { Button } from "../../shadcn/button";
-import { ArrowLeftIcon, Loader2 } from "lucide-react";
+import { ArrowLeftIcon, Edit, Loader2, Plus } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router";
 import DeliveryStatusSelector from "../DeliveryStatusSelector";
 import RefundStatusSelector from "../RefundStatusSelector";
+import CreateReviewDialog from "../CreateReviewDialog";
+import EditReviewDialog from "../EditReviewDialog";
 
 const SingleOrderSection = () => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get("page");
-  // const [page, setPage] = useState("");
-  // const location = useLocation();
-
-  // useEffect(() => {
-  //   setPage(location.pathname.split("/")[2]);
-  //   console.log(location.pathname.split("/")[2]);
-  // }, [location]);
 
   const { orderId } = useParams();
 
   const { singleOrder, isLoading } = useSelector((state) => state.order);
-  const { currentUserShop } = useSelector((state) => state.shop);
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -78,6 +72,9 @@ const SingleOrderSection = () => {
                   <TableHead>QUANTITY</TableHead>
                   <TableHead>PRICE</TableHead>
                   <TableHead>TOTAL</TableHead>
+                  {singleOrder?.deliveryStatus === "delivered" &&
+                    page !== "orders" &&
+                    page !== "refunds" && <TableHead>REVIEW</TableHead>}
                 </TableRow>
               </TableHeader>
 
@@ -99,6 +96,40 @@ const SingleOrderSection = () => {
                     <TableCell className="capitalize">
                       {item.price * item.quantity}
                     </TableCell>
+                    {singleOrder?.deliveryStatus === "delivered" &&
+                    page !== "orders" &&
+                    page !== "refunds" ? (
+                      item?.productId?.reviews?.find(
+                        (review) => review?.userId === user?._id
+                      ) ? (
+                        <TableCell>
+                          <EditReviewDialog
+                            review={item?.productId?.reviews?.find(
+                              (review) => review?.userId === user?._id
+                            )}
+                            trigger={
+                              <Button className="bg-dark text-white hover:bg-dark/80 cursor-pointer">
+                                Edit Review <Edit />
+                              </Button>
+                            }
+                            orderId={orderId}
+                          />
+                        </TableCell>
+                      ) : (
+                        <TableCell>
+                          <CreateReviewDialog
+                            productId={item?.productId?._id}
+                            shopId={item?.productId?.shopId}
+                            orderId={orderId}
+                            trigger={
+                              <Button className="bg-dark text-white hover:bg-dark/80 cursor-pointer">
+                                Write a Review <Plus />
+                              </Button>
+                            }
+                          />
+                        </TableCell>
+                      )
+                    ) : null}
                   </TableRow>
                 ))}
               </TableBody>

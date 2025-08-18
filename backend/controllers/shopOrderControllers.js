@@ -12,14 +12,19 @@ const getShopOrderById = asyncHandler(async (req, res) => {
   // Find shop order and populate relations
   const shopOrder = await ShopOrder.findById(id)
     .populate("shopId", "shopName email phoneNumber") // Shop details
-    .populate("items.productId", "name images price") // Product details
+    .populate({
+      path: "items.productId",
+      select: "name images price shopId reviews",
+      populate: {
+        path: "reviews",
+        select: "userId rating comment createdAt",
+      },
+    })
     .populate({
       path: "parentOrderId",
       select:
         "userId shippingAddress paymentMethod paymentStatus totalAmount createdAt",
-      populate: {
-        path: "shippingAddress",
-      },
+      populate: { path: "shippingAddress" },
     })
     .lean();
 

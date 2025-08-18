@@ -18,6 +18,7 @@ import {
   removeFromWishlist,
 } from "../../features/wishlist/wishlistSlice";
 import ProductTabsSection from "../ProductTabsSection";
+import { getProductReviewsThunk } from "../../features/review/reviewSlice";
 
 const SingleProductSection = () => {
   const { singleProduct, isLoading } = useSelector((state) => state.product);
@@ -33,6 +34,7 @@ const SingleProductSection = () => {
 
   useEffect(() => {
     dispatch(getProductByIdThunk(productId));
+    dispatch(getProductReviewsThunk(productId));
   }, []);
 
   useEffect(() => {
@@ -242,7 +244,10 @@ const SingleProductSection = () => {
           </div>
         </div>
       </section>
-      <ProductTabsSection />
+      <ProductTabsSection
+        product={singleProduct}
+        shop={singleProduct?.shopId}
+      />
     </>
   );
 };

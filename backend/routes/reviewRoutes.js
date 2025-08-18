@@ -4,14 +4,15 @@ const {
   createReview,
   updateReview,
   deleteReview,
+  getShopReviews,
+  getProductReviews,
 } = require("../controllers/reviewControllers");
 const { protect } = require("../middlewares/authMiddleware");
 
 router.post("/", protect, createReview);
 router.patch("/:reviewId", protect, updateReview);
 router.delete("/:reviewId", protect, deleteReview);
-// router.get("/:id", getProductById);
-// router.patch("/:id", updateProduct);
-// router.delete("/:id", deleteProduct);
+router.get("/shop/:shopId", protect, getShopReviews);
+router.get("/product/:productId", protect, getProductReviews);
 
 module.exports = router;

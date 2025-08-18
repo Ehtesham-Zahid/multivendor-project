@@ -1,12 +1,22 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../shadcn/tabs";
 import ProductCard from "./ProductCard";
 import EventCard from "./EventCard";
 import { Button } from "../shadcn/button";
 import { ArrowRightIcon } from "lucide-react";
 import { Link } from "react-router";
+import { getShopReviewsThunk } from "../features/review/reviewSlice";
+import { useEffect } from "react";
+import ReviewCard from "./ReviewCard";
 
 const ShopDetails = ({ shop }) => {
+  const { shopReviews } = useSelector((state) => state.review);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getShopReviewsThunk(shop?._id));
+  }, [shop?._id]);
+
   return (
     <Tabs
       defaultValue="shopProducts"
@@ -49,7 +59,7 @@ const ShopDetails = ({ shop }) => {
       </TabsList>
 
       <TabsContent value="shopProducts" className="p-5">
-        <div className="flex flex-wrap gap-3 justify-center">
+        <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
           {shop?.products?.map((product) => (
             <ProductCard key={product._id} product={product} small={true} />
           ))}
@@ -60,7 +70,17 @@ const ShopDetails = ({ shop }) => {
           <EventCard key={event._id} event={event} small={true} />
         ))}
       </TabsContent>
-      <TabsContent value="shopReviews">Change your password here.</TabsContent>
+      <TabsContent value="shopReviews">
+        {shopReviews?.length > 0 ? (
+          <div className="flex flex-wrap gap-3 justify-center sm:justify-start p-3">
+            {shopReviews?.map((review) => (
+              <ReviewCard key={review._id} review={review} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500">No reviews yet</p>
+        )}
+      </TabsContent>
     </Tabs>
   );
 };

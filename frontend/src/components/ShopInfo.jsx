@@ -7,7 +7,7 @@ import { Button } from "../shadcn/button";
 const ShopInfo = ({ shop }) => {
   const { user } = useSelector((state) => state.auth);
   return (
-    <div className="flex flex-col gap-4 lg:w-[300px] w-full p-5 shadow-2xl rounded-md h-full">
+    <div className="flex flex-col gap-4 lg:w-[350px] w-full p-5 shadow-2xl rounded-md h-full">
       <div className="flex flex-col gap-2 justify-center items-center mb-5">
         <img
           src={shop?.imageUrl}

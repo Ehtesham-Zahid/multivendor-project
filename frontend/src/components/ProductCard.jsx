@@ -69,7 +69,7 @@ const ProductCard = ({ product, small }) => {
   return (
     <div
       className={`col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400  ${
-        small ? "w-56 h-56" : "w-80 h-80 "
+        small ? "w-56 h-56" : "w-80 h-[330px] "
       }`}
     >
       <div
@@ -102,17 +102,19 @@ const ProductCard = ({ product, small }) => {
       </div>
 
       {!small && (
-        <p className="text-sm font-bold text-primary hover:underline underline-offset-[4px] decoration-2  cursor-pointer">
-          {product?.shopId?.shopName}
-        </p>
+        <Link to={`/shop/${product?.shopId?._id}`}>
+          <p className="text-sm font-bold text-primary hover:underline underline-offset-[4px] decoration-2  cursor-pointer">
+            {product?.shopId?.shopName}
+          </p>
+        </Link>
       )}
       <Link to={`/product/${product?._id}`}>
-        <p className={`${small ? "text-md" : "text-xl"} font-bold mt-2`}>
+        <p className={`${small ? "text-md" : "text-xl"} font-bold mt-1`}>
           {product?.name}
         </p>
       </Link>
       <div
-        className={`flex text-sm gap-0.5 items-center ${small ? "mt-1" : "mt-4"}`}
+        className={`flex text-sm gap-0.5 items-center ${small ? "mt-1" : "mt-3"}`}
       >
         <Star size={`${small ? "14px" : "18px"}`} />
         <Star size={`${small ? "14px" : "18px"}`} />
@@ -120,7 +122,7 @@ const ProductCard = ({ product, small }) => {
         <Star size={`${small ? "14px" : "18px"}`} />
         <Star size={`${small ? "14px" : "18px"}`} />
         <p className={`font-semibold ${small ? "text-sm" : "text-md"} ml-1`}>
-          ({product?.rating})
+          ({product?.totalReviews})
         </p>
       </div>
       <div className={`flex justify-between ${small ? "mt-2" : "mt-5"}`}>

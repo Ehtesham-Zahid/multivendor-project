@@ -78,7 +78,10 @@ const getProductById = asyncHandler(async (req, res) => {
     isDeleted: false,
   })
     .populate("eventId")
-    .populate("shopId", "shopName imageUrl rating totalReviews isActive");
+    .populate(
+      "shopId",
+      "shopName imageUrl rating totalReviews isActive products createdAt"
+    );
 
   if (!product) {
     res.status(404);
@@ -211,13 +214,12 @@ const getAllProducts = asyncHandler(async (req, res) => {
   if (search) {
     filter.name = { $regex: search, $options: "i" };
   }
+
   if (category) {
     filter.category = category;
   }
 
-  console.log("isFeatured", isFeatured);
   if (isFeatured === "true") {
-    console.log("isFeatured is true");
     filter.isFeatured = true;
   }
 
@@ -236,11 +238,11 @@ const getAllProducts = asyncHandler(async (req, res) => {
         from: "shops",
         localField: "shopId",
         foreignField: "_id",
-        as: "shop",
+        as: "shopId",
       },
     },
-    { $unwind: "$shop" }, // Turn shop array into object
-    { $match: { "shop.isActive": true } }, // Only active shops
+    { $unwind: "$shopId" }, // Turn shop array into object
+    { $match: { "shopId.isActive": true } }, // Only active shops
   ];
 
   const productsPipeline = [];

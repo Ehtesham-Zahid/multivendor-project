@@ -4,6 +4,8 @@ const cors = require("cors");
 const path = require("path");
 const cron = require("node-cron");
 const cookieParser = require("cookie-parser");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
 const userRouter = require("./routes/userRoutes");
 const shopRouter = require("./routes/shopRoutes");
@@ -17,6 +19,8 @@ const paymentRouter = require("./routes/paymentRoutes");
 const couponRouter = require("./routes/couponRoutes");
 const shopOrderRouter = require("./routes/shopOrderRoutes");
 const parentOrderRouter = require("./routes/parentOrderRoutes");
+const chatRouter = require("./routes/chatRoutes");
+const messageRouter = require("./routes/messageRoutes");
 const ParentOrder = require("./models/parentOrderModel");
 const ShopOrder = require("./models/shopOrderModel");
 const Event = require("./models/eventModel");
@@ -31,6 +35,7 @@ const port = process.env.PORT || 8000;
 connectDB();
 
 const app = express();
+const server = createServer(app);
 
 app.use(
   cors({
@@ -151,9 +156,78 @@ app.use("/api/payments", paymentRouter);
 app.use("/api/coupons", couponRouter);
 app.use("/api/shop-orders", shopOrderRouter);
 app.use("/api/parent-orders", parentOrderRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/messages", messageRouter);
 
 app.use(errorHandler);
 
-app.listen(port, () => {
+// Socket.IO setup
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
+});
+
+// Socket.IO connection handling
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  // Join user to their personal room
+  socket.on("join-user", (userId) => {
+    socket.join(`user-${userId}`);
+    console.log(`User ${userId} joined their room`);
+  });
+
+  // Join shop to their shop room
+  socket.on("join-shop", (shopId) => {
+    socket.join(`shop-${shopId}`);
+    console.log(`Shop ${shopId} joined their room`);
+  });
+
+  // Handle private messages
+  socket.on("send-message", async (data) => {
+    const { senderId, receiverId, message, conversationId } = data;
+
+    // Save message to database (you can implement this)
+    // For now, we'll just emit the message
+
+    // Emit to receiver
+    socket.to(`user-${receiverId}`).emit("receive-message", {
+      senderId,
+      message,
+      conversationId,
+      timestamp: new Date(),
+    });
+
+    socket.to(`shop-${receiverId}`).emit("receive-message", {
+      senderId,
+      message,
+      conversationId,
+      timestamp: new Date(),
+    });
+  });
+
+  // Handle typing indicators
+  socket.on("typing", (data) => {
+    const { senderId, receiverId, isTyping } = data;
+
+    socket.to(`user-${receiverId}`).emit("user-typing", {
+      senderId,
+      isTyping,
+    });
+
+    socket.to(`shop-${receiverId}`).emit("user-typing", {
+      senderId,
+      isTyping,
+    });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+server.listen(port, () => {
   console.log("Server is Running!");
 });

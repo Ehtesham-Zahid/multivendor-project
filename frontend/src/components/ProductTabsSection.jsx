@@ -3,9 +3,15 @@ import { AlignCenter, PaintBucket, Star } from "lucide-react";
 import { useState } from "react";
 import Logo from "../assets/images/logo.png";
 import { Button } from "../shadcn/button";
+import ReviewCard from "./ReviewCard";
+import { useSelector } from "react-redux";
+import Spinner from "./Spinner";
+import { formatDate } from "../utils";
 
-const ProductTabsSection = () => {
+const ProductTabsSection = ({ product, shop }) => {
   const [activeTab, setActiveTab] = useState("product-details");
+  const { productReviews, isLoading } = useSelector((state) => state.review);
+
   return (
     <Tabs
       defaultValue="product-details"
@@ -60,23 +66,27 @@ const ProductTabsSection = () => {
           <div className="flex flex-col gap-2 bg-primary/10 p-5 rounded-lg w-full md:w-1/2">
             <p className="text-lg font-bold text-sky-600">Product Details</p>
             <p className="text-md text-sky-600 font-normal   ">
-              Category: Electronics
+              Category: {product?.category}
             </p>
-            <p className="text-md text-sky-600 font-normal">Stock: 100</p>
-            <p className="text-md text-sky-600 font-normal">Rating: 4.5</p>
+            <p className="text-md text-sky-600 font-normal">
+              Stock: {product?.stock}
+            </p>
+            <p className="text-md text-sky-600 font-normal">
+              Rating: {product?.rating}
+            </p>
           </div>
           <div className="flex flex-col gap-2 bg-yellow-50 p-5 rounded-lg w-full md:w-1/2">
             <p className="text-lg font-bold text-yellow-600">
               Sales Information
             </p>
             <p className="text-md text-yellow-600 font-normal   ">
-              Total Sales: 100 items
+              Total Sales: {product?.sold} items
             </p>
             <p className="text-md text-yellow-600 font-normal">
-              Average Rating: No ratings
+              Average Rating: {product?.rating}
             </p>
             <p className="text-md text-yellow-600 font-normal">
-              Reviews: 0 reviews
+              Reviews: {product?.totalReviews} reviews
             </p>
           </div>
         </div>
@@ -85,29 +95,70 @@ const ProductTabsSection = () => {
         value="product-reviews"
         className="bg-background shadow-2xl p-5 mt-5 "
       >
-        <div className="flex items-center gap-2 justify-center h-full   flex-col  ">
-          <AlignCenter size={50} className="text-gray-500   " />
-          <p className="text-lg font-bold ">No Reviews yet</p>
-          <p className="text-md font-normal text-gray-500">
-            Be the first to review this product!
-          </p>
-        </div>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <div className="flex items-center gap-2 justify-center h-full   flex-col  ">
+            {productReviews.length > 0 ? (
+              productReviews.map((review) => (
+                <ReviewCard key={review._id} review={review} />
+              ))
+            ) : (
+              <div className="flex items-center gap-2 justify-center h-full   flex-col  ">
+                <AlignCenter size={50} className="text-gray-500   " />
+                <p className="text-lg font-bold ">No Reviews yet</p>
+                <p className="text-md font-normal text-gray-500">
+                  Be the first to review this product!
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </TabsContent>
       <TabsContent
         value="shop-information"
         className="bg-background shadow-2xl p-5 mt-5 flex flex-col md:flex-row gap-3  "
       >
         <div className="flex   gap-5 bg-primary/10  rounded-lg w-full h-fit p-5 sm:p-8  ">
-          <img src={Logo} alt="logo" className="w-16 h-16 rounded-full" />
+          <img
+            src={shop?.imageUrl}
+            alt="logo"
+            className="w-16 h-16 rounded-full object-cover"
+          />
           <div className="flex flex-col gap-2">
-            <p className="text-lg font-bold text-sky-600">Toy Story Store</p>
-            <div className={`flex text-sm gap-1 items-center  `}>
-              <Star size={`16px`} />
-              <Star size={`16px`} />
-              <Star size={`16px`} />
-              <Star size={`16px`} />
-              <Star size={`16px`} />
-              <p className="text-md font-normal ml-1">4.75 rating</p>
+            <p className="text-lg font-bold text-sky-600">{shop?.shopName}</p>
+            <div className="flex text-sm gap-1 items-center">
+              {Array.from({ length: 5 }, (_, index) => {
+                const full = index + 1 <= shop?.rating;
+                const half = index < shop?.rating && shop?.rating < index + 1;
+
+                return (
+                  <div key={index} className="relative">
+                    {/* Empty star */}
+                    <Star size={16} className="text-gray-300" fill="none" />
+                    {/* Full star */}
+                    {full && (
+                      <Star
+                        size={16}
+                        className="text-yellow-500 absolute top-0 left-0"
+                        fill="currentColor"
+                      />
+                    )}
+                    {/* Half star */}
+                    {half && (
+                      <Star
+                        size={16}
+                        className="text-yellow-500 absolute top-0 left-0"
+                        fill="currentColor"
+                        style={{ clipPath: "inset(0 50% 0 0)" }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+              <p className="text-md font-normal ml-1">
+                {shop?.rating?.toFixed(1)} rating
+              </p>
             </div>
           </div>
         </div>
@@ -116,13 +167,13 @@ const ProductTabsSection = () => {
             <p className="text-lg font-bold text-sky-600">Shop Statistics</p>
             <div className="flex flex-col gap-2">
               <p className="text-md text-sky-600 font-normal   ">
-                Total Products: 1000
+                Joined: {formatDate(shop?.createdAt)}
               </p>
               <p className="text-md text-sky-600 font-normal   ">
-                Total Orders: 1000
+                Total Products: {shop?.products?.length}
               </p>
               <p className="text-md text-sky-600 font-normal   ">
-                Total Revenue: 100
+                Total Reviews: {shop?.totalReviews}
               </p>
             </div>
           </div>

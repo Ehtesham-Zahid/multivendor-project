@@ -72,7 +72,7 @@ let router = createBrowserRouter([
           { path: "product/:productId", Component: SingleProductPage },
           { path: "order/:orderId", Component: SingleOrderPage },
 
-          // { path: "shop/:shopId", Component: ShopPage },
+          { path: "shop/:shopId", Component: ShopPage },
           {
             path: "profile",
             Component: ProfileLayout,
