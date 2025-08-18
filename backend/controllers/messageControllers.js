@@ -51,15 +51,24 @@ const sendMessage = asyncHandler(async (req, res) => {
   });
 
   // Populate sender and receiver details
-  await newMessage.populate("sender", "name email shopName imageUrl");
-  await newMessage.populate("receiver", "name email shopName imageUrl");
+  await newMessage.populate("sender", "fullname email shopName imageUrl");
+  await newMessage.populate("receiver", "fullname email shopName imageUrl");
 
   // Update conversation with last message info
   conversation.lastMessage = newMessage._id;
   conversation.lastMessageAt = new Date();
 
-  // Increment unread count for receiver
-  conversation.unreadCount += 1;
+  // Check if sender is a User or Shop by looking at the participantModel
+  const senderIndex = conversation.participants.indexOf(req.user._id);
+  const senderType = conversation.participantModel[senderIndex];
+
+  if (senderType === "User") {
+    // User is sending → increment shop's unread count
+    conversation.shopUnreadCount += 1;
+  } else {
+    // Shop is sending → increment user's unread count
+    conversation.userUnreadCount += 1;
+  }
 
   await conversation.save();
 
@@ -102,8 +111,8 @@ const getMessages = asyncHandler(async (req, res) => {
       { receiver: userId, sender: { $in: conversation.participants } },
     ],
   })
-    .populate("sender", "name email shopName imageUrl")
-    .populate("receiver", "name email shopName imageUrl")
+    .populate("sender", "fullname email shopName imageUrl")
+    .populate("receiver", "fullname email shopName imageUrl")
     .sort({ createdAt: -1 }) // Newest first for pagination
     .skip(skip)
     .limit(limit);
@@ -129,8 +138,15 @@ const getMessages = asyncHandler(async (req, res) => {
     }
   );
 
-  // Reset unread count for this conversation
-  conversation.unreadCount = 0;
+  // Reset unread count for this conversation based on participant type
+  const participantIndex = conversation.participants.indexOf(userId);
+  const participantType = conversation.participantModel[participantIndex];
+
+  if (participantType === "User") {
+    conversation.userUnreadCount = 0;
+  } else {
+    conversation.shopUnreadCount = 0;
+  }
   await conversation.save();
 
   res.status(200).json({

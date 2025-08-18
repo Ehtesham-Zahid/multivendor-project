@@ -25,10 +25,9 @@ const chatConversationSchema = mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    unreadCount: {
-      type: Number,
-      default: 0,
-    },
+    // Track unread for each participant
+    userUnreadCount: { type: Number, default: 0 }, // For users
+    shopUnreadCount: { type: Number, default: 0 }, // For shops
     isActive: {
       type: Boolean,
       default: true,

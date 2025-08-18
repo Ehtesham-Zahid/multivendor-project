@@ -6,6 +6,7 @@ const {
   getMessages,
   getOrCreateConversation,
   markConversationAsRead,
+  getUnreadCount,
 } = require("../controllers/chatControllers");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -26,5 +27,8 @@ router.get("/messages/:conversationId", getMessages);
 
 // Mark conversation as read
 router.patch("/conversation/:conversationId/read", markConversationAsRead);
+
+// Get total unread count for current user
+router.get("/unread-count", getUnreadCount);
 
 module.exports = router;

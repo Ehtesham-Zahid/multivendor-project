@@ -139,13 +139,50 @@ const markConversationAsRead = asyncHandler(async (req, res) => {
     }
   );
 
-  // Reset unread count
-  conversation.unreadCount = 0;
+  // Reset unread count based on participant type
+  const participantIndex = conversation.participants.indexOf(userId);
+  const participantType = conversation.participantModel[participantIndex];
+
+  if (participantType === "User") {
+    conversation.userUnreadCount = 0;
+  } else {
+    conversation.shopUnreadCount = 0;
+  }
   await conversation.save();
 
   res.status(200).json({
     success: true,
     message: "Conversation marked as read",
+  });
+});
+
+// Get unread count for current user
+const getUnreadCount = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  // Get total unread count across all conversations
+  const userConversations = await ChatConversation.find({
+    participants: userId,
+    isActive: true,
+  });
+
+  let totalUnread = 0;
+
+  // For each conversation, determine if current user is User or Shop
+  for (const conversation of userConversations) {
+    const participantIndex = conversation.participants.indexOf(userId);
+    const participantType = conversation.participantModel[participantIndex];
+
+    if (participantType === "User") {
+      totalUnread += conversation.userUnreadCount;
+    } else {
+      totalUnread += conversation.shopUnreadCount;
+    }
+  }
+
+  res.status(200).json({
+    success: true,
+    totalUnread,
   });
 });
 
@@ -155,4 +192,5 @@ module.exports = {
   getMessages,
   getOrCreateConversation,
   markConversationAsRead,
+  getUnreadCount,
 };
