@@ -1,20 +1,31 @@
 const mongoose = require("mongoose");
 
-const withdrawalSchema = mongoose.Schema({
-  shopId: { type: mongoose.Schema.Types.ObjectId, ref: "Shop", required: true },
-  amount: { type: Number, required: true },
-  status: {
-    type: String,
-    enum: ["pending", "completed", "failed"],
-    default: "pending",
+const withdrawalSchema = new mongoose.Schema(
+  {
+    vendorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    bankAccountId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "BankAccount",
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+      min: [1, "Withdrawal amount must be greater than 0"],
+    },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected", "paid"],
+      default: "pending",
+    },
+    adminNote: { type: String }, // optional: why rejected
+    stripePayoutId: { type: String }, // store Stripe payout ID after processing
   },
-  transactionId: { type: String, default: null },
-  method: {
-    type: String,
-    enum: ["stripe", "bank_transfer"],
-    required: true,
-  },
-  createdAt: { type: Date, default: Date.now },
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Withdrawal", withdrawalSchema);
