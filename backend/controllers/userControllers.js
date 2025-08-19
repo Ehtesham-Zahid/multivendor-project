@@ -113,6 +113,9 @@ const loginUser = asyncHandler(async (req, res) => {
       fullname: user.fullname,
       email: user.email,
       imageUrl: user.imageUrl,
+      role: user.role,
+      _id: user._id,
+      shopId: user.shopId,
     });
   } else {
     res.status(400);

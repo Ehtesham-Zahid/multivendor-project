@@ -44,7 +44,9 @@ import AdminCouponCodesSection from "./sections/admin/AdminCouponCodesSection";
 import AdminRefundsSection from "./sections/admin/AdminRefundsSection";
 import DashboardRefundsSection from "./sections/DashboardRefundsSection";
 import FaqsSection from "./sections/FaqsSection";
-
+import SingleInboxSection from "./sections/SingleInboxSection";
+import UserConversationsSection from "./sections/UserConversationsSection";
+import DashboardConversationsSection from "./sections/DashboardConversationsSection";
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -93,5 +95,9 @@ export {
   AdminRefundsSection,
   DashboardRefundsSection,
   FaqsSection,
+  // InboxSection,
+  SingleInboxSection,
+  UserConversationsSection,
+  DashboardConversationsSection,
   // UserInboxSection,
 };

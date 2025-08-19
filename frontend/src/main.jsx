@@ -52,6 +52,9 @@ import AdminRefundsPage from "./pages/AdminRefundsPage.jsx";
 import AdminShopsPage from "./pages/AdminShopsPage.jsx";
 import FaqsPage from "./pages/FaqsPage.jsx";
 import AppLayout from "./pages/AppLayout.jsx";
+import SingleInboxPage from "./pages/SingleInboxPage.jsx";
+import { UserConversationsSection } from "./components";
+import DashboardConversationsPage from "./pages/DashboardConversationsPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -80,7 +83,8 @@ let router = createBrowserRouter([
               { index: true, Component: UserProfileSection },
               { path: "orders", Component: UserOrdersSection },
               { path: "refunds", Component: UserRefundsSection },
-              // { path: "inbox", Component: UserInboxSection },
+              { path: "inbox", Component: UserConversationsSection },
+              { path: "inbox/:conversationId", Component: SingleInboxPage },
               { path: "change-password", Component: UserChangePasswordSection },
               { path: "addresses", Component: UserAddressesSection },
               { path: "order/:orderId", Component: SingleOrderPage },
@@ -109,6 +113,8 @@ let router = createBrowserRouter([
           { path: "coupon-codes", Component: DashboardCouponCodesPage },
           { path: "refunds", Component: DashboardRefundsPage },
           { path: "settings", Component: DashboardSettingsPage },
+          { path: "inbox", Component: DashboardConversationsPage },
+          { path: "inbox/:conversationId", Component: SingleInboxPage },
           { path: "category/:cateogry", Component: CategoryPage },
           { path: "order/:orderId", Component: SingleOrderPage },
         ],

@@ -6,7 +6,7 @@ import QuantityCounter from "../QuantityCounter";
 import { Button } from "../../shadcn/button";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getProductByIdThunk } from "../../features/product/productSlice";
 import { intervalToDuration } from "date-fns";
 import { addToCart, getCart } from "../../features/cart/cartSlice";
@@ -19,11 +19,13 @@ import {
 } from "../../features/wishlist/wishlistSlice";
 import ProductTabsSection from "../ProductTabsSection";
 import { getProductReviewsThunk } from "../../features/review/reviewSlice";
+import socket from "../../socket";
+import { getOrCreateConversationThunk } from "../../features/chat/chatSlice";
 
 const SingleProductSection = () => {
   const { singleProduct, isLoading } = useSelector((state) => state.product);
   const { wishlist } = useSelector((state) => state.wishlist);
-
+  const { user } = useSelector((state) => state.auth);
   const [productQuantity, setProductQuantity] = useState(1);
   const [duration, setDuration] = useState({});
   const [isWished, setIsWished] = useState(false);
@@ -31,7 +33,7 @@ const SingleProductSection = () => {
   const { productId } = useParams();
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getProductByIdThunk(productId));
     dispatch(getProductReviewsThunk(productId));
@@ -103,6 +105,21 @@ const SingleProductSection = () => {
       dispatch(removeFromWishlist(singleProduct?._id));
     }
   };
+
+  const handleContactShop = async () => {
+    if (!user) {
+      toast.error("Please login to contact the shop");
+      return;
+    }
+    const resultAction = await dispatch(
+      getOrCreateConversationThunk(singleProduct?.shopId?._id)
+    );
+    if (getOrCreateConversationThunk.fulfilled.match(resultAction)) {
+      console.log(resultAction.payload);
+      navigate(`/profile/inbox/${resultAction.payload.conversation._id}`);
+    }
+  };
+
   return isLoading ? (
     <div className="flex justify-center items-center h-screen pb-52">
       <Spinner />
@@ -230,7 +247,10 @@ const SingleProductSection = () => {
                 <p>{singleProduct?.shopId?.rating} Ratings</p>
               </div>
             </div>
-            <Button className="text-white cursor-pointer">
+            <Button
+              className="text-white cursor-pointer"
+              onClick={handleContactShop}
+            >
               <MessageCirclePlus /> Contact
             </Button>
           </div>

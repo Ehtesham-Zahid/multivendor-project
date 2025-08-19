@@ -4,17 +4,16 @@ const chatConversationSchema = mongoose.Schema(
   {
     participants: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: "participantModel",
-        required: true,
-      },
-    ],
-    participantModel: [
-      {
-        type: String,
-        enum: ["User", "Shop"],
-        default: ["User", "Shop"],
-        required: true,
+        participantId: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          refPath: "participants.participantModel",
+        },
+        participantModel: {
+          type: String,
+          required: true,
+          enum: ["User", "Shop"], // list all models allowed here
+        },
       },
     ],
     lastMessage: {
@@ -37,14 +36,15 @@ const chatConversationSchema = mongoose.Schema(
 );
 
 // Index for efficient querying
-chatConversationSchema.index({ participants: 1 });
+
+chatConversationSchema.index({ "participants.participantId": 1 });
 chatConversationSchema.index({ lastMessageAt: -1 });
 
 // Virtual for getting the other participant
-chatConversationSchema.virtual("otherParticipant").get(function () {
-  return this.participants.find(
-    (p) => p.toString() !== this.currentUser?.toString()
-  );
-});
+// chatConversationSchema.virtual("otherParticipant").get(function () {
+//   return this.participants.find(
+//     (p) => p.toString() !== this.currentUser?.toString()
+//   );
+// });
 
 module.exports = mongoose.model("ChatConversation", chatConversationSchema);

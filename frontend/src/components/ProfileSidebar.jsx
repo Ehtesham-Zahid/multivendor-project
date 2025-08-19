@@ -29,9 +29,11 @@ import {
 } from "@/shadcn/sidebar";
 import { SidebarProvider } from "../shadcn/sidebar";
 import { Link, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutThunk } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import { getUserUnreadCountThunk } from "../features/chat/chatSlice";
+import { useEffect } from "react";
 
 // Menu items.
 const items = [
@@ -65,6 +67,7 @@ const items = [
 const ProfileSidebar = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
+  const { totalUserUnreadCount } = useSelector((state) => state.chat);
 
   const logoutHandler = async () => {
     const resultAction = await dispatch(logoutThunk());
@@ -75,6 +78,11 @@ const ProfileSidebar = () => {
       toast.error("Error in logging out");
     }
   };
+
+  useEffect(() => {
+    dispatch(getUserUnreadCountThunk());
+  }, []);
+
   return (
     <div className="bg-white shadow-2xl   rounded-md p-5  w-full md:w-[280px] h-fit">
       <ul className="flex md:hidden gap-5 sm:gap-8 text-lg justify-around ">
@@ -100,12 +108,17 @@ const ProfileSidebar = () => {
           </Link>
         </li>
         <li>
-          <Link
-            to="/profile/inbox"
-            className="flex font-medium gap-3 items-center"
-          >
-            <MessageCircleIcon size={20} />
-          </Link>
+          <div className="relative">
+            <Link
+              to="/profile/inbox"
+              className="flex font-medium gap-3 items-center"
+            >
+              <MessageCircleIcon size={20} />
+            </Link>
+            <span className="absolute -top-2.5 -right-2.5 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {totalUserUnreadCount}
+            </span>
+          </div>
         </li>
 
         <li>
@@ -155,13 +168,16 @@ const ProfileSidebar = () => {
             <SendToBackIcon size={20} /> Refunds
           </Link>
         </li>
-        <li>
+        <li className="flex items-center gap-1.5">
           <Link
             to="/profile/inbox"
             className="flex font-medium gap-3 items-center"
           >
             <MessageCircleIcon size={20} /> Inbox
           </Link>
+          <span className="  bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            {totalUserUnreadCount}
+          </span>
         </li>
 
         <li>

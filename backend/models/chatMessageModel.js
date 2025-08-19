@@ -4,17 +4,31 @@ const chatMessageSchema = mongoose.Schema(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
       required: true,
+      refPath: "senderModel",
+    },
+    senderModel: {
+      type: String,
+      required: true,
+      enum: ["User", "Shop"],
     },
     receiver: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Shop",
+      required: true,
+      refPath: "receiverModel",
+    },
+    receiverModel: {
+      type: String,
+      required: true,
+      enum: ["User", "Shop"],
+    },
+    conversationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ChatConversation",
       required: true,
     },
     message: {
       type: String,
-      required: true,
       trim: true,
     },
     messageType: {
@@ -26,9 +40,7 @@ const chatMessageSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    readAt: {
-      type: Date,
-    },
+    readAt: Date,
     attachments: [
       {
         url: String,
@@ -40,8 +52,8 @@ const chatMessageSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-// Index for efficient querying
+// Indexes
+chatMessageSchema.index({ conversationId: 1, createdAt: -1 });
 chatMessageSchema.index({ sender: 1, receiver: 1, createdAt: -1 });
-chatMessageSchema.index({ receiver: 1, sender: 1, createdAt: -1 });
 
 module.exports = mongoose.model("ChatMessage", chatMessageSchema);

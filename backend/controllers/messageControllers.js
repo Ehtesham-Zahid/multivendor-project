@@ -1,11 +1,17 @@
 const asyncHandler = require("express-async-handler");
 const ChatMessage = require("../models/chatMessageModel");
 const ChatConversation = require("../models/chatConversationModel");
+const { getIO } = require("../socket");
 
 // @desc    Send a message
 // @route   POST /api/messages
 // @access  Private
 const sendMessage = asyncHandler(async (req, res) => {
+  console.log("req.body", req.body);
+  const isShop = req.query.isShop === "true";
+  const userId = isShop ? req.user.shopId.toString() : req.user._id.toString();
+
+  console.log("userId", userId);
   const {
     conversationId,
     message,
@@ -14,26 +20,35 @@ const sendMessage = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (!conversationId || !message) {
+    console.log("conversationId and message are required");
     res.status(400);
     throw new Error("conversationId and message are required");
   }
 
   // Verify conversation exists and user is participant
   const conversation = await ChatConversation.findById(conversationId);
+  console.log("conversation", conversation);
   if (!conversation) {
     res.status(404);
     throw new Error("Conversation not found");
   }
 
-  if (!conversation.participants.includes(req.user._id)) {
+  if (
+    !conversation.participants
+      .map((participant) => participant.participantId.toString())
+      .includes(userId)
+  ) {
+    console.log("Not authorized to send message in this conversation");
     res.status(403);
     throw new Error("Not authorized to send message in this conversation");
   }
 
   // Get the other participant (receiver)
   const receiverId = conversation.participants.find(
-    (participant) => participant.toString() !== req.user._id.toString()
+    (participant) => participant.participantId.toString() !== userId
   );
+
+  // console.log("receiverId", receiverId);
 
   if (!receiverId) {
     res.status(400);
@@ -42,13 +57,18 @@ const sendMessage = asyncHandler(async (req, res) => {
 
   // Create the message
   const newMessage = await ChatMessage.create({
-    sender: req.user._id,
-    receiver: receiverId,
+    sender: isShop ? req.user.shopId : req.user._id,
+    receiver: receiverId.participantId,
+    senderModel: isShop ? "Shop" : "User",
+    receiverModel: isShop ? "User" : "Shop",
+    conversationId,
     message,
     messageType,
     attachments,
     isRead: false,
   });
+
+  console.log("newMessage", newMessage);
 
   // Populate sender and receiver details
   await newMessage.populate("sender", "fullname email shopName imageUrl");
@@ -59,21 +79,38 @@ const sendMessage = asyncHandler(async (req, res) => {
   conversation.lastMessageAt = new Date();
 
   // Check if sender is a User or Shop by looking at the participantModel
-  const senderIndex = conversation.participants.indexOf(req.user._id);
-  const senderType = conversation.participantModel[senderIndex];
+  const senderIndex = conversation.participants.findIndex(
+    (participant) => participant.participantId.toString() === userId
+  );
+  console.log("senderIndex", senderIndex);
+  const senderType = conversation.participants[senderIndex].participantModel;
 
-  if (senderType === "User") {
-    // User is sending → increment shop's unread count
-    conversation.shopUnreadCount += 1;
-  } else {
-    // Shop is sending → increment user's unread count
-    conversation.userUnreadCount += 1;
+  const io = getIO();
+
+  const room = io.sockets.adapter.rooms.get(conversationId);
+
+  let isReceiverInRoom = false;
+
+  if (room) {
+    for (const socketId of room) {
+      const socket = io.sockets.sockets.get(socketId);
+      if (socket?.userId?.toString() === receiverId.participantId.toString()) {
+        isReceiverInRoom = true;
+        break;
+      }
+    }
   }
 
+  if (!isReceiverInRoom) {
+    if (senderType === "User") {
+      conversation.shopUnreadCount += 1;
+    } else {
+      conversation.userUnreadCount += 1;
+    }
+  }
   await conversation.save();
 
-  // Emit via socket.io (this will be handled in your socket logic)
-  // You can emit the message to the receiver here
+  io.to(conversationId).emit("receive-message", newMessage);
 
   res.status(201).json({
     success: true,
@@ -86,109 +123,65 @@ const sendMessage = asyncHandler(async (req, res) => {
 // @access  Private
 const getMessages = asyncHandler(async (req, res) => {
   const { conversationId } = req.params;
-  const userId = req.user._id;
+  const isShop = req.query.isShop === "true";
+  const userId = isShop ? req.user.shopId.toString() : req.user._id.toString();
 
-  // Verify conversation exists and user is participant
   const conversation = await ChatConversation.findById(conversationId);
   if (!conversation) {
-    res.status(404);
-    throw new Error("Conversation not found");
+    return res
+      .status(404)
+      .json({ success: false, message: "Conversation not found" });
   }
 
-  if (!conversation.participants.includes(userId)) {
-    res.status(403);
-    throw new Error("Not authorized to access this conversation");
+  // verify user is part of this conversation
+  const isParticipant = conversation.participants.some(
+    (p) => p.participantId.toString() === userId.toString()
+  );
+  if (!isParticipant) {
+    return res
+      .status(403)
+      .json({ success: false, message: "Access denied to this conversation" });
   }
 
-  // Get messages with pagination
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 50;
-  const skip = (page - 1) * limit;
+  const participantIds = conversation.participants.map((p) => p.participantId);
+  console.log("participantIds", participantIds);
 
   const messages = await ChatMessage.find({
     $or: [
-      { sender: userId, receiver: { $in: conversation.participants } },
-      { receiver: userId, sender: { $in: conversation.participants } },
+      { sender: userId, receiver: { $in: participantIds } },
+      { receiver: userId, sender: { $in: participantIds } },
     ],
   })
     .populate("sender", "fullname email shopName imageUrl")
     .populate("receiver", "fullname email shopName imageUrl")
-    .sort({ createdAt: -1 }) // Newest first for pagination
-    .skip(skip)
-    .limit(limit);
+    .sort({ createdAt: 1 });
 
-  // Get total count for pagination
-  const totalMessages = await ChatMessage.countDocuments({
-    $or: [
-      { sender: userId, receiver: { $in: conversation.participants } },
-      { receiver: userId, sender: { $in: conversation.participants } },
-    ],
-  });
+  // console.log("messages", messages);
 
-  // Mark messages as read when user fetches them
+  // Mark messages as read
   await ChatMessage.updateMany(
-    {
-      receiver: userId,
-      sender: { $in: conversation.participants },
-      isRead: false,
-    },
-    {
-      isRead: true,
-      readAt: new Date(),
-    }
+    { receiver: userId, sender: { $in: participantIds }, isRead: false },
+    { isRead: true, readAt: new Date() }
   );
 
   // Reset unread count for this conversation based on participant type
-  const participantIndex = conversation.participants.indexOf(userId);
-  const participantType = conversation.participantModel[participantIndex];
+  const participantIndex = conversation.participants.findIndex(
+    (p) => p.participantId.toString() === userId.toString()
+  );
+  const participantType =
+    conversation.participants[participantIndex].participantModel;
 
   if (participantType === "User") {
     conversation.userUnreadCount = 0;
   } else {
     conversation.shopUnreadCount = 0;
   }
+
   await conversation.save();
 
   res.status(200).json({
     success: true,
-    messages: messages.reverse(), // Oldest first for display
-    pagination: {
-      currentPage: page,
-      totalPages: Math.ceil(totalMessages / limit),
-      totalMessages,
-      hasNext: page * limit < totalMessages,
-      hasPrev: page > 1,
-    },
-  });
-});
-
-// @desc    Mark message as read
-// @route   PATCH /api/messages/:messageId/read
-// @access  Private
-const markMessageAsRead = asyncHandler(async (req, res) => {
-  const { messageId } = req.params;
-  const userId = req.user._id;
-
-  const message = await ChatMessage.findById(messageId);
-  if (!message) {
-    res.status(404);
-    throw new Error("Message not found");
-  }
-
-  // Verify user is the receiver
-  if (message.receiver.toString() !== userId.toString()) {
-    res.status(403);
-    throw new Error("Not authorized to mark this message as read");
-  }
-
-  // Mark as read
-  message.isRead = true;
-  message.readAt = new Date();
-  await message.save();
-
-  res.status(200).json({
-    success: true,
-    message: "Message marked as read",
+    messages,
   });
 });
 
@@ -222,6 +215,5 @@ const deleteMessage = asyncHandler(async (req, res) => {
 module.exports = {
   sendMessage,
   getMessages,
-  markMessageAsRead,
   deleteMessage,
 };

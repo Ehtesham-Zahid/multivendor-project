@@ -3,8 +3,6 @@ const router = express.Router();
 const {
   sendMessage,
   getMessages,
-  markMessageAsRead,
-  deleteMessage,
 } = require("../controllers/messageControllers");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -16,11 +14,5 @@ router.post("/", sendMessage);
 
 // Get messages for a conversation
 router.get("/:conversationId", getMessages);
-
-// Mark message as read
-router.patch("/:messageId/read", markMessageAsRead);
-
-// Delete a message
-router.delete("/:messageId", deleteMessage);
 
 module.exports = router;
