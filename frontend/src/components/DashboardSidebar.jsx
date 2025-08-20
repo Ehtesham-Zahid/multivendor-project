@@ -57,7 +57,7 @@ const items = [
   },
   {
     title: "Withdraw Money",
-    url: "#",
+    url: "/dashboard/withdrawal",
     icon: Settings,
   },
   {

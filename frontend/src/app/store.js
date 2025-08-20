@@ -12,6 +12,7 @@ import couponReducer from "../features/coupon/couponSlice";
 import orderReducer from "../features/order/orderSlice";
 import reviewReducer from "../features/review/reviewSlice";
 import chatReducer from "../features/chat/chatSlice";
+import bankAccountReducer from "../features/bankAccount/bankAccountSlice";
 
 export const store = configureStore({
   reducer: {
@@ -27,5 +28,6 @@ export const store = configureStore({
     order: orderReducer,
     review: reviewReducer,
     chat: chatReducer,
+    bankAccount: bankAccountReducer,
   },
 });

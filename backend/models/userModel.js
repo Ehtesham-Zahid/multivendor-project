@@ -52,6 +52,10 @@ const userSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    stripeAccountId: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true }
 );

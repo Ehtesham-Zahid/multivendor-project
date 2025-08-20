@@ -10,8 +10,8 @@ const bankAccountSchema = new mongoose.Schema(
     accountHolderName: { type: String, required: true },
     bankName: { type: String, required: true },
     accountNumber: { type: String, required: true },
-    ifscCode: { type: String }, // for Indian banks OR routing number for US
-    stripeBankAccountId: { type: String }, // store the Stripe external_account ID
+    routingNumber: { type: String },
+    stripeBankAccountId: { type: String },
     isDefault: { type: Boolean, default: false },
   },
   { timestamps: true }

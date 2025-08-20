@@ -5,9 +5,9 @@ const {
   getBankAccountById,
   updateBankAccount,
   deleteBankAccount,
-} = require("../controllers/bankAccountController");
+} = require("../controllers/bankAccountControllers");
 
-const { protect } = require("../middleware/authMiddleware");
+const { protect } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router

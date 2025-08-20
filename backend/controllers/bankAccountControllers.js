@@ -1,24 +1,74 @@
 const asyncHandler = require("express-async-handler");
 const BankAccount = require("../models/bankAccountModel");
+const User = require("../models/userModel");
+const Stripe = require("stripe");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 // ✅ Create Bank Account
 const createBankAccount = asyncHandler(async (req, res) => {
-  const { bankName, accountNumber, accountHolderName, ifscCode, isDefault } =
-    req.body;
-  const vendorId = req.user._id;
-
-  if (isDefault) {
-    // reset all others to false
-    await BankAccount.updateMany({ vendorId }, { isDefault: false });
-  }
-
-  const bankAccount = await BankAccount.create({
-    vendorId,
+  const {
     bankName,
     accountNumber,
     accountHolderName,
-    ifscCode,
+    routingNumber,
     isDefault,
+  } = req.body;
+  const vendorId = req.user._id;
+
+  // Step 1: Reset other defaults if this one is default
+  if (isDefault) {
+    await BankAccount.updateMany({ userId: vendorId }, { isDefault: false });
+  }
+
+  // Step 2: Get or create Stripe Connected Account for this vendor
+  let vendor = await User.findById(vendorId);
+  if (!vendor.stripeAccountId) {
+    const account = await stripe.accounts.create({
+      type: "express",
+      country: "US",
+      email: vendor.email,
+      business_type: "individual",
+      capabilities: {
+        transfers: { requested: true },
+      },
+    });
+
+    vendor.stripeAccountId = account.id;
+    await vendor.save();
+  }
+
+  let bankAccountStripe;
+
+  try {
+    bankAccountStripe = await stripe.accounts.createExternalAccount(
+      vendor.stripeAccountId,
+      {
+        external_account: {
+          object: "bank_account",
+          country: "US",
+          currency: "USD",
+          account_holder_name: accountHolderName,
+          account_number: accountNumber,
+          routing_number: routingNumber,
+        },
+        default_for_currency: true,
+      }
+    );
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message);
+  }
+  // Step 3: Attach bank account to vendor's Stripe account
+
+  // Step 4: Save to your DB
+  const bankAccount = await BankAccount.create({
+    userId: vendorId,
+    bankName,
+    accountNumber,
+    accountHolderName,
+    routingNumber,
+    isDefault,
+    stripeBankAccountId: bankAccountStripe.id, // save Stripe reference
   });
 
   res.status(201).json(bankAccount);
@@ -27,7 +77,7 @@ const createBankAccount = asyncHandler(async (req, res) => {
 // ✅ Get All Bank Accounts for Vendor
 const getBankAccounts = asyncHandler(async (req, res) => {
   const vendorId = req.user._id;
-  const accounts = await BankAccount.find({ vendorId });
+  const accounts = await BankAccount.find({ userId: vendorId });
   res.json(accounts);
 });
 

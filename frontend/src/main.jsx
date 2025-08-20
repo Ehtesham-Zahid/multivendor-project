@@ -55,6 +55,7 @@ import AppLayout from "./pages/AppLayout.jsx";
 import SingleInboxPage from "./pages/SingleInboxPage.jsx";
 import { UserConversationsSection } from "./components";
 import DashboardConversationsPage from "./pages/DashboardConversationsPage.jsx";
+import DashboardWithdrawalPage from "./pages/DashboardWithdrawalPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -117,6 +118,7 @@ let router = createBrowserRouter([
           { path: "inbox/:conversationId", Component: SingleInboxPage },
           { path: "category/:cateogry", Component: CategoryPage },
           { path: "order/:orderId", Component: SingleOrderPage },
+          { path: "withdrawal", Component: DashboardWithdrawalPage },
         ],
       },
       {

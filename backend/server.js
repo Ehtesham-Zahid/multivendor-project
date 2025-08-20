@@ -21,6 +21,7 @@ const shopOrderRouter = require("./routes/shopOrderRoutes");
 const parentOrderRouter = require("./routes/parentOrderRoutes");
 const conversationRouter = require("./routes/conversationRoutes");
 const messageRouter = require("./routes/messageRoutes");
+const bankAccountRouter = require("./routes/bankAccountRoutes");
 const ParentOrder = require("./models/parentOrderModel");
 const ShopOrder = require("./models/shopOrderModel");
 const Event = require("./models/eventModel");
@@ -158,6 +159,7 @@ app.use("/api/shop-orders", shopOrderRouter);
 app.use("/api/parent-orders", parentOrderRouter);
 app.use("/api/conversations", conversationRouter);
 app.use("/api/messages", messageRouter);
+app.use("/api/bank-accounts", bankAccountRouter);
 
 app.use(errorHandler);
 

@@ -47,6 +47,8 @@ import FaqsSection from "./sections/FaqsSection";
 import SingleInboxSection from "./sections/SingleInboxSection";
 import UserConversationsSection from "./sections/UserConversationsSection";
 import DashboardConversationsSection from "./sections/DashboardConversationsSection";
+import DashboardWithdrawalSection from "./sections/DashboardWithdrawalSection";
+import SelectBankAccountDialog from "./SelectBankAccountDialog";
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -99,5 +101,7 @@ export {
   SingleInboxSection,
   UserConversationsSection,
   DashboardConversationsSection,
+  DashboardWithdrawalSection,
+  SelectBankAccountDialog,
   // UserInboxSection,
 };
