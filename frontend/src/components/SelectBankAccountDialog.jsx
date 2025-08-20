@@ -12,14 +12,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import { getBankAccountsThunk } from "../features/bankAccount/bankAccountSlice";
 import CreateBankAccountDialog from "./CreateBankAccountDialog";
+import { useForm } from "react-hook-form";
+import { requestWithdrawalThunk } from "../features/withdrawal/withdrawalSlice";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
 
-const SelectBankAccountDialog = ({ trigger, onSelect }) => {
+const SelectBankAccountDialog = ({ trigger, onSelect, accountBalance }) => {
   const dispatch = useDispatch();
   const { shopBankAccounts, isShopBankAccountsLoading } = useSelector(
     (state) => state.bankAccount
   );
+  const { isRequestWithdrawalLoading } = useSelector(
+    (state) => state.withdrawal
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     if (isOpen) {
@@ -43,6 +56,21 @@ const SelectBankAccountDialog = ({ trigger, onSelect }) => {
     dispatch(getBankAccountsThunk()).then(() => {
       if (created?._id) setSelectedId(created._id);
     });
+  };
+
+  const handleWithdrawal = async (data) => {
+    const resultAction = await dispatch(
+      requestWithdrawalThunk({
+        bankAccountId: selectedId,
+        amount: data.amount,
+      })
+    );
+    if (requestWithdrawalThunk.fulfilled.match(resultAction)) {
+      toast.success("Withdrawal request sent successfully");
+      setIsOpen(false);
+    } else {
+      toast.error("Failed to send withdrawal request");
+    }
   };
 
   return (
@@ -97,18 +125,49 @@ const SelectBankAccountDialog = ({ trigger, onSelect }) => {
           </div>
         </div>
 
+        <div className="flex flex-col gap-2 mt-4">
+          <p className="text-sm text-zinc-600 font-bold">
+            Enter Amount to Withdraw
+          </p>
+          <input
+            type="number"
+            className="w-full p-2 rounded-md border border-zinc-300 outline-primary font-bold"
+            placeholder="Enter Amount"
+            {...register("amount", {
+              required: true,
+              min: { value: 100, message: "Amount must be greater than $100" },
+              max: {
+                value: accountBalance,
+                message: "Amount must be less than or equal to account balance",
+              },
+            })}
+          />
+          {errors.amount && (
+            <span className="text-red-500 text-sm font-semibold">
+              {errors.amount.message ||
+                "Amount must be greater than 0 and less than or equal to account balance"}
+            </span>
+          )}
+        </div>
+
         <div className="mt-4 flex justify-end gap-2">
-          <Button variant="secondary" onClick={() => setIsOpen(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setIsOpen(false)}
+            className="cursor-pointer text-black "
+          >
             Cancel
           </Button>
           <Button
             disabled={!selectedId}
-            onClick={() => {
-              onSelect && onSelect(selectedAccount);
-              setIsOpen(false);
-            }}
+            onClick={handleSubmit(handleWithdrawal)}
+            className="bg-primary text-white cursor-pointer"
           >
-            Continue
+            {isRequestWithdrawalLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Request Withdrawal"
+            )}
           </Button>
         </div>
       </DialogContent>

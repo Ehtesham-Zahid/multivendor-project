@@ -27,6 +27,9 @@ const ShopOrder = require("./models/shopOrderModel");
 const Event = require("./models/eventModel");
 const Product = require("./models/productModel");
 
+// Add withdrawals router import
+const withdrawalRouter = require("./routes/withdrawalRoutes");
+
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
 const User = require("./models/userModel");
@@ -160,6 +163,7 @@ app.use("/api/parent-orders", parentOrderRouter);
 app.use("/api/conversations", conversationRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/bank-accounts", bankAccountRouter);
+app.use("/api/withdrawals", withdrawalRouter);
 
 app.use(errorHandler);
 

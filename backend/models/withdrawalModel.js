@@ -2,9 +2,14 @@ const mongoose = require("mongoose");
 
 const withdrawalSchema = new mongoose.Schema(
   {
-    vendorId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    shopId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
       required: true,
     },
     bankAccountId: {

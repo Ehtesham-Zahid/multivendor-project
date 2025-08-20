@@ -79,6 +79,7 @@ const initialState = {
   totalShops: 0,
   totalPages: 0,
   currentPage: 1,
+  accountBalance: 0,
 };
 
 const shopSlice = createSlice({
@@ -90,6 +91,9 @@ const shopSlice = createSlice({
     },
     resetError(state) {
       state.error = null;
+    },
+    setAccountBalance(state, action) {
+      state.accountBalance = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -179,5 +183,5 @@ const shopSlice = createSlice({
   },
 });
 
-export const { logout, resetError } = shopSlice.actions;
+export const { logout, resetError, setAccountBalance } = shopSlice.actions;
 export default shopSlice.reducer;

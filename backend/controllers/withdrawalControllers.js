@@ -1,10 +1,13 @@
 const asyncHandler = require("express-async-handler");
+const BankAccount = require("../models/bankAccountModel");
 const Withdrawal = require("../models/withdrawalModel");
 const Shop = require("../models/shopModel");
+const Stripe = require("stripe");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Vendor requests a withdrawal
 const requestWithdrawal = asyncHandler(async (req, res) => {
-  const { amount, method } = req.body;
+  const { amount, bankAccountId } = req.body;
   const shopId = req.user.shopId; // assuming auth middleware adds this
 
   const shop = await Shop.findById(shopId);
@@ -13,9 +16,9 @@ const requestWithdrawal = asyncHandler(async (req, res) => {
     throw new Error("Shop not found");
   }
 
-  if (amount <= 0) {
+  if (amount <= 100) {
     res.status(400);
-    throw new Error("Withdrawal amount must be greater than zero");
+    throw new Error("Withdrawal amount must be greater than $100");
   }
 
   if (shop.accountBalance < amount) {
@@ -23,69 +26,109 @@ const requestWithdrawal = asyncHandler(async (req, res) => {
     throw new Error("Insufficient account balance");
   }
 
-  // Deduct immediately or when completed?
-  // Best practice: Deduct immediately to lock funds
   shop.accountBalance -= amount;
   await shop.save();
 
-  const withdrawal = await Withdrawal.create({
+  let withdrawal = await Withdrawal.create({
+    userId: req.user._id,
+    bankAccountId,
     shopId,
     amount,
-    method,
     status: "pending",
   });
+
+  withdrawal = await withdrawal.populate(
+    "bankAccountId",
+    "accountHolderName bankName accountNumber"
+  );
 
   res.status(201).json(withdrawal);
 });
 
 // Admin views all withdrawals
-const getAllWithdrawals = asyncHandler(async (req, res) => {
+const getAllWithdrawalsAdmin = asyncHandler(async (req, res) => {
   const withdrawals = await Withdrawal.find()
     .populate("shopId", "name accountBalance")
+    .populate("bankAccountId", "accountHolderName bankName accountNumber")
     .sort({ createdAt: -1 });
   res.json(withdrawals);
 });
 
-// Admin updates withdrawal status
-const updateWithdrawalStatus = asyncHandler(async (req, res) => {
+const updateWithdrawalStatusAdmin = asyncHandler(async (req, res) => {
   const { withdrawalId } = req.params;
-  const { status, transactionId } = req.body; // "completed" or "failed"
+  const { status } = req.body; // "completed" or "failed"
 
-  const withdrawal = await Withdrawal.findById(withdrawalId).populate("shopId");
+  const withdrawal = await Withdrawal.findById(withdrawalId)
+    .populate("shopId")
+    .populate("userId");
   if (!withdrawal) {
     res.status(404);
     throw new Error("Withdrawal not found");
   }
 
-  if (!["completed", "failed"].includes(status)) {
+  if (!["approved", "rejected", "paid"].includes(status)) {
     res.status(400);
     throw new Error("Invalid status");
   }
 
-  withdrawal.status = status;
-  if (transactionId) withdrawal.transactionId = transactionId;
+  // Only proceed with Stripe transfer if approved
+  if (status === "approved") {
+    const user = withdrawal.userId;
 
-  // If failed, refund the money back to shop
-  if (status === "failed") {
+    if (!user.stripeAccountId) {
+      res.status(400);
+      throw new Error("User has no Stripe account connected");
+    }
+
+    // Find the vendor's default bank account
+    const bankAccount = await BankAccount.findById(withdrawal.bankAccountId);
+    if (!bankAccount) {
+      res.status(400);
+      throw new Error("User has no default bank account");
+    }
+
+    try {
+      // Create a transfer from your platform (admin) Stripe account → vendor's connected account
+      const transfer = await stripe.transfers.create({
+        amount: Math.round(withdrawal.amount * 100), // in cents
+        currency: "usd", // or "pkr" if supported
+        destination: user.stripeAccountId,
+      });
+
+      withdrawal.stripePayoutId = transfer.id;
+      withdrawal.status = "paid";
+    } catch (err) {
+      withdrawal.status = "rejected";
+      withdrawal.shopId.accountBalance += withdrawal.amount;
+      await withdrawal.shopId.save();
+      console.error("Stripe transfer failed:", err);
+      res.status(500);
+      throw new Error("Failed to transfer funds via Stripe");
+    }
+  } else if (status === "rejected") {
+    withdrawal.status = "rejected";
     withdrawal.shopId.accountBalance += withdrawal.amount;
     await withdrawal.shopId.save();
+  } else if (status === "paid") {
+    withdrawal.status = "paid";
   }
 
   await withdrawal.save();
-
   res.json(withdrawal);
 });
 
 // Vendor views own withdrawals
 const getMyWithdrawals = asyncHandler(async (req, res) => {
   const shopId = req.user.shopId; // from auth middleware
-  const withdrawals = await Withdrawal.find({ shopId }).sort({ createdAt: -1 });
+  const withdrawals = await Withdrawal.find({ shopId })
+    .populate("bankAccountId", "accountHolderName bankName accountNumber")
+    .sort({ createdAt: -1 });
   res.json(withdrawals);
 });
 
 module.exports = {
   requestWithdrawal,
-  getAllWithdrawals,
-  updateWithdrawalStatus,
+  getAllWithdrawalsAdmin,
+  updateWithdrawalStatusAdmin,
   getMyWithdrawals,
 };
