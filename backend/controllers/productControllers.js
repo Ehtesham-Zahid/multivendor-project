@@ -26,6 +26,19 @@ const createProduct = asyncHandler(async (req, res) => {
     );
   }
 
+  // Ensure shop exists and is active before creating products
+  const shop = await Shop.findById(req.user.shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+  if (!shop.isActive) {
+    res.status(403);
+    throw new Error(
+      "Your shop is inactive. Activate your shop to create products"
+    );
+  }
+
   let product;
   try {
     product = await Product.create({
@@ -58,12 +71,6 @@ const createProduct = asyncHandler(async (req, res) => {
     const uploadedImages = await Promise.all(imageUploadPromises);
     product.images = uploadedImages;
     await product.save(); // Save updated product with images
-  }
-
-  const shop = await Shop.findById(req.user.shopId);
-  if (!shop) {
-    res.status(404);
-    throw new Error("Shop not found");
   }
 
   shop.products.push(product._id);

@@ -12,7 +12,7 @@ import ReviewCard from "./ReviewCard";
 const ShopDetails = ({ shop }) => {
   const { shopReviews } = useSelector((state) => state.review);
   const dispatch = useDispatch();
-
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     dispatch(getShopReviewsThunk(shop?._id));
   }, [shop?._id]);
@@ -47,15 +47,17 @@ const ShopDetails = ({ shop }) => {
             Shop Reviews
           </TabsTrigger>
         </div>
-        <Button
-          className="w-full lg:w-fit text-md text-white mt-3 lg:mt-0 lg:mr-2 "
-          size={"lg"}
-          asChild
-        >
-          <Link to={`/dashboard`}>
-            Dashboard <ArrowRightIcon className="w-4 h-4" />
-          </Link>
-        </Button>
+        {user?._id === shop?.ownerId && (
+          <Button
+            className="w-full lg:w-fit text-md text-white mt-3 lg:mt-0 lg:mr-2 "
+            size={"lg"}
+            asChild
+          >
+            <Link to={`/dashboard`}>
+              Dashboard <ArrowRightIcon className="w-4 h-4" />
+            </Link>
+          </Button>
+        )}
       </TabsList>
 
       <TabsContent value="shopProducts" className="p-5">

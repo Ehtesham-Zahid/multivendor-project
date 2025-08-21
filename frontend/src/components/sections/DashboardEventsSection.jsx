@@ -75,9 +75,11 @@ const DashboardEventsSection = () => {
                 </TableCell>
               </TableRow>
             ) : shopEvents?.length > 0 ? (
-              shopEvents.map((event) => (
+              shopEvents.map((event, index) => (
                 <TableRow key={event._id}>
-                  <TableCell className="font-medium">{event._id}</TableCell>
+                  <TableCell className="font-medium">
+                    {`EVN${1000 + index + 1}`}
+                  </TableCell>
                   <TableCell>{event.name}</TableCell>
                   <TableCell>{event.productId.name}</TableCell>
                   <TableCell>${event.originalPrice}</TableCell>
@@ -109,7 +111,7 @@ const DashboardEventsSection = () => {
           </TableBody>
         </Table>
       </div>
-      <div className="flex justify-between items-center mt-4 w-full">
+      <div className="flex flex-col sm:flex-row gap-5 justify-between items-center mt-4 w-full">
         {totalShopEvents > 10 && (
           <div className="flex items-center gap-2 text-sm w-fit">
             <span>Show</span>

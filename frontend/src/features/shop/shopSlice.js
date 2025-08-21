@@ -84,6 +84,20 @@ export const updateShopStatusThunk = createAsyncThunk(
   }
 );
 
+export const updateDashboardShopStatusThunk = createAsyncThunk(
+  "shop/updateDashboardShopStatus",
+  async (shopId, thunkAPI) => {
+    try {
+      const res = await updateShopStatusApi(shopId);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update shop status"
+      );
+    }
+  }
+);
+
 const initialState = {
   currentUserShop: null,
   shop: null,
@@ -205,6 +219,22 @@ const shopSlice = createSlice({
         state.success = true;
       })
       .addCase(updateShopStatusThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(updateDashboardShopStatusThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateDashboardShopStatusThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.currentUserShop = action.payload.shop;
+        state.success = true;
+      })
+      .addCase(updateDashboardShopStatusThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

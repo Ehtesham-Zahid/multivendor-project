@@ -17,7 +17,9 @@ import { toast } from "react-toastify";
 
 const CreateAddressDialog = ({ page }) => {
   const dispatch = useDispatch();
-  const { isLoading, error, addresses } = useSelector((state) => state.address);
+  const { isCreateAddressLoading, error, addresses } = useSelector(
+    (state) => state.address
+  );
   const [isOpen, setIsOpen] = useState(false);
   //   const [isPrimary, setIsPrimary] = useState(false);
 
@@ -238,11 +240,11 @@ const CreateAddressDialog = ({ page }) => {
             )}
 
             <Button
-              disabled={isLoading}
+              disabled={isCreateAddressLoading}
               type="submit"
-              className="text-white text-md mt-3"
+              className="text-white text-md mt-3 cursor-pointer"
             >
-              {isLoading ? (
+              {isCreateAddressLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 "Save Address"

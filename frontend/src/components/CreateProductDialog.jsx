@@ -20,6 +20,7 @@ import { DialogClose } from "../shadcn/dialog";
 
 const CreateProductDialog = () => {
   const { isLoading, error } = useSelector((state) => state.product);
+  const { currentUserShop } = useSelector((state) => state.shop);
   const dispatch = useDispatch();
   const {
     register,
@@ -52,6 +53,11 @@ const CreateProductDialog = () => {
   };
 
   const onSubmit = async (data) => {
+    if (currentUserShop.isActive === false) {
+      toast.error("Please activate your shop to create products.");
+      return;
+    }
+
     if (images.length === 0) {
       toast.error("Please upload at least one image.");
       return;

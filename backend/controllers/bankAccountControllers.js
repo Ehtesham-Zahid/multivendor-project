@@ -86,7 +86,7 @@ const getBankAccountById = asyncHandler(async (req, res) => {
   const vendorId = req.user._id;
   const bankAccount = await BankAccount.findOne({
     _id: req.params.id,
-    vendorId,
+    userId: vendorId,
   });
 
   if (!bankAccount) {
@@ -103,7 +103,10 @@ const updateBankAccount = asyncHandler(async (req, res) => {
   const { bankName, accountNumber, accountHolderName, ifscCode, isDefault } =
     req.body;
 
-  let bankAccount = await BankAccount.findOne({ _id: req.params.id, vendorId });
+  let bankAccount = await BankAccount.findOne({
+    _id: req.params.id,
+    userId: vendorId,
+  });
 
   if (!bankAccount) {
     res.status(404);
@@ -111,7 +114,7 @@ const updateBankAccount = asyncHandler(async (req, res) => {
   }
 
   if (isDefault) {
-    await BankAccount.updateMany({ vendorId }, { isDefault: false });
+    await BankAccount.updateMany({ userId: vendorId }, { isDefault: false });
   }
 
   bankAccount.bankName = bankName || bankAccount.bankName;
@@ -131,7 +134,7 @@ const deleteBankAccount = asyncHandler(async (req, res) => {
   const vendorId = req.user._id;
   const bankAccount = await BankAccount.findOne({
     _id: req.params.id,
-    vendorId,
+    userId: vendorId,
   });
 
   if (!bankAccount) {
@@ -145,14 +148,14 @@ const deleteBankAccount = asyncHandler(async (req, res) => {
 
   // If deleted account was default, assign another one as default
   if (isDefault) {
-    const anotherAccount = await BankAccount.findOne({ vendorId });
+    const anotherAccount = await BankAccount.findOne({ userId: vendorId });
     if (anotherAccount) {
       anotherAccount.isDefault = true;
       await anotherAccount.save();
     }
   }
 
-  res.json({ message: "Bank account removed" });
+  res.json({ message: "Bank account removed", id: bankAccount._id });
 });
 
 module.exports = {

@@ -1,10 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../shadcn/button";
-import { updateCurrentUserShopThunk } from "../../features/shop/shopSlice";
+import {
+  updateCurrentUserShopThunk,
+  updateShopStatusThunk,
+  updateDashboardShopStatusThunk,
+} from "../../features/shop/shopSlice";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Camera, Loader2 } from "lucide-react";
+import { Camera, Loader2, ShieldAlert } from "lucide-react";
 import Spinner from "../Spinner";
 
 const DashboardSettingSection = () => {
@@ -65,6 +69,20 @@ const DashboardSettingSection = () => {
       toast.success("Shop Updated!");
     } else {
       toast.error("Error in updating shop");
+    }
+  };
+
+  const onToggleStatus = async () => {
+    if (!currentUserShop?._id) return;
+    const action = await dispatch(
+      updateDashboardShopStatusThunk(currentUserShop._id)
+    );
+    if (updateDashboardShopStatusThunk.fulfilled.match(action)) {
+      const next = action.payload?.shop?.isActive;
+      toast.success(`Shop ${next ? "activated" : "deactivated"}`);
+      // keep dialog open; UI will reflect new state
+    } else {
+      toast.error("Failed to update shop status");
     }
   };
   return isLoading ? (
@@ -181,6 +199,23 @@ const DashboardSettingSection = () => {
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <p>Update Shop</p>
+          )}
+        </Button>
+        <Button
+          onClick={onToggleStatus}
+          disabled={isLoading}
+          className="text-white text-md bg-red-500 hover:bg-red-600 cursor-pointer w-md"
+        >
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <div className="flex items-center gap-2">
+              <ShieldAlert size={16} />
+              <span>
+                {currentUserShop?.isActive ? "Deactivate" : "Activate"} Your
+                Shop
+              </span>
+            </div>
           )}
         </Button>
       </form>

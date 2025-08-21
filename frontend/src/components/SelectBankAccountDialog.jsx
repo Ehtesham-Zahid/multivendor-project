@@ -10,23 +10,30 @@ import {
 import { Button } from "../shadcn/button";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
-import { getBankAccountsThunk } from "../features/bankAccount/bankAccountSlice";
+import {
+  getBankAccountsThunk,
+  deleteBankAccountThunk,
+} from "../features/bankAccount/bankAccountSlice";
 import CreateBankAccountDialog from "./CreateBankAccountDialog";
 import { useForm } from "react-hook-form";
 import { requestWithdrawalThunk } from "../features/withdrawal/withdrawalSlice";
 import { toast } from "react-toastify";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
+import Spinner from "./Spinner";
 
 const SelectBankAccountDialog = ({ trigger, onSelect, accountBalance }) => {
   const dispatch = useDispatch();
-  const { shopBankAccounts, isShopBankAccountsLoading } = useSelector(
-    (state) => state.bankAccount
-  );
+  const {
+    shopBankAccounts,
+    isShopBankAccountsLoading,
+    isDeleteBankAccountLoading,
+  } = useSelector((state) => state.bankAccount);
   const { isRequestWithdrawalLoading } = useSelector(
     (state) => state.withdrawal
   );
   const [isOpen, setIsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const {
     register,
@@ -73,6 +80,21 @@ const SelectBankAccountDialog = ({ trigger, onSelect, accountBalance }) => {
     }
   };
 
+  const handleDeleteAccount = async (accountId) => {
+    setDeletingId(accountId);
+    const resultAction = await dispatch(deleteBankAccountThunk(accountId));
+    if (deleteBankAccountThunk.fulfilled.match(resultAction)) {
+      toast.success("Bank account deleted successfully");
+      if (selectedId === accountId) {
+        setSelectedId(null);
+      }
+      dispatch(getBankAccountsThunk());
+    } else {
+      toast.error("Failed to delete bank account");
+    }
+    setDeletingId(null);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>{trigger}</DialogTrigger>
@@ -85,44 +107,65 @@ const SelectBankAccountDialog = ({ trigger, onSelect, accountBalance }) => {
         </div>
 
         <div className="mt-2 space-y-3">
-          {!shopBankAccounts?.length && !isShopBankAccountsLoading && (
+          {isShopBankAccountsLoading ? (
+            <div className="text-sm text-zinc-600">
+              <Spinner />
+            </div>
+          ) : shopBankAccounts?.length === 0 ? (
             <div className="text-sm text-zinc-600">
               No bank accounts found. Please add a bank account.
             </div>
-          )}
+          ) : (
+            <div className="flex flex-col divide-y">
+              {shopBankAccounts?.map((acc) => (
+                <div
+                  key={acc._id}
+                  className="flex items-center justify-between py-2"
+                >
+                  <label className="flex items-center gap-3 flex-1 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="bankAccount"
+                      value={acc._id}
+                      checked={selectedId === acc._id}
+                      onChange={() => setSelectedId(acc._id)}
+                      className="h-4 w-4"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">
+                        {acc.accountHolderName} • {acc.bankName}
+                      </span>
+                      <span className="text-xs text-zinc-600">
+                        •••• {acc.accountNumber?.slice(-4)}
+                      </span>
+                    </div>
+                  </label>
 
-          <div className="flex flex-col divide-y">
-            {shopBankAccounts?.map((acc) => (
-              <label
-                key={acc._id}
-                className="flex items-center justify-between py-2 cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    name="bankAccount"
-                    value={acc._id}
-                    checked={selectedId === acc._id}
-                    onChange={() => setSelectedId(acc._id)}
-                    className="h-4 w-4"
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">
-                      {acc.accountHolderName} • {acc.bankName}
-                    </span>
-                    <span className="text-xs text-zinc-600">
-                      •••• {acc.accountNumber?.slice(-4)}
-                    </span>
+                  <div className="flex items-center gap-2">
+                    {acc.isDefault && (
+                      <span className="text-xs px-2 py-0.5 rounded bg-zinc-200">
+                        Default
+                      </span>
+                    )}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteAccount(acc._id)}
+                      disabled={isDeleteBankAccountLoading}
+                      className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 cursor-pointer"
+                    >
+                      {isDeleteBankAccountLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4 cursor-pointer" />
+                      )}
+                    </Button>
                   </div>
                 </div>
-                {acc.isDefault && (
-                  <span className="text-xs px-2 py-0.5 rounded bg-zinc-200">
-                    Default
-                  </span>
-                )}
-              </label>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-2 mt-4">

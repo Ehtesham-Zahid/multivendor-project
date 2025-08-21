@@ -76,9 +76,13 @@ const initialState = {
   shopBankAccounts: [],
   currentBankAccount: null,
   isLoading: false,
+  isCreateBankAccountLoading: false,
+  isDeleteBankAccountLoading: false,
+  isUpdateBankAccountLoading: false,
   error: null,
   success: false,
   isShopBankAccountsLoading: false,
+  isGetBankAccountByIdLoading: false,
 };
 
 const bankAccountSlice = createSlice({
@@ -155,18 +159,17 @@ const bankAccountSlice = createSlice({
       })
       // Delete bank account
       .addCase(deleteBankAccountThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isDeleteBankAccountLoading = true;
         state.error = null;
       })
       .addCase(deleteBankAccountThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isDeleteBankAccountLoading = false;
         state.shopBankAccounts = state.shopBankAccounts.filter(
           (account) => account._id !== action.payload.id
         );
-        state.success = true;
       })
       .addCase(deleteBankAccountThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isDeleteBankAccountLoading = false;
         state.error = action.payload;
       });
   },

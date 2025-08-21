@@ -26,7 +26,7 @@ const CreateEventDialog = () => {
   const [endDate, setEndDate] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { isLoading, error } = useSelector((state) => state.event);
-
+  const { currentUserShop } = useSelector((state) => state.shop);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -44,6 +44,11 @@ const CreateEventDialog = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    if (currentUserShop.isActive === false) {
+      toast.error("Please activate your shop to create events.");
+      return;
+    }
+
     if (productId === "") {
       toast.error("Please select a product");
       return;

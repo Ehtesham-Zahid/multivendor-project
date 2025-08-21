@@ -16,7 +16,7 @@ const ShopSection = () => {
   }, [shopId]);
 
   return (
-    <div className="flex  gap-5 items-center md:items-start   min-h-screen w-custom mx-auto my-10 lg:flex-row flex-col">
+    <div className="flex  gap-5 items-center md:items-start     w-custom mx-auto my-10 lg:flex-row flex-col">
       {isLoading ? (
         <div className="flex justify-center items-center h-full w-full">
           <Spinner />

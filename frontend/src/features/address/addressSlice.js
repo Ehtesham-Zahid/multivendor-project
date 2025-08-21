@@ -60,6 +60,9 @@ export const updateAddressThunk = createAsyncThunk(
 const initialState = {
   addresses: [],
   isLoading: false,
+  isCreateAddressLoading: false,
+  isDeleteAddressLoading: false,
+  isUpdateAddressLoading: false,
   error: null,
 };
 
@@ -83,39 +86,39 @@ export const addressSlice = createSlice({
       });
     builder
       .addCase(createAddressThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isCreateAddressLoading = true;
         state.error = null;
       })
       .addCase(createAddressThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isCreateAddressLoading = false;
         state.addresses.push(action.payload);
       })
       .addCase(createAddressThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isCreateAddressLoading = false;
         state.error = action.error.message;
       });
     builder
       .addCase(deleteAddressThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isDeleteAddressLoading = true;
         state.error = null;
       })
       .addCase(deleteAddressThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isDeleteAddressLoading = false;
         state.addresses = state.addresses.filter(
           (address) => address._id !== action.payload
         );
       })
       .addCase(deleteAddressThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isDeleteAddressLoading = false;
         state.error = action.error.message;
       });
     builder
       .addCase(updateAddressThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isUpdateAddressLoading = true;
         state.error = null;
       })
       .addCase(updateAddressThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isUpdateAddressLoading = false;
         const index = state.addresses.findIndex(
           (address) => address._id === action.payload._id
         );
@@ -124,7 +127,7 @@ export const addressSlice = createSlice({
         }
       })
       .addCase(updateAddressThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isUpdateAddressLoading = false;
         state.error = action.error.message;
       });
   },

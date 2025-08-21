@@ -22,6 +22,19 @@ const createEvent = asyncHandler(async (req, res) => {
     throw new Error("All fields are required");
   }
 
+  // Ensure shop exists and is active before creating events
+  const shop = await Shop.findById(req.user.shopId);
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+  if (!shop.isActive) {
+    res.status(403);
+    throw new Error(
+      "Your shop is inactive. Activate your shop to create events"
+    );
+  }
+
   const product = await Product.findById(productId);
   if (!product) {
     res.status(404);
@@ -58,12 +71,6 @@ const createEvent = asyncHandler(async (req, res) => {
 
   product.eventId = event._id;
   await product.save();
-
-  const shop = await Shop.findById(req.user.shopId);
-  if (!shop) {
-    res.status(404);
-    throw new Error("Shop not found");
-  }
 
   shop.events.push(event._id);
   await shop.save();

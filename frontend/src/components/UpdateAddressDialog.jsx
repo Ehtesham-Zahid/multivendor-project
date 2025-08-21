@@ -17,7 +17,9 @@ import { toast } from "react-toastify";
 
 const UpdateAddressDialog = ({ address }) => {
   const dispatch = useDispatch();
-  const { isLoading, error, addresses } = useSelector((state) => state.address);
+  const { isUpdateAddressLoading, error, addresses } = useSelector(
+    (state) => state.address
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const {
@@ -156,11 +158,11 @@ const UpdateAddressDialog = ({ address }) => {
             <span className="text-red-500 text-sm font-semibold">{error}</span>
           )}
           <Button
-            disabled={isLoading}
+            disabled={isUpdateAddressLoading}
             type="submit"
-            className="text-white text-md mt-3"
+            className="text-white text-md mt-3 cursor-pointer"
           >
-            {isLoading ? (
+            {isUpdateAddressLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               "Update Address"

@@ -168,7 +168,7 @@ const DashboardOrdersSection = () => {
         </Table>
       </div>
 
-      <div className="flex justify-between items-center mt-4 w-full">
+      <div className="flex flex-col sm:flex-row gap-5 justify-between items-center mt-4 w-full">
         {totalShopOrders > 10 && (
           <div className="flex items-center gap-2 text-sm w-fit">
             <span>Show</span>

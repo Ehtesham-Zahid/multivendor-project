@@ -1,10 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteAddressThunk } from "../features/address/addressSlice";
 import { Button } from "../shadcn/button";
 import { toast } from "react-toastify";
 import UpdateAddressDialog from "./UpdateAddressDialog";
+import { Loader2 } from "lucide-react";
 
 const AddressCard = ({ address, index }) => {
+  const { isDeleteAddressLoading } = useSelector((state) => state.address);
   const dispatch = useDispatch();
   const handleDeleteAddress = async (addressId) => {
     // Dispatch the delete address thunk action
@@ -35,8 +37,13 @@ const AddressCard = ({ address, index }) => {
             "border-none hover:text-danger cursor-pointer hover:underline"
           }
           onClick={() => handleDeleteAddress(address._id)}
+          disabled={isDeleteAddressLoading}
         >
-          Delete
+          {isDeleteAddressLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            "Delete"
+          )}
         </Button>
       </div>
     </div>

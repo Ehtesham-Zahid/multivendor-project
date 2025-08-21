@@ -22,6 +22,7 @@ const DashboardLayout = () => {
           <SidebarTrigger />
           {/* <PanelLeftIcon size={28} /> */}
           {/* <DashboardHeader /> */}
+
           <Outlet />
         </main>
       </SidebarProvider>
