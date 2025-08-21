@@ -177,8 +177,22 @@ export const getFeaturedProductsThunk = createAsyncThunk(
   }
 );
 
-export const getSearchProductsThunk = createAsyncThunk(
-  "product/getSearchProducts",
+export const getSearchBarProductsThunk = createAsyncThunk(
+  "product/getSearchBarProducts",
+  async ({ search, limit, page }, thunkAPI) => {
+    try {
+      const res = await getAllProductsApi({ search, limit, page });
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getSearchPageProductsThunk = createAsyncThunk(
+  "product/getSearchPageProducts",
   async ({ search, limit, page }, thunkAPI) => {
     try {
       const res = await getAllProductsApi({ search, limit, page });
@@ -198,7 +212,8 @@ const initialState = {
   bestSellingProducts: [],
   bestSellingProductsHomepage: [],
   featuredProducts: [],
-  searchProducts: [],
+  searchBarProducts: [],
+  searchPageProducts: [],
   singleProduct: null,
   isLoading: false,
   error: null,
@@ -220,8 +235,8 @@ const productSlice = createSlice({
     setSearchTermReducer: (state, action) => {
       state.searchTerm = action.payload;
     },
-    setSearchProductsReducer: (state, action) => {
-      state.searchProducts = action.payload;
+    setSearchBarProductsReducer: (state, action) => {
+      state.searchBarProducts = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -233,32 +248,26 @@ const productSlice = createSlice({
       })
       .addCase(createProductThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.shop = action.payload;
-        state.success = true;
         state.shopProducts.push(action.payload);
       })
       .addCase(createProductThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.success = false;
       });
     builder
       .addCase(getProductsByShopThunk.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(getProductsByShopThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.shopProducts = action.payload.products;
         state.totalPages = action.payload.totalPages;
         state.totalProducts = action.payload.totalProducts;
-        state.success = true;
       })
       .addCase(getProductsByShopThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.success = false;
       });
     builder
       .addCase(deleteProductThunk.pending, (state) => {
@@ -325,10 +334,10 @@ const productSlice = createSlice({
           state.totalPages = action.payload.totalPages;
         }
 
-        if (search) {
-          state.searchProducts = action.payload.products;
-          state.totalPages = action.payload.totalPages;
-        }
+        // if (search) {
+        //   state.searchPageProducts = action.payload.products;
+        //   state.totalPages = action.payload.totalPages;
+        // }
 
         // This block should be your fallback when no specific filters are passed
         console.log(!category && !(sortBy === "sales"));
@@ -337,7 +346,8 @@ const productSlice = createSlice({
           console.log(action.payload.products);
           state.allProducts = action.payload.products;
           state.totalPages = action.payload.totalPages;
-          state.searchProducts = [];
+          state.searchBarProducts = [];
+          state.searchPageProducts = [];
         }
       })
 
@@ -443,23 +453,39 @@ const productSlice = createSlice({
         state.error = action.payload;
       });
     builder
-      .addCase(getSearchProductsThunk.pending, (state) => {
+      .addCase(getSearchBarProductsThunk.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(getSearchProductsThunk.fulfilled, (state, action) => {
+      .addCase(getSearchBarProductsThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.searchProducts = action.payload.products;
-        state.totalSearchPages = action.payload.totalPages;
-        state.totalSearchProducts = action.payload.totalProducts;
+        state.searchBarProducts = action.payload.products;
+        // state.totalSearchPages = action.payload.totalPages;
+        // state.totalSearchProducts = action.payload.totalProducts;
       })
-      .addCase(getSearchProductsThunk.rejected, (state, action) => {
+      .addCase(getSearchBarProductsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+
+    builder
+      .addCase(getSearchPageProductsThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getSearchPageProductsThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.searchPageProducts = action.payload.products;
+        state.totalPages = action.payload.totalPages;
+        state.totalProducts = action.payload.totalProducts;
+      })
+      .addCase(getSearchPageProductsThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
   },
 });
 
-export const { setSearchTermReducer, setSearchProductsReducer } =
+export const { setSearchTermReducer, setSearchBarProductsReducer } =
   productSlice.actions;
 export default productSlice.reducer;

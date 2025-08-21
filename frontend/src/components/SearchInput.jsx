@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "react-use";
 import {
-  getSearchProductsThunk,
-  setSearchProductsReducer,
+  getSearchBarProductsThunk,
+  setSearchBarProductsReducer,
   setSearchTermReducer,
 } from "../features/product/productSlice";
 
@@ -17,7 +17,7 @@ const SearchInput = () => {
   useEffect(() => {
     if (debouncedSearchTerm.length > 0) {
       dispatch(
-        getSearchProductsThunk({
+        getSearchBarProductsThunk({
           search: debouncedSearchTerm,
           limit: 5,
           // page: 1,
@@ -26,9 +26,9 @@ const SearchInput = () => {
       dispatch(setSearchTermReducer(debouncedSearchTerm));
     } else {
       dispatch(setSearchTermReducer(""));
-      dispatch(setSearchProductsReducer([]));
+      dispatch(setSearchBarProductsReducer([]));
     }
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, dispatch]);
 
   return (
     <div className="lg:w-[47vw] w-full border-2  border-primary outline-none flex justify-center  rounded-md px-5 py-2 mx-auto">

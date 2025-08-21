@@ -56,8 +56,8 @@ const items = [
   },
 
   {
-    title: "Withdraw Money",
-    url: "/admin/withdraw-money",
+    title: "All Withdrawals",
+    url: "/admin/withdrawals",
     icon: Banknote,
   },
 ];

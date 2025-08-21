@@ -49,6 +49,7 @@ import UserConversationsSection from "./sections/UserConversationsSection";
 import DashboardConversationsSection from "./sections/DashboardConversationsSection";
 import DashboardWithdrawalSection from "./sections/DashboardWithdrawalSection";
 import SelectBankAccountDialog from "./SelectBankAccountDialog";
+import AdminWithdrawalSection from "./sections/admin/AdminWithdrawalSection";
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -103,5 +104,6 @@ export {
   DashboardConversationsSection,
   DashboardWithdrawalSection,
   SelectBankAccountDialog,
+  AdminWithdrawalSection,
   // UserInboxSection,
 };

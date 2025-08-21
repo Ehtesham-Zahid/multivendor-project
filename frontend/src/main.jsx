@@ -56,6 +56,7 @@ import SingleInboxPage from "./pages/SingleInboxPage.jsx";
 import { UserConversationsSection } from "./components";
 import DashboardConversationsPage from "./pages/DashboardConversationsPage.jsx";
 import DashboardWithdrawalPage from "./pages/DashboardWithdrawalPage.jsx";
+import AdminWithdrawalPage from "./pages/AdminWithdrawalPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -146,6 +147,7 @@ let router = createBrowserRouter([
           { path: "coupon-codes", Component: AdminCouponCodesPage },
           { path: "refunds", Component: AdminRefundsPage },
           { path: "shops", Component: AdminShopsPage },
+          { path: "withdrawals", Component: AdminWithdrawalPage },
         ],
       },
     ],

@@ -129,7 +129,7 @@ import {
 import { addToCart, getCart } from "../features/cart/cartSlice";
 import { toast } from "react-toastify";
 import {
-  setSearchProductsReducer,
+  setSearchBarProductsReducer,
   setSearchTermReducer,
 } from "../features/product/productSlice";
 
@@ -186,8 +186,8 @@ const SearchCard = ({ product }) => {
     dispatch(getCart());
   };
 
-  const handleSearchProducts = () => {
-    dispatch(setSearchProductsReducer([]));
+  const handleSearchBarProducts = () => {
+    dispatch(setSearchBarProductsReducer([]));
     dispatch(setSearchTermReducer(""));
   };
 
@@ -196,7 +196,7 @@ const SearchCard = ({ product }) => {
       <Link
         to={`/product/${product?._id}`}
         className="flex gap-2"
-        onClick={handleSearchProducts}
+        onClick={handleSearchBarProducts}
       >
         <img
           src={product?.images[0]}

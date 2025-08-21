@@ -132,23 +132,19 @@ const withdrawalSlice = createSlice({
 
     builder
       .addCase(updateWithdrawalStatusAdminThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isUpdateWithdrawalStatusAdminLoading = true;
         state.error = null;
       })
       .addCase(updateWithdrawalStatusAdminThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isUpdateWithdrawalStatusAdminLoading = false;
         state.success = true;
-        // Update lists
         const updated = action.payload;
-        state.myWithdrawals = state.myWithdrawals.map((w) =>
-          w._id === updated._id ? updated : w
-        );
         state.adminWithdrawals = state.adminWithdrawals.map((w) =>
           w._id === updated._id ? updated : w
         );
       })
       .addCase(updateWithdrawalStatusAdminThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isUpdateWithdrawalStatusAdminLoading = false;
         state.error = action.payload;
       });
   },

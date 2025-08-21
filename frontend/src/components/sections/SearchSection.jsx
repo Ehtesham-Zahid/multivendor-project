@@ -1,13 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../ProductCard";
 import { useEffect, useState } from "react";
-import { getAllProductsThunk } from "../../features/product/productSlice";
+import {
+  getSearchPageProductsThunk,
+  setSearchTermReducer,
+} from "../../features/product/productSlice";
 import Spinner from "../Spinner";
 
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -19,30 +21,33 @@ const SearchSection = () => {
   const { search } = useParams();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const { searchProducts, isLoading, totalPages } = useSelector(
+  const { searchPageProducts, isLoading, totalPages } = useSelector(
     (state) => state.product
   );
 
   useEffect(() => {
     console.log(search);
     if (search) {
-      dispatch(getAllProductsThunk({ search, limit: 10, page }));
+      dispatch(getSearchPageProductsThunk({ search, limit: 10, page }));
+      dispatch(setSearchTermReducer(""));
     }
   }, [search, dispatch, page]);
 
   return (
-    <section className="w-custom m-auto">
+    <section className="w-custom m-auto mb-20">
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         Search Results for {search}
       </p>
-      <div className="grid grid-cols-5 gap-8">
+      <div className=" ">
         {isLoading ? (
           <Spinner />
         ) : (
           <>
-            {searchProducts?.map((product) => {
-              return <ProductCard key={product._id} product={product} />;
-            })}
+            <div className="flex flex-wrap gap-5  justify-center md:justify-between ">
+              {searchPageProducts?.map((product) => {
+                return <ProductCard key={product._id} product={product} />;
+              })}
+            </div>
             {totalPages > 1 && (
               <div className="mt-10 flex justify-center items-center col-span-full">
                 <Pagination>

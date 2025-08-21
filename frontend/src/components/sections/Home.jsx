@@ -7,11 +7,9 @@ import {
   Slider,
 } from "@/components";
 import PopularEvents from "@/components/sections/PopularEvents";
-import SearchDetails from "../SearchDetails";
+import FeaturesSection from "./FeaturesSection";
 
 const Home = () => {
-  const { searchProducts } = useSelector((state) => state.product);
-
   return (
     <div className="relative  ">
       <div>
@@ -20,6 +18,7 @@ const Home = () => {
         <BestSelling limit={5} />
         <PopularEvents />
         <FeaturedProducts />
+        <FeaturesSection />
       </div>
     </div>
   );
