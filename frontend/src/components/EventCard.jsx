@@ -4,9 +4,13 @@ import { Badge } from "../shadcn/badge";
 import { Button } from "../shadcn/button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { getCart } from "../features/cart/cartSlice";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
 const EventCard = ({ event, small }) => {
   const [duration, setDuration] = useState({});
+  const dispatch = useDispatch();
   useEffect(() => {
     const updateDuration = () => {
       const now = new Date();
@@ -24,6 +28,32 @@ const EventCard = ({ event, small }) => {
 
     return () => clearInterval(intervalId); // cleanup
   }, [event?.endDate]);
+
+  // Handle add to cart logic here
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingItemIndex = cart.findIndex(
+      (item) => item._id === event?.productId?._id
+    );
+
+    if (existingItemIndex !== -1) {
+      // Product already in cart, increase quantity by 1
+      cart[existingItemIndex].quantity =
+        (cart[existingItemIndex].quantity || 1) + 1;
+    } else {
+      // Product not in cart, add with quantity 1
+      const product = { ...event?.productId, quantity: 1 };
+      product.eventId = event;
+      console.log(product);
+      cart.push(product);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    toast.success("Product added to cart");
+    dispatch(getCart());
+  };
+
   return (
     <div
       className={`bg-zinc-300 grid ${small ? "grid-cols-1 xl:grid-cols-2" : "grid-cols-1 lg:grid-cols-2"} gap-5 p-3 sm:p-5 rounded-md  `}
@@ -57,7 +87,7 @@ const EventCard = ({ event, small }) => {
             </Badge>
           </div>
           <div className="flex gap-2.5 sm:gap-5 mt-8">
-            <div className="text-center bg-blue-200  text-dark py-0.5 px-2 sm:px-3 rounded-md border-2 border-blue-500">
+            <div className="text-center bg-blue-200  text-dark py-0.5 px-2 sm:px-3  rounded-md border-2 border-blue-500">
               <p className="text-2xl sm:text-4xl font-bold">{duration?.days}</p>
               <p className="text-xs sm:text-sm font-medium">DAYS</p>
             </div>
@@ -71,28 +101,33 @@ const EventCard = ({ event, small }) => {
               <p className="text-2xl sm:text-4xl font-bold">
                 {duration?.minutes}
               </p>
-              <p className="text-xs sm:text-sm font-medium">MINUTES</p>
+              <p className="text-xs sm:text-sm font-medium">
+                {small ? "MINS" : "MINUTES"}
+              </p>
             </div>
             <div className="text-center bg-blue-200  text-dark py-0.5   px-2 sm:px-3 rounded-md border-2 border-blue-500">
               <p className="text-2xl sm:text-4xl font-bold">
                 {duration?.seconds}
               </p>
-              <p className="text-xs sm:text-sm font-medium">SECONDS</p>
+              <p className="text-xs sm:text-sm font-medium">
+                {small ? "SECS" : "SECONDS"}
+              </p>
             </div>
           </div>
         </div>
         <div className="flex flex-col gap-3">
           <Link to={`/product/${event?.productId?._id}`}>
             <Button
-              className="w-full bg-secondary text-white text-md  cursor-pointer"
+              className="w-full bg-secondary hover:bg-yellow-500 text-white text-md  cursor-pointer"
               size={"lg"}
             >
               See Details
             </Button>
           </Link>
           <Button
-            className="w-full bg-primary text-white text-md  cursor-pointer"
+            className="w-full bg-primary  text-white text-md  cursor-pointer"
             size={"lg"}
+            onClick={handleAddToCart}
           >
             Add To Cart
           </Button>

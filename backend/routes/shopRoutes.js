@@ -4,7 +4,6 @@ const router = express.Router();
 const {
   createShop,
   getCurrentUserShop,
-  deleteShop,
   updateCurrentUserShop,
   getShopById,
   getAllShopsAdmin,
@@ -22,7 +21,6 @@ router.patch(
   upload.single("image"),
   updateCurrentUserShop
 );
-router.delete("/:shopId", protect, deleteShop);
 router.get("/:shopId", getShopById);
 router.patch("/update-shop-status/:shopId", protect, updateShopStatus);
 

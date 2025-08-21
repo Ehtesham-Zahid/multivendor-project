@@ -32,5 +32,7 @@ export const getAllShopsApi = async ({ page, limit, onlyActive }) => {
 };
 
 export const updateShopStatusApi = async (shopId) => {
-  return await API.patch(`/shops/update-shop-status/${shopId}`);
+  return await API.patch(`/shops/update-shop-status/${shopId}`, null, {
+    withCredentials: true,
+  });
 };

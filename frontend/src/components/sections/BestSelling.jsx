@@ -24,6 +24,8 @@ const BestSelling = ({ limit }) => {
     bestSellingProducts,
     isLoading,
     bestSellingProductsTotalPages,
+    isBestSellingProductsHomePageLoading,
+    isBestSellingProductsLoading,
   } = useSelector((state) => state.product);
 
   useEffect(() => {
@@ -40,59 +42,61 @@ const BestSelling = ({ limit }) => {
         Best Selling
       </p>
       <div className=" ">
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            <div className="flex flex-wrap gap-5 justify-center md:justify-between ">
-              {limit === 5
-                ? bestSellingProductsHomepage?.map((product) => {
-                    return <ProductCard key={product._id} product={product} />;
-                  })
-                : bestSellingProducts?.map((product) => {
-                    return <ProductCard key={product._id} product={product} />;
-                  })}
-            </div>
-            {limit !== 5 && bestSellingProductsTotalPages > 1 && (
-              <div className="mt-10 flex justify-center items-center col-span-full">
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                      />
-                    </PaginationItem>
-                    {Array.from(
-                      { length: bestSellingProductsTotalPages },
-                      (_, index) => (
-                        <PaginationItem key={index}>
-                          <PaginationLink
-                            href="#"
-                            onClick={() => setPage(index + 1)}
-                            className={page === index + 1 ? "active" : ""}
-                          >
-                            {index + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      )
-                    )}
-                    <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        onClick={() =>
-                          setPage((prev) =>
-                            Math.min(prev + 1, bestSellingProductsTotalPages)
-                          )
-                        }
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
+        <>
+          <div className="flex flex-wrap gap-5 justify-center md:justify-between ">
+            {limit === 5 && isBestSellingProductsHomePageLoading ? (
+              <Spinner />
+            ) : limit === 5 && !isBestSellingProductsHomePageLoading ? (
+              bestSellingProductsHomepage?.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))
+            ) : isBestSellingProductsLoading ? (
+              <Spinner />
+            ) : (
+              bestSellingProducts?.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))
             )}
-          </>
-        )}
+          </div>
+          {limit !== 5 && bestSellingProductsTotalPages > 1 && (
+            <div className="mt-10 flex justify-center items-center col-span-full">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                    />
+                  </PaginationItem>
+                  {Array.from(
+                    { length: bestSellingProductsTotalPages },
+                    (_, index) => (
+                      <PaginationItem key={index}>
+                        <PaginationLink
+                          href="#"
+                          onClick={() => setPage(index + 1)}
+                          className={page === index + 1 ? "active" : ""}
+                        >
+                          {index + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  )}
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={() =>
+                        setPage((prev) =>
+                          Math.min(prev + 1, bestSellingProductsTotalPages)
+                        )
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
+        </>
       </div>
     </section>
   );

@@ -21,12 +21,10 @@ const SearchSection = () => {
   const { search } = useParams();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const { searchPageProducts, isLoading, totalPages } = useSelector(
-    (state) => state.product
-  );
+  const { searchPageProducts, isSearchPageProductsLoading, totalSearchPages } =
+    useSelector((state) => state.product);
 
   useEffect(() => {
-    console.log(search);
     if (search) {
       dispatch(getSearchPageProductsThunk({ search, limit: 10, page }));
       dispatch(setSearchTermReducer(""));
@@ -39,7 +37,7 @@ const SearchSection = () => {
         Search Results for {search}
       </p>
       <div className=" ">
-        {isLoading ? (
+        {isSearchPageProductsLoading ? (
           <Spinner />
         ) : (
           <>
@@ -48,7 +46,7 @@ const SearchSection = () => {
                 return <ProductCard key={product._id} product={product} />;
               })}
             </div>
-            {totalPages > 1 && (
+            {totalSearchPages > 1 && (
               <div className="mt-10 flex justify-center items-center col-span-full">
                 <Pagination>
                   <PaginationContent>
@@ -58,7 +56,7 @@ const SearchSection = () => {
                         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                       />
                     </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, index) => (
+                    {Array.from({ length: totalSearchPages }, (_, index) => (
                       <PaginationItem key={index}>
                         <PaginationLink
                           href="#"
@@ -73,7 +71,9 @@ const SearchSection = () => {
                       <PaginationNext
                         href="#"
                         onClick={() =>
-                          setPage((prev) => Math.min(prev + 1, totalPages))
+                          setPage((prev) =>
+                            Math.min(prev + 1, totalSearchPages)
+                          )
                         }
                       />
                     </PaginationItem>

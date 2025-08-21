@@ -7,6 +7,7 @@ import ReviewCard from "./ReviewCard";
 import { useSelector } from "react-redux";
 import Spinner from "./Spinner";
 import { formatDate } from "../utils";
+import { Link } from "react-router";
 
 const ProductTabsSection = ({ product, shop }) => {
   const [activeTab, setActiveTab] = useState("product-details");
@@ -58,10 +59,7 @@ const ProductTabsSection = ({ product, shop }) => {
         className="bg-background shadow-2xl p-5 mt-5 "
       >
         <p className="text-3xl font-bold ">Product Description</p>
-        <p className="text-lg mt-5">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-          quos.
-        </p>
+        <p className="text-base mt-5">{product?.description}</p>
         <div className="flex flex-col md:flex-row gap-5 mt-5  ">
           <div className="flex flex-col gap-2 bg-primary/10 p-5 rounded-lg w-full md:w-1/2">
             <p className="text-lg font-bold text-sky-600">Product Details</p>
@@ -80,13 +78,13 @@ const ProductTabsSection = ({ product, shop }) => {
               Sales Information
             </p>
             <p className="text-md text-yellow-600 font-normal   ">
-              Total Sales: {product?.sold} items
+              Total Sales: {product?.sold}
             </p>
             <p className="text-md text-yellow-600 font-normal">
               Average Rating: {product?.rating}
             </p>
             <p className="text-md text-yellow-600 font-normal">
-              Reviews: {product?.totalReviews} reviews
+              Total Reviews: {product?.totalReviews}
             </p>
           </div>
         </div>
@@ -104,7 +102,7 @@ const ProductTabsSection = ({ product, shop }) => {
                 <ReviewCard key={review._id} review={review} />
               ))
             ) : (
-              <div className="flex items-center gap-2 justify-center h-full   flex-col  ">
+              <div className="flex items-center gap-2 justify-center h-full mt-16   flex-col  ">
                 <AlignCenter size={50} className="text-gray-500   " />
                 <p className="text-lg font-bold ">No Reviews yet</p>
                 <p className="text-md font-normal text-gray-500">
@@ -177,12 +175,14 @@ const ProductTabsSection = ({ product, shop }) => {
               </p>
             </div>
           </div>
-          <Button
-            className="w-full bg-primary text-white  text-md  cursor-pointer"
-            size={"lg"}
-          >
-            View Shop
-          </Button>
+          <Link to={`/shop/${shop?._id}`}>
+            <Button
+              className="w-full bg-primary text-white  text-md  cursor-pointer"
+              size={"lg"}
+            >
+              View Shop
+            </Button>
+          </Link>
         </div>
       </TabsContent>
     </Tabs>

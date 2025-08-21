@@ -65,10 +65,14 @@ const ShopDetails = ({ shop }) => {
           ))}
         </div>
       </TabsContent>
-      <TabsContent value="currentEvents">
-        {shop?.events?.map((event) => (
-          <EventCard key={event._id} event={event} small={true} />
-        ))}
+      <TabsContent value="currentEvents" className={"p-2 flex  flex-col gap-3"}>
+        {shop?.events?.length > 0 ? (
+          shop?.events?.map((event) => (
+            <EventCard key={event._id} event={event} small={true} />
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No events yet</p>
+        )}
       </TabsContent>
       <TabsContent value="shopReviews">
         {shopReviews?.length > 0 ? (

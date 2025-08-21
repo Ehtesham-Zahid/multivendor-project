@@ -6,7 +6,7 @@ import QuantityCounter from "../QuantityCounter";
 import { Button } from "../../shadcn/button";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { getProductByIdThunk } from "../../features/product/productSlice";
 import { intervalToDuration } from "date-fns";
 import { addToCart, getCart } from "../../features/cart/cartSlice";
@@ -23,7 +23,9 @@ import socket from "../../socket";
 import { getOrCreateConversationThunk } from "../../features/chat/chatSlice";
 
 const SingleProductSection = () => {
-  const { singleProduct, isLoading } = useSelector((state) => state.product);
+  const { singleProduct, isProductByIdLoading } = useSelector(
+    (state) => state.product
+  );
   const { wishlist } = useSelector((state) => state.wishlist);
   const { user } = useSelector((state) => state.auth);
   const [productQuantity, setProductQuantity] = useState(1);
@@ -120,7 +122,7 @@ const SingleProductSection = () => {
     }
   };
 
-  return isLoading ? (
+  return isProductByIdLoading ? (
     <div className="flex justify-center items-center h-screen pb-52">
       <Spinner />
     </div>
@@ -172,9 +174,9 @@ const SingleProductSection = () => {
               {singleProduct?.eventId &&
               new Date(singleProduct?.eventId?.startDate).getTime() <
                 Date.now() ? (
-                <div className=" bg-sky-200 rounded-md border-4 border-sky-500 flex flex-col p-3 gap-2">
+                <div className=" bg-red-200 rounded-md border-4 border-red-500 flex flex-col p-3 gap-2">
                   <div className="flex justify-between flex-col gap-2">
-                    <p className="text-3xl font-bold text-yellow-500 uppercase">
+                    <p className="text-3xl font-bold text-red-500 uppercase">
                       {singleProduct?.eventId?.name}
                     </p>
                     <p className="text-md font-bold text-black">
@@ -182,27 +184,27 @@ const SingleProductSection = () => {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="font-bold text-2xl line-through">
-                      ${singleProduct?.price}
-                    </p>
-                    <p className="font-bold text-3xl text-primary">
+                    <p className="font-bold text-3xl text-red-500">
                       ${singleProduct?.eventId?.eventPrice}
+                    </p>
+                    <p className="font-bold text-2xl line-through text-gray-600">
+                      ${singleProduct?.eventId?.originalPrice}
                     </p>
                   </div>
                   <div className="flex gap-5 mt-8">
-                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                    <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-4xl font-bold">{duration?.days}</p>
                       <p className="text-sm font-medium">DAYS</p>
                     </div>
-                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                    <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-4xl font-bold">{duration?.hours}</p>
                       <p className="text-sm font-medium">HOURS</p>
                     </div>
-                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                    <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-4xl font-bold">{duration?.minutes}</p>
                       <p className="text-sm font-medium">MINUTES</p>
                     </div>
-                    <div className="text-center bg-sky-100  text-dark py-0.5 px-3 rounded-md border-2 border-sky-500">
+                    <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-4xl font-bold">{duration?.seconds}</p>
                       <p className="text-sm font-medium">SECONDS</p>
                     </div>
@@ -243,7 +245,12 @@ const SingleProductSection = () => {
                 className="rounded-md w-16 h-16  object-contain border-2 "
               />
               <div className="flex flex-col">
-                <p className="font-bold">{singleProduct?.shopId?.shopName}</p>
+                <Link
+                  to={`/shop/${singleProduct?.shopId?._id}`}
+                  className="font-bold hover:underline"
+                >
+                  {singleProduct?.shopId?.shopName}
+                </Link>
                 <p>{singleProduct?.shopId?.rating} Ratings</p>
               </div>
             </div>
@@ -256,7 +263,8 @@ const SingleProductSection = () => {
           </div>
           <div>
             <Button
-              className="w-full my-8 text-md text-white "
+              className="w-full my-8 text-md text-white cursor-pointer"
+              size={"lg"}
               onClick={handleAddToCart}
             >
               Add To Cart

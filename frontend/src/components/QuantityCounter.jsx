@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateQuantity } from "../features/cart/cartSlice";
+import { getCart, updateQuantity } from "../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 
 const QuantityCounter = ({

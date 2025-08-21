@@ -1,35 +1,20 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shadcn/dialog";
-import {
-  Eye,
-  Heart,
-  MessageCircleCode,
-  MessageCircleCodeIcon,
-  MessageCircleIcon,
-  MessageCirclePlus,
-  Phone,
-} from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@/shadcn/dialog";
+import { Eye, Heart, MessageCirclePlus } from "lucide-react";
 import { Button } from "../shadcn/button";
 
-import ProductImage from "../assets/images/category-1.jpg";
 import Logo from "../assets/images/logo.png";
 import { Badge } from "../shadcn/badge";
 import QuantityCounter from "./QuantityCounter";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, getCart } from "../features/cart/cartSlice";
+import { getCart } from "../features/cart/cartSlice";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
   addToWishlist,
-  getWishlist,
   removeFromWishlist,
 } from "../features/wishlist/wishlistSlice";
+import { getDiscountPercentage } from "../utils";
+import { Link } from "react-router";
 
 const ProductDialog = ({ product, small }) => {
   const [productQuantity, setProductQuantity] = useState(1);
@@ -108,7 +93,60 @@ const ProductDialog = ({ product, small }) => {
                 {product?.name}
               </p>
               <div className="flex justify-between  mt-3">
-                <p className="font-bold text-2xl">{product?.price}$</p>
+                {product?.eventId ? (
+                  <div className="flex flex-row gap-x-2">
+                    <p
+                      className={`font-bold ${small ? "text-lg" : "text-2xl"}`}
+                    >
+                      {product?.eventId?.eventPrice}${" "}
+                      <span
+                        className={`${small ? "text-base" : "text-lg"} line-through text-gray-500`}
+                      >
+                        {product?.eventId?.originalPrice}$
+                      </span>
+                    </p>
+                    <Badge
+                      className={`hidden lg:block text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+                    >
+                      {getDiscountPercentage(
+                        product?.eventId?.originalPrice,
+                        product?.eventId?.eventPrice
+                      )}
+                      % off
+                    </Badge>
+                    <Badge
+                      className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+                    >
+                      Event Sale
+                    </Badge>
+                  </div>
+                ) : product?.discountPrice ? (
+                  <div className="flex flex-row gap-x-2">
+                    <p
+                      className={`font-bold ${small ? "text-lg" : "text-2xl"}`}
+                    >
+                      {product?.discountPrice}${" "}
+                      <span
+                        className={`${small ? "text-base" : "text-lg"} line-through text-gray-500`}
+                      >
+                        {product?.price}$
+                      </span>
+                    </p>
+                    <Badge
+                      className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+                    >
+                      {getDiscountPercentage(
+                        product?.price,
+                        product?.discountPrice
+                      )}
+                      % off
+                    </Badge>
+                  </div>
+                ) : (
+                  <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
+                    {product?.price}$
+                  </p>
+                )}
                 <Badge variant="default" className="text-white bg-secondary">
                   {product?.sold} Sold
                 </Badge>
@@ -140,12 +178,24 @@ const ProductDialog = ({ product, small }) => {
                   className="rounded-md w-16 h-16  object-contain border-2 "
                 />
                 <div className="flex flex-col">
-                  <p className="font-bold">{product?.shopId?.shopName}</p>
-                  <p>{product?.rating} Ratings</p>
+                  <Link
+                    to={`/shop/${product?.shopId?._id}`}
+                    className="font-bold hover:text-sky-600"
+                  >
+                    {product?.shopId?.shopName}
+                  </Link>
+                  <p className="text-sm text-gray-500">
+                    {product?.shopId?.rating} Rating
+                  </p>
                 </div>
               </div>
               <Button className="text-white cursor-pointer">
-                <MessageCirclePlus /> Contact
+                <Link
+                  to={`/inbox/${product?.shopId?._id}`}
+                  className="flex items-center gap-x-1"
+                >
+                  <MessageCirclePlus /> Contact
+                </Link>
               </Button>
             </div>
             <div className="flex lg:flex-row flex-col py-5 gap-3 lg:gap-5">
@@ -153,7 +203,7 @@ const ProductDialog = ({ product, small }) => {
                 className=" text-white w-full lg:w-48  bg-secondary text-md cursor-pointer hover:bg-amber-400"
                 size={"lg"}
               >
-                View Full Details
+                <Link to={`/product/${product?._id}`}>View Full Details</Link>
               </Button>
               <Button
                 className=" text-white w-full lg:w-48  text-md cursor-pointer"

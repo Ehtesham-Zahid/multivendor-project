@@ -50,6 +50,8 @@ import DashboardConversationsSection from "./sections/DashboardConversationsSect
 import DashboardWithdrawalSection from "./sections/DashboardWithdrawalSection";
 import SelectBankAccountDialog from "./SelectBankAccountDialog";
 import AdminWithdrawalSection from "./sections/admin/AdminWithdrawalSection";
+import ScrollToTop from "./ScrollToTop";
+import EditShopDialog from "./EditShopDialog";
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -105,5 +107,7 @@ export {
   DashboardWithdrawalSection,
   SelectBankAccountDialog,
   AdminWithdrawalSection,
+  ScrollToTop,
+  EditShopDialog,
   // UserInboxSection,
 };

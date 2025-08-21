@@ -8,6 +8,7 @@ import {
 } from "@/components";
 import PopularEvents from "@/components/sections/PopularEvents";
 import FeaturesSection from "./FeaturesSection";
+import CtaSection from "./CtaSection";
 
 const Home = () => {
   return (
@@ -19,6 +20,7 @@ const Home = () => {
         <PopularEvents />
         <FeaturedProducts />
         <FeaturesSection />
+        <CtaSection />
       </div>
     </div>
   );

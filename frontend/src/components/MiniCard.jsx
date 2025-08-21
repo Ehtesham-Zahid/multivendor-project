@@ -66,12 +66,32 @@ const MiniCard = ({ sheet, product }) => {
             {product?.name}
           </Link>
           {sheet !== "wishlist" ? (
-            <p className="    tracking-tight text-gray-500  text-sm">$55 * 5</p>
+            <p className="    tracking-tight text-gray-500  text-sm">
+              {product?.eventId
+                ? `${product?.eventId?.eventPrice} * ${product?.quantity}`
+                : `${product?.price} * ${product?.quantity}`}
+            </p>
           ) : null}
 
-          <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
-            ${product?.price}
-          </p>
+          {product?.eventId ? (
+            sheet === "cart" ? (
+              <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
+                ${product?.eventId?.eventPrice * product?.quantity}
+              </p>
+            ) : (
+              <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
+                ${product?.eventId?.eventPrice}
+              </p>
+            )
+          ) : sheet === "cart" ? (
+            <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
+              ${product?.price * product?.quantity}
+            </p>
+          ) : (
+            <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
+              ${product?.price}
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-x-2">
           {sheet === "wishlist" ? (

@@ -13,7 +13,7 @@ const AllEvents = () => {
   }, [dispatch]);
 
   return (
-    <section className="w-custom m-auto min-h-screen ">
+    <section className="w-custom m-auto min-h-screen mb-20">
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         All Events
       </p>

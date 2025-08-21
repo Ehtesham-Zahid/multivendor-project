@@ -11,6 +11,7 @@ import "swiper/css/scrollbar";
 
 import "./index.css";
 import { Button } from "../shadcn/button";
+import { Link } from "react-router";
 
 const Slider = () => {
   return (
@@ -35,12 +36,14 @@ const Slider = () => {
               secure payments, fast delivery, and 24/7 support at Buyno. Start
               Shopping
             </p>
-            <Button
-              className="text-white cursor-pointer text-lg py-6"
-              size="lg"
-            >
-              Start Shopping
-            </Button>
+            <Link to={"/all-products"}>
+              <Button
+                className="text-white cursor-pointer text-lg py-6"
+                size="lg"
+              >
+                Start Shopping
+              </Button>
+            </Link>
           </div>
         </SwiperSlide>
 

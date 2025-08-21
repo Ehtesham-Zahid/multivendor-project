@@ -12,6 +12,7 @@ import {
 } from "../features/wishlist/wishlistSlice";
 import { addToCart, getCart } from "../features/cart/cartSlice";
 import { toast } from "react-toastify";
+import { getDiscountPercentage } from "../utils";
 
 const ProductCard = ({ product, small }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -72,24 +73,26 @@ const ProductCard = ({ product, small }) => {
         small ? "w-56 h-56" : "w-80 h-[330px] "
       }`}
     >
-      <div
-        className={`flex flex-col absolute right-5 top-5 gap-y-2 z-10 ${
-          small ? "gap-y-0" : "gap-y-2"
-        }`}
-      >
-        <Heart
-          className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
-          size={`${small ? "24px" : "28px"}`}
-          fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
-          onClick={handleWishlistToggle}
-        />
-        <ProductDialog product={product} small={small} />
-        <ShoppingCart
-          className="bg-white rounded-sm p-1 hover:bg-sky-200  cursor-pointer"
-          size={`${small ? "24px" : "28px"}`}
-          onClick={handleAddToCart}
-        />
-      </div>
+      {!small && (
+        <div
+          className={`flex flex-col absolute right-5 top-5 gap-y-2 z-10 ${
+            small ? "gap-y-0" : "gap-y-2"
+          }`}
+        >
+          <Heart
+            className="bg-white rounded-sm p-1 hover:bg-sky-200 cursor-pointer "
+            size={`${small ? "24px" : "28px"}`}
+            fill={isWished ? "oklch(70.4% 0.191 22.216)" : "white"}
+            onClick={handleWishlistToggle}
+          />
+          <ProductDialog product={product} small={small} />
+          <ShoppingCart
+            className="bg-white rounded-sm p-1 hover:bg-sky-200  cursor-pointer"
+            size={`${small ? "24px" : "28px"}`}
+            onClick={handleAddToCart}
+          />
+        </div>
+      )}
       <div
         className={`overflow-hidden rounded-md   aspect-square mx-auto  ${
           small ? "w-28 h-28" : "w-44 h-44"
@@ -103,7 +106,7 @@ const ProductCard = ({ product, small }) => {
 
       {!small && (
         <Link to={`/shop/${product?.shopId?._id}`}>
-          <p className="text-sm font-bold text-primary hover:underline underline-offset-[4px] decoration-2  cursor-pointer">
+          <p className="text-sm font-bold text-primary hover:underline underline-offset-[2px] decoration-2  cursor-pointer">
             {product?.shopId?.shopName}
           </p>
         </Link>
@@ -116,19 +119,84 @@ const ProductCard = ({ product, small }) => {
       <div
         className={`flex text-sm gap-0.5 items-center ${small ? "mt-1" : "mt-3"}`}
       >
-        <Star size={`${small ? "14px" : "18px"}`} />
-        <Star size={`${small ? "14px" : "18px"}`} />
-        <Star size={`${small ? "14px" : "18px"}`} />
-        <Star size={`${small ? "14px" : "18px"}`} />
-        <Star size={`${small ? "14px" : "18px"}`} />
-        <p className={`font-semibold ${small ? "text-sm" : "text-md"} ml-1`}>
-          ({product?.totalReviews})
-        </p>
+        {Array.from({ length: 5 }, (_, index) => {
+          const full = index + 1 <= Math.floor(product?.rating); // full stars
+          const half =
+            product?.rating - index >= 0.5 && product?.rating - index < 1; // half star
+
+          return (
+            <Star
+              key={index}
+              size={small ? "14px" : "18px"}
+              className={`${
+                full
+                  ? "text-yellow-500"
+                  : half
+                    ? "text-yellow-500"
+                    : "text-gray-300"
+              }`}
+              fill={
+                full ? "currentColor" : half ? "url(#halfGradient)" : "none"
+              }
+            />
+          );
+        })}
+        <p className="text-sm text-gray-500 ml-2">{product?.rating} / 5</p>
       </div>
       <div className={`flex justify-between ${small ? "mt-2" : "mt-5"}`}>
-        <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
-          {product?.price}$
-        </p>
+        {product?.eventId ? (
+          <div className="flex flex-row gap-x-2">
+            <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
+              {product?.eventId?.eventPrice}${" "}
+              <span
+                className={`${small ? "text-base" : "text-lg"} line-through text-gray-500`}
+              >
+                {product?.eventId?.originalPrice}$
+              </span>
+            </p>
+            {/* <Badge
+              className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+            >
+              {getDiscountPercentage(product?.price, product?.discountPrice)}%
+              off
+            </Badge> */}
+            {small ? (
+              <Badge
+                className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+              >
+                Event
+              </Badge>
+            ) : (
+              <Badge
+                className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+              >
+                Event Sale
+              </Badge>
+            )}
+          </div>
+        ) : product?.discountPrice ? (
+          <div className="flex flex-row gap-x-2">
+            <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
+              {product?.discountPrice}${" "}
+              <span
+                className={`${small ? "text-base" : "text-lg"} line-through text-gray-500`}
+              >
+                {product?.price}$
+              </span>
+            </p>
+            <Badge
+              className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+            >
+              {getDiscountPercentage(product?.price, product?.discountPrice)}%
+              off
+            </Badge>
+          </div>
+        ) : (
+          <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
+            {product?.price}$
+          </p>
+        )}
+
         <Badge
           variant="default"
           className={`text-white bg-secondary ${small ? "text-[11px]" : "text-sm"}`}

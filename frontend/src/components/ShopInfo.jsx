@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { formatDate } from "../utils";
 import { Link } from "react-router";
 import { Button } from "../shadcn/button";
+import { Star } from "lucide-react";
+import EditShopDialog from "./EditShopDialog";
 
 const ShopInfo = ({ shop }) => {
   const { user } = useSelector((state) => state.auth);
@@ -31,7 +33,39 @@ const ShopInfo = ({ shop }) => {
         </div>
         <div>
           <p className="font-bold">Shop Rating</p>
-          <p>{shop?.rating}</p>
+          <div className="flex items-center gap-1 mt-1">
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }, (_, index) => {
+                const full = index + 1 <= shop?.rating;
+                const half = index < shop?.rating && shop?.rating < index + 1;
+
+                return (
+                  <div key={index} className="relative">
+                    {/* Empty star */}
+                    <Star size={16} className="text-gray-300" fill="none" />
+                    {/* Full star */}
+                    {full && (
+                      <Star
+                        size={16}
+                        className="text-yellow-500 absolute top-0 left-0"
+                        fill="currentColor"
+                      />
+                    )}
+                    {/* Half star */}
+                    {half && (
+                      <Star
+                        size={16}
+                        className="text-yellow-500 absolute top-0 left-0"
+                        fill="currentColor"
+                        style={{ clipPath: "inset(0 50% 0 0)" }}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-sm text-gray-500 ml-2">{shop?.rating} / 5</p>
+          </div>
         </div>
         <div>
           <p className="font-bold">Joined At</p>
@@ -40,14 +74,7 @@ const ShopInfo = ({ shop }) => {
       </div>
       {user?._id === shop?.ownerId && (
         <div className="flex justify-center items-center mt-5">
-          <Link
-            to={`/dashboard/shop/${shop?._id}/edit`}
-            className="w-full text-center"
-          >
-            <Button className="bg-primary text-white px-4 py-2 rounded-md w-full text-center cursor-pointer">
-              Edit
-            </Button>
-          </Link>
+          <EditShopDialog />
         </div>
       )}
     </div>

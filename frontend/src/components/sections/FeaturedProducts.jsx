@@ -6,7 +6,9 @@ import Spinner from "../Spinner";
 
 const FeaturedProducts = () => {
   const dispatch = useDispatch();
-  const { featuredProducts, isLoading } = useSelector((state) => state.product);
+  const { featuredProducts, isFeaturedProductsLoading } = useSelector(
+    (state) => state.product
+  );
 
   useEffect(() => {
     dispatch(getFeaturedProductsThunk({ limit: 5 }));
@@ -18,7 +20,7 @@ const FeaturedProducts = () => {
         Featured Products
       </p>
       <div className="flex flex-wrap gap-5 justify-center md:justify-between ">
-        {isLoading ? (
+        {isFeaturedProductsLoading ? (
           <Spinner />
         ) : (
           <>

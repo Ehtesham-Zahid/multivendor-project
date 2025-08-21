@@ -5,6 +5,7 @@ import {
   getShopByIdApi,
   updateCurrentUserShopApi,
   getAllShopsApi,
+  updateShopStatusApi,
 } from "./shopAPI";
 
 export const createShopThunk = createAsyncThunk(
@@ -65,6 +66,20 @@ export const getAllShopsThunk = createAsyncThunk(
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const updateShopStatusThunk = createAsyncThunk(
+  "shop/updateShopStatus",
+  async (shopId, thunkAPI) => {
+    try {
+      const res = await updateShopStatusApi(shopId);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update shop status"
+      );
     }
   }
 );
@@ -133,17 +148,14 @@ const shopSlice = createSlice({
       .addCase(updateCurrentUserShopThunk.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(updateCurrentUserShopThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.currentUserShop = action.payload;
-        state.success = true;
+        state.shop = action.payload;
       })
       .addCase(updateCurrentUserShopThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.success = false;
       });
     builder
       .addCase(getShopByIdThunk.pending, (state) => {
@@ -176,6 +188,23 @@ const shopSlice = createSlice({
         state.success = true;
       })
       .addCase(getAllShopsThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.success = false;
+      });
+    builder
+      .addCase(updateShopStatusThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateShopStatusThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // API returns { message, shop }
+        state.shop = action.payload.shop || state.shop;
+        state.success = true;
+      })
+      .addCase(updateShopStatusThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         state.success = false;

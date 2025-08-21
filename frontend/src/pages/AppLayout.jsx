@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Outlet } from "react-router";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../features/auth/authSlice";
+import { ScrollToTop } from "../components";
 
 const AppLayout = () => {
   const dispatch = useDispatch();
@@ -9,7 +10,12 @@ const AppLayout = () => {
     dispatch(getCurrentUser());
   }, [dispatch]);
   console.log("user");
-  return <Outlet />;
+  return (
+    <>
+      <ScrollToTop />
+      <Outlet />
+    </>
+  );
 };
 
 export default AppLayout;

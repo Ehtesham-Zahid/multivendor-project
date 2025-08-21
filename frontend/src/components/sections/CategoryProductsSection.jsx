@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -23,25 +22,21 @@ const CategoryProductsSection = () => {
   const { category } = useParams();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const { categoryProducts, isLoading, error, totalPages } = useSelector(
-    (state) => state.product
-  );
+  const { categoryProducts, isProductsByCategoryLoading, totalCategoryPages } =
+    useSelector((state) => state.product);
+
   useEffect(() => {
-    // Dispatch the getProductsByCategoryThunk action with the category as an argument
-    dispatch(getAllProductsThunk({ category, page, limit }));
-  }, [category, dispatch, page, limit]);
+    dispatch(getProductsByCategoryThunk({ category, page, limit: 10 }));
+  }, [category, dispatch, page]);
 
   return (
-    <section className="w-custom m-auto h-full">
+    <section className="w-custom m-auto h-full mb-20">
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         {category}
       </p>
       <div>
-        {isLoading ? (
+        {isProductsByCategoryLoading ? (
           <Spinner />
-        ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
         ) : categoryProducts.length === 0 ? (
           <p className="text-center uppercase text-black text-2xl  font-bold absolute  left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             No products found in this category
@@ -53,7 +48,7 @@ const CategoryProductsSection = () => {
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
-            {totalPages > 1 && (
+            {totalCategoryPages > 1 && (
               <div className="mt-10 flex justify-center">
                 <Pagination>
                   <PaginationContent>
@@ -63,7 +58,7 @@ const CategoryProductsSection = () => {
                         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                       />
                     </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, index) => (
+                    {Array.from({ length: totalCategoryPages }, (_, index) => (
                       <PaginationItem key={index}>
                         <PaginationLink
                           href="#"
@@ -78,7 +73,9 @@ const CategoryProductsSection = () => {
                       <PaginationNext
                         href="#"
                         onClick={() =>
-                          setPage((prev) => Math.min(prev + 1, totalPages))
+                          setPage((prev) =>
+                            Math.min(prev + 1, totalCategoryPages)
+                          )
                         }
                       />
                     </PaginationItem>

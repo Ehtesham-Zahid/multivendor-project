@@ -61,7 +61,21 @@ const updateCurrentUserShop = asyncHandler(async (req, res) => {
   const { shopId } = req.user;
   const updates = req.body;
 
-  const shop = await Shop.findById(shopId);
+  const shop = await Shop.findById(shopId)
+    .populate({
+      path: "products",
+      match: { isDeleted: false },
+      populate: { path: "eventId", model: "Event" },
+    })
+    // populate events -> productId -> eventId
+    .populate({
+      path: "events",
+      populate: {
+        path: "productId",
+        match: { isDeleted: false },
+        populate: { path: "eventId", model: "Event" },
+      },
+    });
   if (!shop) {
     res.status(404);
     throw new Error("Shop not found");
@@ -85,29 +99,6 @@ const updateCurrentUserShop = asyncHandler(async (req, res) => {
   res.status(200).json(shop);
 });
 
-const deleteShop = asyncHandler(async (req, res) => {
-  const { shopId } = req.params;
-
-  const shop = await Shop.findById(shopId);
-  if (!shop) {
-    res.status(404);
-    throw new Error("Shop not found");
-  }
-
-  if (shop.ownerId.toString() !== req.user._id.toString()) {
-    res.status(403);
-    throw new Error("Not authorized");
-  }
-
-  shop.isDeleted = true;
-  await shop.save();
-
-  // Also soft-delete all its products
-  await Product.updateMany({ shop: shop._id }, { isDeleted: true });
-
-  res.status(200).json({ message: "Shop deleted" });
-});
-
 const getAllShops = asyncHandler(async (req, res) => {
   const shops = await Shop.find({}).populate("ownerId", "name email");
   res.status(200).json(shops);
@@ -115,32 +106,64 @@ const getAllShops = asyncHandler(async (req, res) => {
 
 const getShopById = asyncHandler(async (req, res) => {
   const { shopId } = req.params;
+
   const shop = await Shop.findById(shopId)
-    .populate("products")
+    // populate products but only where isDeleted = false
+    .populate({
+      path: "products",
+      match: { isDeleted: false },
+      populate: { path: "eventId", model: "Event" },
+    })
+    // populate events -> productId -> eventId
     .populate({
       path: "events",
       populate: {
         path: "productId",
+        match: { isDeleted: false },
+        populate: { path: "eventId", model: "Event" },
       },
     });
+
   if (!shop) {
     res.status(404);
     throw new Error("Shop not found");
   }
+
   res.status(200).json(shop);
 });
 
 const updateShopStatus = asyncHandler(async (req, res) => {
   const { shopId } = req.params;
 
-  const shop = await Shop.findById(shopId);
+  const shop = await Shop.findById(shopId)
+    .populate({
+      path: "products",
+      match: { isDeleted: false },
+      populate: { path: "eventId", model: "Event" },
+    })
+    .populate({
+      path: "events",
+      populate: {
+        path: "productId",
+        match: { isDeleted: false },
+        populate: { path: "eventId", model: "Event" },
+      },
+    });
+
   if (!shop) {
     res.status(404);
     throw new Error("Shop not found");
   }
 
+  // Toggle shop status
   shop.isActive = !shop.isActive;
   await shop.save();
+
+  // Update all products belonging to this shop
+  await Product.updateMany(
+    { _id: { $in: shop.products.map((p) => p._id) } },
+    { $set: { isActive: shop.isActive } }
+  );
 
   res.status(200).json({
     message: `Shop is now ${shop.isActive ? "active" : "inactive"}`,
@@ -187,7 +210,6 @@ module.exports = {
   createShop,
   getCurrentUserShop,
   updateCurrentUserShop,
-  deleteShop,
   getAllShops,
   getShopById,
   getAllShopsAdmin,

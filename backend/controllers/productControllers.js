@@ -166,13 +166,14 @@ const deleteProduct = asyncHandler(async (req, res) => {
   product.isDeleted = true;
   await product.save();
 
-  const event = await Event.findById(product.eventId);
-  if (event) {
-    await event.deleteOne();
-    product.eventId = null;
-    await product.save();
+  if (product.eventId) {
+    const event = await Event.findById(product.eventId);
+    if (event) {
+      await event.deleteOne();
+      product.eventId = null;
+      await product.save();
+    }
   }
-
   res.status(200).json({ message: "Product marked as deleted" });
 });
 
@@ -186,7 +187,8 @@ const getProductsByShop = asyncHandler(async (req, res) => {
     isDeleted: false,
   })
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .populate("eventId");
 
   const total = await Product.countDocuments({
     shopId: req.user.shopId,
@@ -210,7 +212,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
   const { category, sortBy } = req.query;
 
   // --- Build initial filter ---
-  const filter = { isDeleted: false };
+  const filter = { isDeleted: false, isActive: true };
   if (search) {
     filter.name = { $regex: search, $options: "i" };
   }
@@ -242,7 +244,15 @@ const getAllProducts = asyncHandler(async (req, res) => {
       },
     },
     { $unwind: "$shopId" }, // Turn shop array into object
-    { $match: { "shopId.isActive": true } }, // Only active shops
+    {
+      $lookup: {
+        from: "events",
+        localField: "eventId",
+        foreignField: "_id",
+        as: "eventId",
+      },
+    },
+    { $unwind: { path: "$eventId", preserveNullAndEmptyArrays: true } },
   ];
 
   const productsPipeline = [];
@@ -283,6 +293,7 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
   const products = await Product.find({
     category,
     isDeleted: false,
+    isActive: true,
   }).populate("shopId", "shopName imageUrl rating totalReviews isActive");
 
   res.status(200).json(products);
@@ -294,16 +305,19 @@ const getAllProductsAdmin = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const onlyActive = req.query.onlyActive;
+  const onlyDeleted = req.query.onlyDeleted === "true";
   const sortBy = req.query.sortBy === "sales" ? { sold: -1 } : {};
   const skip = (page - 1) * limit;
 
   const filter = {};
 
   if (onlyActive === "true") {
-    filter.isDeleted = false;
+    filter.isActive = true;
+  } else if (onlyActive === "false") {
+    filter.isActive = false;
   }
 
-  if (onlyActive === "false") {
+  if (onlyDeleted) {
     filter.isDeleted = true;
   }
 

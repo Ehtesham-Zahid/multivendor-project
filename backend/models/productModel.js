@@ -71,6 +71,10 @@ const productSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
