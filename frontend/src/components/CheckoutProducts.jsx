@@ -16,7 +16,7 @@ const CheckoutProducts = () => {
 
   return (
     <div className="bg-sky-100">
-      <div className=" w-3/5 mr-auto p-10">
+      <div className=" w-11/12 lg:w-4/5 xl:w-3/5 mx-auto md:mx-0 md:mr-auto p-10">
         {cart?.map((product) => {
           return <CheckoutCard key={product._id} product={product} />;
         })}{" "}

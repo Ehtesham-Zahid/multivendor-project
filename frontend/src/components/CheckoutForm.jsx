@@ -30,7 +30,7 @@ const CheckoutForm = () => {
   const { user } = useSelector((state) => state.auth);
   const { coupon } = useSelector((state) => state.coupon);
   const { totalAmount, cart } = useSelector((state) => state.cart);
-  const { addresses, isCreateAddressLoading } = useSelector(
+  const { addresses, isCreateAddressLoading, isLoading } = useSelector(
     (state) => state.address
   );
   const { isUserOrdersLoading } = useSelector((state) => state.order);
@@ -129,10 +129,10 @@ const CheckoutForm = () => {
 
   return (
     <form
-      className="p-5 border-r-2 w-3/5 ml-auto"
+      className="p-3 sm:p-5 xl:border-r-2  w-11/12 lg:w-4/5 xl:w-3/5 mx-auto md:mx-0 md:ml-auto"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="contact border-b-2 border-dark py-5 flex flex-col gap-2">
+      <div className="contact border-b-2 border-dark py-3 sm:py-5 flex flex-col gap-2">
         {user ? (
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
@@ -152,7 +152,7 @@ const CheckoutForm = () => {
         ) : (
           <>
             <div className="flex justify-between items-center">
-              <p className="text-2xl font-bold">Contact</p>
+              <p className="text-xl sm:text-2xl font-bold">Contact</p>
               <Link
                 to="/auth/login"
                 className="hover:underline"
@@ -172,10 +172,10 @@ const CheckoutForm = () => {
           </>
         )}
       </div>
-      <div className="delivery border-b-2 border-dark py-5 gap-5 flex flex-col">
-        <p className="text-2xl font-bold">Shipping Address</p>
+      <div className="delivery border-b-2 border-dark py-3 sm:py-5 gap-3 sm:gap-5 flex flex-col">
+        <p className="text-xl sm:text-2xl font-bold">Shipping Address</p>
         {user ? (
-          isLoading ? (
+          isLoading || isCreateAddressLoading ? (
             <Spinner />
           ) : addresses?.length > 0 ? (
             <RadioGroup
@@ -262,9 +262,9 @@ const CheckoutForm = () => {
           </>
         )}
       </div>
-      <div className="payment   py-5 flex flex-col gap-5">
+      <div className="payment py-3 sm:py-5 flex flex-col gap-3 sm:gap-5">
         <div className="flex flex-col">
-          <p className="text-2xl font-bold">Payment</p>
+          <p className="text-xl sm:text-2xl font-bold">Payment</p>
           <p className="text-sm text-gray-500">
             All transactions are secure and encrypted.
           </p>
