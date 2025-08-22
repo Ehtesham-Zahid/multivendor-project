@@ -128,14 +128,14 @@ const SingleProductSection = () => {
   ) : (
     <>
       <section className="w-11/12 xl:w-5/6 2xl:w-4/5 m-auto grid grid-cols-1 lg:grid-cols-2 my-20 gap-x-10">
-        <div className="flex gap-3 col-span-1 flex-col 2xl:flex-row border- border-zinc-300 pb-5 rounded-md">
+        <div className="flex gap-3 col-span-1 flex-col    rounded-md">
           {singleProduct?.images.length > 1 && (
-            <div className="flex flex-row  2xl:flex-col gap-5 justify-around 2xl:justify-center items-center max-w-[2xl]:w-full ">
+            <div className="flex flex-row   gap-5 justify-around  items-center w-full ">
               {singleProduct?.images?.map((image, index) => (
                 <div
                   onClick={() => setCurrentImage(index)}
                   key={index}
-                  className={`w-24 p-1 sm:w-36 aspect-square rounded-md overflow-hidden border sm:p-2   cursor-pointer ${
+                  className={`w-20 p-1 sm:w-32 aspect-square rounded-md overflow-hidden border sm:p-2   cursor-pointer ${
                     currentImage === index
                       ? "border-primary"
                       : "border-zinc-300"
@@ -146,7 +146,7 @@ const SingleProductSection = () => {
               ))}
             </div>
           )}
-          <div className="w-[300px] sm:w-[400px] xl:w-[500px] aspect-square overflow-hidden rounded-sm m-auto    p-2">
+          <div className="w-[300px] sm:w-[400px] xl:w-[500px] aspect-square overflow-hidden rounded-sm m-auto  mt-0   p-2 ">
             <img
               src={singleProduct?.images[currentImage]}
               className="w-full h-full object-cover"
