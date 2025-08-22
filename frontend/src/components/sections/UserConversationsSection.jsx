@@ -19,7 +19,9 @@ const UserConversationsSection = () => {
       </h1>
       <div className="flex flex-col gap-3 w-full">
         {isUserConversationsLoading ? (
-          <Spinner />
+          <div className="flex justify-center items-center h-full w-full pt-20">
+            <Spinner />
+          </div>
         ) : (
           <>
             {userConversations.length === 0 && (

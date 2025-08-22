@@ -102,7 +102,7 @@ const UserProfileSection = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className={"w-xs sm:w-md  mt-5 text-white text-md"}
+            className={"w-xs sm:w-md  mt-5 text-white text-md cursor-pointer"}
           >
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

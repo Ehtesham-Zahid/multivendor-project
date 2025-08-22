@@ -194,7 +194,7 @@ const DashboardSettingSection = () => {
         <Button
           disabled={updateCurrentUserShopLoading}
           type="submit"
-          className={"w-md  text-white text-md"}
+          className={"w-md  text-white text-md  cursor-pointer"}
         >
           {updateCurrentUserShopLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

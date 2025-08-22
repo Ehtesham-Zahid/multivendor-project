@@ -14,9 +14,7 @@ const PopularEvents = () => {
     dispatch(getPopularEventThunk());
   }, [dispatch]);
 
-  return isPopularEventLoading ? (
-    <Spinner />
-  ) : popularEvent ? (
+  return popularEvent ? (
     <section className="w-custom m-auto">
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         Popular Events

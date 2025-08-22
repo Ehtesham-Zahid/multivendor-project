@@ -42,8 +42,14 @@ export const logoutAPI = async () => {
   );
 };
 
-export const getDashboardStatsAPI = async () => {
-  return await API.get(`/users/admin/dashboard-stats`, {
+export const getAdminStatsAPI = async () => {
+  return await API.get(`/users/admin/admin-stats`, {
+    withCredentials: true, // <== required to receive Set-Cookie
+  });
+};
+
+export const getAllUsersAPI = async (data) => {
+  return await API.get(`/users/admin/all-users?role=${data.role}`, {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };

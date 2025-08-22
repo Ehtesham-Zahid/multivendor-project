@@ -4,7 +4,6 @@ const User = require("../models/userModel");
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-// ✅ Create Bank Account
 const createBankAccount = asyncHandler(async (req, res) => {
   const {
     bankName,
@@ -15,12 +14,10 @@ const createBankAccount = asyncHandler(async (req, res) => {
   } = req.body;
   const vendorId = req.user._id;
 
-  // Step 1: Reset other defaults if this one is default
   if (isDefault) {
     await BankAccount.updateMany({ userId: vendorId }, { isDefault: false });
   }
 
-  // Step 2: Get or create Stripe Connected Account for this vendor
   let vendor = await User.findById(vendorId);
   if (!vendor.stripeAccountId) {
     const account = await stripe.accounts.create({
@@ -58,17 +55,17 @@ const createBankAccount = asyncHandler(async (req, res) => {
     res.status(500);
     throw new Error(error.message);
   }
-  // Step 3: Attach bank account to vendor's Stripe account
 
-  // Step 4: Save to your DB
+  const maskedAccountNumber = "********" + accountNumber.slice(-4);
+
   const bankAccount = await BankAccount.create({
     userId: vendorId,
     bankName,
-    accountNumber,
+    accountNumber: maskedAccountNumber,
     accountHolderName,
     routingNumber,
     isDefault,
-    stripeBankAccountId: bankAccountStripe.id, // save Stripe reference
+    stripeBankAccountId: bankAccountStripe.id,
   });
 
   res.status(201).json(bankAccount);

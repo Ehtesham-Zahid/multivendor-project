@@ -9,7 +9,8 @@ const {
   updateMe,
   changePassword,
   logout,
-  getDashboardStats,
+  getAdminStats,
+  getAllUsers,
 } = require("../controllers/userControllers.js");
 
 const upload = require("../middlewares/uploadMiddleware.js");
@@ -22,6 +23,7 @@ router.get("/me", protect, me);
 router.patch("/update-me", upload.single("image"), protect, updateMe);
 router.patch("/change-password", protect, changePassword);
 router.post("/logout", protect, logout);
-router.get("/admin/dashboard-stats", protect, getDashboardStats);
+router.get("/admin/admin-stats", protect, isAdmin, getAdminStats);
+router.get("/admin/all-users", protect, getAllUsers);
 
 module.exports = router;

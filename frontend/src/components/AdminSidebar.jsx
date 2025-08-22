@@ -8,6 +8,7 @@ import {
   Wallet,
   Package,
   Banknote,
+  Users,
 } from "lucide-react";
 
 import {
@@ -33,6 +34,11 @@ const items = [
     title: "All Shops",
     url: "/admin/shops",
     icon: Inbox,
+  },
+  {
+    title: "All Users",
+    url: "/admin/users",
+    icon: Users,
   },
   {
     title: "All Events",

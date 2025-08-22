@@ -57,6 +57,7 @@ import { UserConversationsSection } from "./components";
 import DashboardConversationsPage from "./pages/DashboardConversationsPage.jsx";
 import DashboardWithdrawalPage from "./pages/DashboardWithdrawalPage.jsx";
 import AdminWithdrawalPage from "./pages/AdminWithdrawalPage.jsx";
+import AdminUsersPage from "./pages/AdminUsersPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -148,6 +149,7 @@ let router = createBrowserRouter([
           { path: "refunds", Component: AdminRefundsPage },
           { path: "shops", Component: AdminShopsPage },
           { path: "withdrawals", Component: AdminWithdrawalPage },
+          { path: "users", Component: AdminUsersPage },
         ],
       },
     ],

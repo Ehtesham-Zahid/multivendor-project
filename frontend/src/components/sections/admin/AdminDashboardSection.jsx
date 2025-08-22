@@ -1,52 +1,50 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import DashboardCard from "../../DashboardCard";
 import AdminOrdersSection from "./AdminOrdersSection";
-import { useDispatch, useSelector } from "react-redux";
-import { getDashboardStatsThunk } from "../../../features/auth/authSlice";
+import { getAdminStatsThunk } from "../../../features/auth/authSlice";
 import Spinner from "../../Spinner";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminDashboardSection = () => {
-  const { dashboardStats, isLoading } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.auth);
+  const {
+    totalRevenue,
+    totalShops,
+    totalOrders,
+    totalRefunds,
+    totalProducts,
+    isAdminStatsLoading,
+  } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getDashboardStatsThunk());
+    dispatch(getAdminStatsThunk());
   }, [dispatch]);
 
   return (
     <div className="flex flex-col gap-5">
-      {isLoading ? (
+      {isAdminStatsLoading ? (
         <Spinner />
       ) : (
         <div className="flex gap-5 sm:gap-10 flex-wrap justify-center md:justify-start">
-          <DashboardCard
-            title="Total Revenue"
-            subtitle={`$${user?.totalRevenue}`}
-          />
-          <DashboardCard
-            title="Account Balance"
-            subtitle={`$${user?.accountBalance}`}
-            linkUrl="/admin/account-balance"
-          />
+          <DashboardCard title="Total Revenue" subtitle={`$${totalRevenue}`} />
           <DashboardCard
             title="Total Shops"
-            subtitle={`${dashboardStats?.totalShops}`}
+            subtitle={`${totalShops}`}
             linkUrl="/admin/shops"
           />
           <DashboardCard
             title="Total Orders"
-            subtitle={`${dashboardStats?.totalOrders}`}
+            subtitle={`${totalOrders}`}
             linkUrl="/admin/orders"
           />
           <DashboardCard
             title="Total Refunds"
-            subtitle={`${dashboardStats?.totalRefunds}`}
+            subtitle={`${totalRefunds}`}
             linkUrl="/admin/refunds"
           />
           <DashboardCard
             title="Total Products"
-            subtitle={`${dashboardStats?.totalProducts}`}
+            subtitle={`${totalProducts}`}
             linkUrl="/admin/products"
           />
         </div>

@@ -88,7 +88,7 @@ const withdrawalSlice = createSlice({
       })
       .addCase(requestWithdrawalThunk.fulfilled, (state, action) => {
         state.isRequestWithdrawalLoading = false;
-        state.myWithdrawals.unshift(action.payload);
+        state.myWithdrawals.push(action.payload);
       })
       .addCase(requestWithdrawalThunk.rejected, (state, action) => {
         state.isRequestWithdrawalLoading = false;

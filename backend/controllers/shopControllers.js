@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Shop = require("../models/shopModel");
 const Product = require("../models/productModel");
 const uploadAvatar = require("../utils/cloudinary");
+const ShopOrder = require("../models/shopOrderModel");
 
 const createShop = asyncHandler(async (req, res) => {
   const { shopName, phoneNumber, address, zipCode } = req.body;
@@ -77,11 +78,13 @@ const updateCurrentUserShop = asyncHandler(async (req, res) => {
     });
   if (!shop) {
     res.status(404);
+    console.log("Shop not found");
     throw new Error("Shop not found");
   }
 
   if (shop.ownerId.toString() !== req.user._id.toString()) {
     res.status(403);
+    console.log("Not authorized to update this shop");
     throw new Error("Not authorized to update this shop");
   }
 
@@ -95,6 +98,7 @@ const updateCurrentUserShop = asyncHandler(async (req, res) => {
   }
 
   await shop.save();
+  console.log("Shop updated");
   res.status(200).json(shop);
 });
 
@@ -170,6 +174,26 @@ const updateShopStatus = asyncHandler(async (req, res) => {
   });
 });
 
+const getCurrentUserShopStats = asyncHandler(async (req, res) => {
+  const { shopId } = req.user;
+  const shop = await Shop.findById(shopId);
+
+  if (!shop) {
+    res.status(404);
+    throw new Error("Shop not found");
+  }
+
+  const totalProducts = await Product.countDocuments({ shopId });
+  const totalOrders = await ShopOrder.countDocuments({ shopId });
+
+  res.status(200).json({
+    totalProducts,
+    totalOrders,
+    totalRevenue: shop.totalRevenue,
+    accountBalance: shop.accountBalance,
+  });
+});
+
 // Admin Controllers
 const getAllShopsAdmin = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -212,4 +236,5 @@ module.exports = {
   getShopById,
   getAllShopsAdmin,
   updateShopStatus,
+  getCurrentUserShopStats,
 };

@@ -111,7 +111,7 @@ const AdminEventsSection = () => {
             {isAdminEventsLoading ? (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="text-center py-6 font-semibold text-md pt-48"
                 >
                   <Spinner />
@@ -169,7 +169,7 @@ const AdminEventsSection = () => {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={9}
                   className="text-center py-4 font-semibold"
                 >
                   No events yet.

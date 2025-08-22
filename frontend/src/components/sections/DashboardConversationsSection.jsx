@@ -19,7 +19,9 @@ const DashboardConversationsSection = () => {
       </h1>
       <div className="flex flex-col gap-3 w-full">
         {isShopConversationsLoading ? (
-          <Spinner />
+          <div className="flex justify-center items-center h-full w-full pt-40">
+            <Spinner />
+          </div>
         ) : (
           <>
             {shopConversations.length === 0 && (

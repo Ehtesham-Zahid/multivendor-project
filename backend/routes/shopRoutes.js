@@ -8,6 +8,7 @@ const {
   getShopById,
   getAllShopsAdmin,
   updateShopStatus,
+  getCurrentUserShopStats,
 } = require("../controllers/shopControllers.js");
 
 const upload = require("../middlewares/uploadMiddleware.js");
@@ -15,6 +16,7 @@ const { protect, isAdmin } = require("../middlewares/authMiddleware.js");
 
 router.post("/create-shop", protect, upload.single("image"), createShop);
 router.get("/getCurrentUserShop", protect, getCurrentUserShop);
+router.get("/getCurrentUserShopStats", protect, getCurrentUserShopStats);
 router.patch(
   "/updateCurrentUserShop",
   protect,

@@ -18,7 +18,7 @@ const ShopSection = () => {
   return (
     <div className="flex  gap-5 items-center md:items-start     w-custom mx-auto my-10 lg:flex-row flex-col">
       {getShopByIdLoading ? (
-        <div className="flex justify-center items-center h-full w-full">
+        <div className="flex justify-center items-center h-full w-full pt-40">
           <Spinner />
         </div>
       ) : (

@@ -55,7 +55,10 @@ const CreateBankAccountDialog = ({ page, onSuccess }) => {
       className="overflow-y-scroll"
     >
       <DialogTrigger>
-        <Button className="bg-primary text-white text-md" size="lg">
+        <Button
+          className="bg-primary text-white text-md cursor-pointer"
+          size="lg"
+        >
           Add Bank Account <Plus />
         </Button>
       </DialogTrigger>
@@ -163,7 +166,7 @@ const CreateBankAccountDialog = ({ page, onSuccess }) => {
             )}
 
             {error && (
-              <span className="text-red-500 text-sm font-semibold">
+              <span className="text-red-500 text-xs sm:text-sm font-semibold w-xs sm:w-sm lg:w-md">
                 {error}
               </span>
             )}
@@ -171,7 +174,7 @@ const CreateBankAccountDialog = ({ page, onSuccess }) => {
             <Button
               disabled={isLoading}
               type="submit"
-              className="text-white text-md mt-3"
+              className="text-white text-md mt-3 cursor-pointer"
             >
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

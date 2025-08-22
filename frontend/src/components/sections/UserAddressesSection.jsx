@@ -19,14 +19,13 @@ const UserAddressesSection = () => {
     <div className="w-full flex flex-col gap-5">
       <div className="flex justify-between">
         <p className="font-bold text-2xl sm:text-3xl">My Addresses</p>
-        {/* <Button className="text-md text-white" size={"lg"}>
-          Add New
-        </Button> */}
         <CreateAddressDialog />
       </div>
       <div className="flex w-full justify-center md:justify-start items-center gap-8 flex-wrap">
         {isLoading ? (
-          <Spinner />
+          <div className="flex justify-center items-center h-full w-full pt-20">
+            <Spinner />
+          </div>
         ) : addresses.length === 0 ? (
           <p className="text-center font-semibold mx-auto">
             You don't have any Saved Address

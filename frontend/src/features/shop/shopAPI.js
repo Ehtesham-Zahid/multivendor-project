@@ -36,3 +36,9 @@ export const updateShopStatusApi = async (shopId) => {
     withCredentials: true,
   });
 };
+
+export const getCurrentUserShopStatsApi = async () => {
+  return await API.get(`/shops/getCurrentUserShopStats`, {
+    withCredentials: true,
+  });
+};

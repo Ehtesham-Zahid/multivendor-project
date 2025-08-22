@@ -36,9 +36,11 @@ const CategoryProductsSection = () => {
       </p>
       <div>
         {isCategoryProductsLoading ? (
-          <Spinner />
+          <div className="flex justify-center items-center h-full w-full pt-20">
+            <Spinner />
+          </div>
         ) : categoryProducts.length === 0 ? (
-          <p className="text-center uppercase text-black text-2xl  font-bold absolute  left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <p className="text-center uppercase text-black text-2xl  font-bold    pt-20 ">
             No products found in this category
           </p>
         ) : (

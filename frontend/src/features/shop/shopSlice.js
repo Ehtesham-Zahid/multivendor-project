@@ -6,6 +6,7 @@ import {
   updateCurrentUserShopApi,
   getAllShopsApi,
   updateShopStatusApi,
+  getCurrentUserShopStatsApi,
 } from "./shopAPI";
 
 export const createShopThunk = createAsyncThunk(
@@ -82,6 +83,18 @@ export const updateShopStatusThunk = createAsyncThunk(
   }
 );
 
+export const getCurrentUserShopStatsThunk = createAsyncThunk(
+  "shop/getCurrentUserShopStats",
+  async (_, thunkAPI) => {
+    try {
+      const res = await getCurrentUserShopStatsApi();
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   currentUserShop: null,
   shop: null,
@@ -90,13 +103,18 @@ const initialState = {
   totalShops: 0,
   totalPages: 0,
   currentPage: 1,
-  accountBalance: 0,
   createShopLoading: false,
   getCurrentUserShopLoading: false,
   getShopByIdLoading: false,
   getAllShopsLoading: false,
   updateShopStatusLoading: false,
   updateCurrentUserShopLoading: false,
+  getCurrentUserShopStatsLoading: false,
+
+  totalProducts: 0,
+  totalOrders: 0,
+  accountBalance: 0,
+  totalRevenue: 0,
 };
 
 const shopSlice = createSlice({
@@ -194,6 +212,22 @@ const shopSlice = createSlice({
       })
       .addCase(updateShopStatusThunk.rejected, (state, action) => {
         state.updateShopStatusLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getCurrentUserShopStatsThunk.pending, (state) => {
+        state.getCurrentUserShopStatsLoading = true;
+        state.error = null;
+      })
+      .addCase(getCurrentUserShopStatsThunk.fulfilled, (state, action) => {
+        state.getCurrentUserShopStatsLoading = false;
+        state.totalProducts = action.payload.totalProducts;
+        state.totalOrders = action.payload.totalOrders;
+        state.totalRevenue = action.payload.totalRevenue;
+        state.accountBalance = action.payload.accountBalance;
+      })
+      .addCase(getCurrentUserShopStatsThunk.rejected, (state, action) => {
+        state.getCurrentUserShopStatsLoading = false;
         state.error = action.payload;
       });
   },

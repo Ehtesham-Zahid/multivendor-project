@@ -30,7 +30,9 @@ const AllProducts = () => {
       </p>
       <div>
         {isAllProductsLoading ? (
-          <Spinner />
+          <div className="flex justify-center items-center h-full w-full pt-20">
+            <Spinner />
+          </div>
         ) : error ? (
           <p>{error}</p>
         ) : allProducts?.length === 0 ? (

@@ -117,7 +117,7 @@ const AdminProductsSection = () => {
             {isAllProductsAdminLoading ? (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="text-center py-6 font-semibold text-md pt-48"
                 >
                   <Spinner />
@@ -185,7 +185,7 @@ const AdminProductsSection = () => {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={8}
+                  colSpan={9}
                   className="text-center py-4 font-semibold"
                 >
                   No products yet.

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const DashboardCard = ({ title, subtitle, link, linkUrl }) => {
   return (
-    <div className="flex flex-col  justify-between  drop-shadow-xl  rounded-md shadow-xl  bg-background p-5 w-48 h-30">
+    <div className="flex flex-col  justify-between  drop-shadow-xl  rounded-md shadow-xl  bg-background p-5 w-full sm:w-48 h-30">
       <div className="flex justify-between items-center">
         <p className="text-md flex gap-1 items-center text-nowrap text-dark font-normal">
           {/* <DollarSign size={18} /> */}

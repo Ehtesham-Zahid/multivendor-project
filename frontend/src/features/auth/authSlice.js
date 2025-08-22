@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   changePasswordAPI,
-  getDashboardStatsAPI,
+  getAdminStatsAPI,
+  getAllUsersAPI,
   getMe,
   login,
   logoutAPI,
@@ -94,11 +95,23 @@ export const logoutThunk = createAsyncThunk(
   }
 );
 
-export const getDashboardStatsThunk = createAsyncThunk(
-  "auth/getDashboardStats",
+export const getAdminStatsThunk = createAsyncThunk(
+  "auth/getAdminStats",
   async (_, thunkAPI) => {
     try {
-      const res = await getDashboardStatsAPI();
+      const res = await getAdminStatsAPI();
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const getAllUsersThunk = createAsyncThunk(
+  "auth/getAllUsers",
+  async (data, thunkAPI) => {
+    try {
+      const res = await getAllUsersAPI(data);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -107,11 +120,20 @@ export const getDashboardStatsThunk = createAsyncThunk(
 );
 
 const initialState = {
+  isAdminStatsLoading: false,
   user: null,
   isLoading: false,
   error: null,
   success: false,
-  dashboardStats: null,
+  totalRevenue: 0,
+  totalShops: 0,
+  totalOrders: 0,
+  totalRefunds: 0,
+  allUsers: [],
+  isAllUsersLoading: false,
+  totalProducts: 0,
+  totalUsers: 0,
+  totalUsersPages: 0,
 };
 
 const authSlice = createSlice({
@@ -233,19 +255,38 @@ const authSlice = createSlice({
         state.error = action.payload;
       });
     builder
-      .addCase(getDashboardStatsThunk.pending, (state) => {
-        state.isLoading = true;
+      .addCase(getAdminStatsThunk.pending, (state) => {
+        state.isAdminStatsLoading = true;
         state.error = null;
         state.success = false;
       })
-      .addCase(getDashboardStatsThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+      .addCase(getAdminStatsThunk.fulfilled, (state, action) => {
+        state.isAdminStatsLoading = false;
         state.success = true;
-        state.dashboardStats = action.payload;
+        state.totalRevenue = action.payload.totalRevenue;
+        state.totalShops = action.payload.totalShops;
+        state.totalOrders = action.payload.totalOrders;
+        state.totalRefunds = action.payload.totalRefunds;
+        state.totalProducts = action.payload.totalProducts;
       })
-      .addCase(getDashboardStatsThunk.rejected, (state, action) => {
-        state.isLoading = false;
+      .addCase(getAdminStatsThunk.rejected, (state, action) => {
+        state.isAdminStatsLoading = false;
         state.success = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getAllUsersThunk.pending, (state) => {
+        state.isAllUsersLoading = true;
+        state.error = null;
+      })
+      .addCase(getAllUsersThunk.fulfilled, (state, action) => {
+        state.isAllUsersLoading = false;
+        state.allUsers = action.payload.users;
+        state.totalUsers = action.payload.totalUsers;
+        state.totalUsersPages = action.payload.totalUsersPages;
+      })
+      .addCase(getAllUsersThunk.rejected, (state, action) => {
+        state.isAllUsersLoading = false;
         state.error = action.payload;
       });
   },

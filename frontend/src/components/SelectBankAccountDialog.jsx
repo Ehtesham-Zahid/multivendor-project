@@ -107,7 +107,7 @@ const SelectBankAccountDialog = ({ trigger, onSelect, accountBalance }) => {
         </div>
 
         <div className="mt-2 space-y-3">
-          {isShopBankAccountsLoading ? (
+          {isShopBankAccountsLoading || isDeleteBankAccountLoading ? (
             <div className="text-sm text-zinc-600">
               <Spinner />
             </div>
@@ -155,11 +155,7 @@ const SelectBankAccountDialog = ({ trigger, onSelect, accountBalance }) => {
                       disabled={isDeleteBankAccountLoading}
                       className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 cursor-pointer"
                     >
-                      {isDeleteBankAccountLoading ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Trash2 className="w-4 h-4 cursor-pointer" />
-                      )}
+                      <Trash2 className="w-4 h-4 cursor-pointer" />
                     </Button>
                   </div>
                 </div>

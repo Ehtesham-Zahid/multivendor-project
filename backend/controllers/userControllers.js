@@ -204,7 +204,12 @@ const logout = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out" });
 });
 
-const getDashboardStats = asyncHandler(async (req, res) => {
+const getAdminStats = asyncHandler(async (req, res) => {
+  const user = req.user;
+  if (user.role !== "admin") {
+    res.status(401);
+    throw new Error("Unauthorized");
+  }
   const totalOrders = await ShopOrder.countDocuments();
   const totalProducts = await Product.countDocuments();
   const totalVendors = await User.countDocuments({ role: "vendor" });
@@ -213,11 +218,29 @@ const getDashboardStats = asyncHandler(async (req, res) => {
   });
 
   res.json({
-    totalOrders,
-    totalProducts,
+    totalRevenue: user.totalRevenue,
     totalShops: totalVendors,
+    totalOrders,
     totalRefunds,
+    totalProducts,
   });
+});
+
+const getAllUsers = asyncHandler(async (req, res) => {
+  const { role } = req.query;
+
+  const filter = {};
+
+  if (role && role !== "undefined") {
+    filter.role = role;
+  }
+
+  const users = await User.find(filter)
+    .populate("shopId")
+    .select("-password -verifiedToken -verifiedTokenExpires -stripeAccountId ");
+  const totalUsers = await User.countDocuments(filter);
+  const totalUsersPages = Math.ceil(totalUsers / 10);
+  res.status(200).json({ users, totalUsers, totalUsersPages });
 });
 
 module.exports = {
@@ -228,5 +251,6 @@ module.exports = {
   updateMe,
   changePassword,
   logout,
-  getDashboardStats,
+  getAdminStats,
+  getAllUsers,
 };

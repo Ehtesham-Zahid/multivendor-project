@@ -97,7 +97,7 @@ const AdminOrdersSection = () => {
             {isAdminOrdersLoading ? (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={8}
                   className="text-center py-6 font-semibold text-md pt-48"
                 >
                   <Spinner />
@@ -161,7 +161,7 @@ const AdminOrdersSection = () => {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={8}
                   className="text-center py-6 font-semibold text-md"
                 >
                   No orders yet.

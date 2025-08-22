@@ -52,6 +52,7 @@ import SelectBankAccountDialog from "./SelectBankAccountDialog";
 import AdminWithdrawalSection from "./sections/admin/AdminWithdrawalSection";
 import ScrollToTop from "./ScrollToTop";
 import EditShopDialog from "./EditShopDialog";
+import AdminUsersSection from "./sections/admin/AdminUsersSection";
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -100,6 +101,7 @@ export {
   AdminRefundsSection,
   DashboardRefundsSection,
   FaqsSection,
+  AdminUsersSection,
   // InboxSection,
   SingleInboxSection,
   UserConversationsSection,
