@@ -33,7 +33,6 @@ const CreateBankAccountDialog = ({ page, onSuccess }) => {
     if (shopBankAccounts.length === 0) {
       data.isDefault = true;
     }
-    console.log("Submitted Data:", data);
     try {
       const resultAction = await dispatch(createBankAccountThunk(data));
       if (createBankAccountThunk.fulfilled.match(resultAction)) {

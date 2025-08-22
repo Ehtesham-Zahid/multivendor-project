@@ -47,7 +47,6 @@ const createShop = asyncHandler(async (req, res) => {
 });
 
 const getCurrentUserShop = asyncHandler(async (req, res) => {
-  console.log(req.user);
   const shop = await Shop.findById(req.user.shopId);
   if (!shop) {
     res.status(404);
@@ -180,7 +179,6 @@ const getAllShopsAdmin = asyncHandler(async (req, res) => {
   const skip = (page - 1) * limit;
 
   const filter = {};
-  console.log(onlyActive);
 
   if (onlyActive === "true") {
     filter.isActive = true;

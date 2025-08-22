@@ -17,11 +17,9 @@ const StateSelector = ({ countryName, setState, countryCode }) => {
 
     // Get the country's ISO code first
     const allCountries = State.getAllStates();
-    console.log(allCountries);
     const selectedStates = allCountries.filter(
       (state) => state.countryCode === countryCode
     );
-    console.log(selectedStates);
 
     setStates(selectedStates);
   }, [countryCode]);

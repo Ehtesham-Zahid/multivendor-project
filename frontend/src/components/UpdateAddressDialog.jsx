@@ -42,16 +42,13 @@ const UpdateAddressDialog = ({ address }) => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       const resultAction = await dispatch(
         updateAddressThunk({ addressId: address._id, addressData: data })
       );
       if (updateAddressThunk.fulfilled.match(resultAction)) {
-        console.log("hell");
         toast.success("Address updated successfully!");
         setIsOpen(false);
-        // reset();
       } else {
         toast.error("Failed to update address.");
       }

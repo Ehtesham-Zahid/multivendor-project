@@ -14,8 +14,6 @@ const getUserConversations = asyncHandler(async (req, res) => {
     .populate("lastMessage", "message createdAt")
     .sort({ lastMessageAt: -1 });
 
-  console.log(conversations);
-
   res.status(200).json({
     success: true,
     conversations,

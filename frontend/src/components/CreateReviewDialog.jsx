@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 import { getShopOrderByIdThunk } from "../features/order/orderSlice";
 
 const CreateReviewDialog = ({ productId, shopId, trigger, orderId }) => {
-  console.log(productId, shopId);
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(1);
   const [hoveredRating, setHoveredRating] = useState(0);

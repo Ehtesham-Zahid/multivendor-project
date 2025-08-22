@@ -64,7 +64,6 @@ const AdminProductsSection = () => {
 
   const handleProductStatusChange = (value) => {
     if (value === "sales") {
-      console.log("sales");
       dispatch(
         getAllProductsAdminThunk({
           onlyActive: "",

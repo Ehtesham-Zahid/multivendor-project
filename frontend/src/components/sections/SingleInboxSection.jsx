@@ -53,7 +53,6 @@ const SingleInboxSection = () => {
 
     // Listen for incoming messages
     socket.on("receive-message", (newMessage) => {
-      console.log(newMessage);
       dispatch(addMessage(newMessage)); // <- no stale state
     });
 

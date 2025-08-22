@@ -30,8 +30,6 @@ export const getActiveEventsApi = async ({ sortBy, limit }) => {
   if (sortBy) params.append("sortBy", sortBy);
   if (limit) params.append("limit", limit);
 
-  console.log(`/events/getActiveEvents/?${params.toString()}`);
-
   return await API.get(`/events/getActiveEvents/?${params.toString()}`);
 };
 

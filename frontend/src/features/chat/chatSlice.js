@@ -13,7 +13,6 @@ export const getOrCreateConversationThunk = createAsyncThunk(
   async (shopId, thunkAPI) => {
     try {
       const res = await getOrCreateConversation(shopId);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -26,10 +25,8 @@ export const sendMessageThunk = createAsyncThunk(
   async ({ conversationId, message, isShop = false }, thunkAPI) => {
     try {
       const res = await sendMessageApi({ conversationId, message, isShop });
-      console.log("res", res);
       return res.data;
     } catch (error) {
-      console.log("error", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -66,7 +63,6 @@ export const getMessagesThunk = createAsyncThunk(
       const res = await getMessagesApi(conversationId, isShop);
       return res.data;
     } catch (error) {
-      console.log("error", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }

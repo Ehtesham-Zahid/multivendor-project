@@ -15,7 +15,6 @@ const generateToken = (id, expire) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullname, email, password } = req.body;
-  console.log(req);
 
   if (!fullname?.trim() || !email?.trim() || !password?.trim()) {
     res.status(400);
@@ -36,13 +35,11 @@ const registerUser = asyncHandler(async (req, res) => {
   // Create User
   const user = await User.create({ fullname, email, password: hashedPassword });
 
-  console.log("MAIN BAHIR HU");
   if (req.file) {
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     const dataURI = `data:${req.file.mimetype};base64,${b64}`;
     const { original } = await uploadAvatar(dataURI, user._id, "user_logos");
     user.imageUrl = original;
-    console.log("MAIN ANDER HU");
   }
 
   const verifiedToken = generateToken(user._id, "1h");
@@ -77,7 +74,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password, rememberMe } = req.body;
-  console.log(req.body);
 
   if (!email?.trim() || !password?.trim()) {
     res.status(400);
@@ -162,7 +158,6 @@ const updateMe = asyncHandler(async (req, res) => {
     const dataURI = `data:${req.file.mimetype};base64,${b64}`;
     const { original } = await uploadAvatar(dataURI, user._id, "user_logos");
     user.imageUrl = original;
-    console.log("MAIN ANDER HU");
   }
 
   await user.save();
@@ -216,8 +211,6 @@ const getDashboardStats = asyncHandler(async (req, res) => {
   const totalRefunds = await ShopOrder.countDocuments({
     refundStatus: "refunded",
   });
-
-  // Assuming `Order` has a field "totalPrice" and "status"
 
   res.json({
     totalOrders,

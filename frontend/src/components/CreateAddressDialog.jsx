@@ -31,7 +31,6 @@ const CreateAddressDialog = ({ page }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("Submitted Data:", data);
     try {
       const resultAction = await dispatch(createAddressThunk(data));
       if (createAddressThunk.fulfilled.match(resultAction)) {

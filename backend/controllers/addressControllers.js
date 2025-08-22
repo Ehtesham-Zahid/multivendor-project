@@ -26,20 +26,6 @@ const createAddress = asyncHandler(async (req, res) => {
     country,
     isPrimary,
   } = req.body;
-  console.log(req.body);
-  //   if (
-  //     !fullName ||
-  //     !phoneNumber ||
-  //     !email ||
-  //     !addressDetails ||
-  //     !city ||
-  //     !state ||
-  //     !zipCode ||
-  //     !country
-  //   ) {
-  //     res.status(400);
-  //     throw new Error("All fields are required");
-  //   }
 
   const address = await Address.create({
     fullName,

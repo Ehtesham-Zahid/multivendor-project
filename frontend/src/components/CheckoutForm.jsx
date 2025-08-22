@@ -57,11 +57,8 @@ const CheckoutForm = () => {
   }, [addresses, selectedAddress]);
 
   const onSubmit = async (data) => {
-    console.log("data", data);
     if (user) {
-      console.log("selectedAddress", selectedAddress);
       setAddressId(selectedAddress);
-      console.log("addressId", addressId);
     } else {
       const addressData = {
         ...data,
@@ -76,16 +73,14 @@ const CheckoutForm = () => {
     }
 
     if (addressId) {
-      console.log("addressId", addressId);
-      // Transform cart to match the `items` structure in your Order model
       const items = cart.map((product) => ({
-        productId: product._id, // Product ID
+        productId: product._id,
         shopId:
           typeof product.shopId === "object"
             ? product.shopId._id
-            : product.shopId, // Shop ID
-        quantity: product.quantity || 1, // Default to 1 if missing
-        price: product.discountPrice || product.price, // Prefer discount price if available
+            : product.shopId,
+        quantity: product.quantity || 1,
+        price: product.discountPrice || product.price,
       }));
 
       const orderData = {
@@ -99,7 +94,6 @@ const CheckoutForm = () => {
       const resultAction2 = await dispatch(createOrderThunk(orderData));
 
       if (createOrderThunk.fulfilled.match(resultAction2)) {
-        console.log("resultAction2", resultAction2);
         if (selectedOption === "card") {
           const total = coupon ? coupon.newTotal : totalAmount;
           const res = await API.post("/payments/create-checkout-session", {
@@ -111,7 +105,6 @@ const CheckoutForm = () => {
 
           const stripe = await stripePromise;
           if (!stripe) {
-            console.error("Stripe failed to load");
             return;
           }
 

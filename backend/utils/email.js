@@ -1,10 +1,8 @@
-// pages/api/send.ts or app/api/send/route.ts (Next.js)
 const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const POST = async (details) => {
-  console.log(details);
   const { to, subject, html } = details;
 
   try {

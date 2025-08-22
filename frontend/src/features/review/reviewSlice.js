@@ -12,7 +12,6 @@ export const createReviewThunk = createAsyncThunk(
   async (reviewData, thunkAPI) => {
     try {
       const res = await createReviewApi(reviewData);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -25,7 +24,6 @@ export const getShopReviewsThunk = createAsyncThunk(
   async (shopId, thunkAPI) => {
     try {
       const res = await getShopReviewsApi(shopId);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -50,7 +48,6 @@ export const updateReviewThunk = createAsyncThunk(
   async ({ reviewId, reviewData }, thunkAPI) => {
     try {
       const res = await updateReviewApi(reviewId, reviewData);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);

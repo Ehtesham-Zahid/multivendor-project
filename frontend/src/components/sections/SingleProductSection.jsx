@@ -117,7 +117,6 @@ const SingleProductSection = () => {
       getOrCreateConversationThunk(singleProduct?.shopId?._id)
     );
     if (getOrCreateConversationThunk.fulfilled.match(resultAction)) {
-      console.log(resultAction.payload);
       navigate(`/profile/inbox/${resultAction.payload.conversation._id}`);
     }
   };

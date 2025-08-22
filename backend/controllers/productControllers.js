@@ -101,8 +101,6 @@ const getProductById = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
   const { name, description, price, discountPrice, stock, category } = req.body;
 
-  console.log("HEY BUDDY", req.body);
-
   const product = await Product.findById(req.params.productId);
 
   if (!product || product.isDeleted) {
@@ -138,8 +136,6 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
   product.stock = stock || product.stock;
   product.category = category || product.category;
-
-  console.log("Updated Product:", product);
 
   // Handle new image uploads if any
   if (req.files && req.files.length > 0) {

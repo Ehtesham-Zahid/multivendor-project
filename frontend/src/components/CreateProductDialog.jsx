@@ -186,7 +186,6 @@ const CreateProductDialog = () => {
               {...register("discountPrice", {
                 valueAsNumber: true,
                 validate: (value) => {
-                  console.log(value);
                   if (isNaN(value)) return true;
                   return value >= 0 || "Discount cannot be negative";
                 },

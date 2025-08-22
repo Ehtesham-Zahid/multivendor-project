@@ -10,7 +10,6 @@ export const createCouponThunk = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await createCouponApi(data);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -25,7 +24,6 @@ export const deleteCouponThunk = createAsyncThunk(
       const res = await deleteCouponApi(couponId);
       return res.data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }

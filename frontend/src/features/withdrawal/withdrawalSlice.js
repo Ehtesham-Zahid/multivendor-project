@@ -25,7 +25,6 @@ export const getMyWithdrawalsThunk = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await getMyWithdrawalsApi();
-      console.log(res.data);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(

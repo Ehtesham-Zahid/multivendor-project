@@ -11,7 +11,6 @@ const AddressCard = ({ address, index }) => {
   const handleDeleteAddress = async (addressId) => {
     // Dispatch the delete address thunk action
     const resultAction = await dispatch(deleteAddressThunk(addressId));
-    console.log("Delete Address ID:", addressId);
     if (deleteAddressThunk.fulfilled.match(resultAction)) {
       toast.success("Address deleted successfully!");
     }

@@ -57,7 +57,6 @@ const createReview = asyncHandler(async (req, res) => {
 const updateReview = asyncHandler(async (req, res) => {
   const { reviewId } = req.params;
   const { rating, comment } = req.body;
-  console.log(req.body);
 
   const review = await Review.findById(reviewId);
 

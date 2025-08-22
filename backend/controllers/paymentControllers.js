@@ -41,7 +41,6 @@ const createCheckoutSession = asyncHandler(async (req, res) => {
 });
 
 const webhook = asyncHandler(async (req, res) => {
-  console.log("webhook", req.body);
   const sig = req.headers["stripe-signature"];
   let event;
 
@@ -52,14 +51,12 @@ const webhook = asyncHandler(async (req, res) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    console.log("Webhook signature verification failed.", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const orderId = session.metadata.orderId;
-    console.log("webhook orderId", orderId);
 
     // Retrieve PaymentIntent if you need full details
     const paymentIntent = await stripe.paymentIntents.retrieve(
@@ -106,15 +103,12 @@ const webhook = asyncHandler(async (req, res) => {
       shop.totalRevenue = (shop.totalRevenue || 0) + shopCommission;
       await shop.save();
     }
-
-    console.log("✅ Order marked as paid:", orderId);
   }
 
   if (
     event.type === "payment_intent.payment_failed" ||
     event.type === "checkout.session.expired"
   ) {
-    console.log("payment failed or expired");
     const session = event.data.object;
     const orderId =
       session.metadata?.orderId || event.data.object.metadata?.orderId;
@@ -138,8 +132,6 @@ const webhook = asyncHandler(async (req, res) => {
       shopOrder.paymentStatus = "failed";
       await shopOrder.save();
     }
-
-    console.log("❌ Order and shop orders marked as failed:", orderId);
   }
 
   res.status(200).json({ received: true });

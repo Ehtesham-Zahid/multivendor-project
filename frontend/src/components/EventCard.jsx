@@ -45,7 +45,6 @@ const EventCard = ({ event, small }) => {
       // Product not in cart, add with quantity 1
       const product = { ...event?.productId, quantity: 1 };
       product.eventId = event;
-      console.log(product);
       cart.push(product);
     }
 

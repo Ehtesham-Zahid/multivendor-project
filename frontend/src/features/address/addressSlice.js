@@ -14,7 +14,6 @@ export const createAddressThunk = createAsyncThunk(
       const res = await createAddressApi(addressData);
       return res.data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -51,7 +50,6 @@ export const updateAddressThunk = createAsyncThunk(
       const res = await updateAddressApi(addressId, addressData);
       return res.data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }

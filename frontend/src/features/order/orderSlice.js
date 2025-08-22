@@ -22,7 +22,6 @@ export const createOrderThunk = createAsyncThunk(
       const res = await createOrderApi(data);
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -35,7 +34,6 @@ export const getShopOrdersThunk = createAsyncThunk(
       const res = await getShopOrdersApi(refundStatus);
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -46,10 +44,8 @@ export const getUserParentOrdersThunk = createAsyncThunk(
   async ({ page, limit, deliveryStatus }, thunkAPI) => {
     try {
       const res = await getUserParentOrdersApi(page, limit, deliveryStatus);
-      console.log("user parent orders", res.data);
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -62,7 +58,6 @@ export const getOrderThunk = createAsyncThunk(
       const res = await getOrderApi(orderId, shopId);
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -75,7 +70,6 @@ export const requestRefundThunk = createAsyncThunk(
       const res = await requestRefundApi(shopOrderId);
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -103,7 +97,6 @@ export const getShopOrdersByCurrentShopThunk = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -116,7 +109,6 @@ export const getShopOrderByIdThunk = createAsyncThunk(
       const res = await getShopOrderByIdApi(orderId);
       return res.data.shopOrder;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -129,7 +121,6 @@ export const updateDeliveryStatusThunk = createAsyncThunk(
       const res = await updateDeliveryStatusApi(shopOrderId, deliveryStatus);
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -150,7 +141,6 @@ export const getUserShopOrdersThunk = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -163,7 +153,6 @@ export const updateRefundStatusThunk = createAsyncThunk(
       const res = await updateRefundStatusApi(shopOrderId, refundStatus);
       return res.data.shopOrder;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -176,7 +165,6 @@ export const getAdminOrdersThunk = createAsyncThunk(
       const res = await getAdminOrdersApi(deliveryStatus, page, limit);
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -194,7 +182,6 @@ export const getAdminRefundsThunk = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      console.log("order slice", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }

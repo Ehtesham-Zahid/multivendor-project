@@ -25,7 +25,6 @@ export const getCurrentUserShopThunk = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await getCurrentUserShopApi();
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -38,7 +37,6 @@ export const updateCurrentUserShopThunk = createAsyncThunk(
   async (shopData, thunkAPI) => {
     try {
       const res = await updateCurrentUserShopApi(shopData);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);

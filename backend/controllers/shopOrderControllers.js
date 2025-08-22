@@ -1,4 +1,3 @@
-// controllers/shopOrderController.js
 const asyncHandler = require("express-async-handler");
 const ShopOrder = require("../models/shopOrderModel");
 const ParentOrder = require("../models/parentOrderModel");
@@ -40,7 +39,6 @@ const getShopOrderById = asyncHandler(async (req, res) => {
 });
 
 const getShopOrdersByCurrentShop = asyncHandler(async (req, res) => {
-  // const { shopId } = req.params;
   const { shopId } = req.user;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -54,13 +52,10 @@ const getShopOrdersByCurrentShop = asyncHandler(async (req, res) => {
   };
 
   if (refundOnly === "true") {
-    console.log("refundOnly", refundOnly);
     filter.refundStatus = { $ne: "none" };
   }
   if (refundStatus) {
     filter.refundStatus = refundStatus;
-
-    console.log("filter", filter);
   }
   if (deliveryStatus) {
     filter.deliveryStatus = deliveryStatus;
@@ -91,7 +86,6 @@ const getShopOrdersByCurrentShop = asyncHandler(async (req, res) => {
 
 const requestRefundShopOrder = asyncHandler(async (req, res) => {
   const { shopOrderId } = req.params;
-  console.log("shopOrderId", shopOrderId);
 
   const shopOrder = await ShopOrder.findById(shopOrderId)
     .populate("shopId", "shopName email phone") // Shop details
@@ -105,7 +99,6 @@ const requestRefundShopOrder = asyncHandler(async (req, res) => {
       },
     });
 
-  console.log("shopOrder", shopOrder);
   if (!shopOrder) {
     res.status(404);
     throw new Error("Shop order not found");
@@ -117,7 +110,6 @@ const requestRefundShopOrder = asyncHandler(async (req, res) => {
 
   shopOrder.refundStatus = "requested";
   await shopOrder.save();
-  console.log("shopOrder", shopOrder);
 
   res.status(200).json({
     message: "Refund request sent successfully",
@@ -164,7 +156,6 @@ const updateShopOrderRefundStatus = asyncHandler(async (req, res) => {
         // Amount is in cents, e.g., 500 = $5.00 (optional)
       });
 
-      console.log("Refund successful:", refund.id);
       shopOrder.refundStatus = "refunded";
 
       await shopOrder.save();
@@ -423,7 +414,6 @@ const updateShopOrderDeliveryStatus = asyncHandler(async (req, res) => {
         }
       } else {
         shopOrder.refundStatus = "refunded"; // COD case
-        console.log("Refunded COD order");
       }
     }
   }
@@ -465,7 +455,6 @@ const getUserShopOrders = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
   const filter = {};
-  console.log("refundOnly", refundOnly);
 
   if (refundOnly) {
     filter.refundStatus = { $ne: "none" };
@@ -485,7 +474,6 @@ const getUserShopOrders = asyncHandler(async (req, res) => {
         path: "shippingAddress",
       },
     });
-  console.log("shopOrders", shopOrders);
 
   const totalShopOrders = await ShopOrder.countDocuments({ userId, ...filter });
   const totalPages = Math.ceil(totalShopOrders / limit);
@@ -539,7 +527,6 @@ const getAllShopOrdersAdmin = asyncHandler(async (req, res) => {
 
 module.exports = {
   getShopOrderById,
-  //   getShopOrdersByShop,
   requestRefundShopOrder,
   updateShopOrderDeliveryStatus,
   getAllShopOrdersAdmin,

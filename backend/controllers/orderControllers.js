@@ -7,7 +7,6 @@ const Shop = require("../models/shopModel");
 // Create
 
 const createOrder = asyncHandler(async (req, res) => {
-  console.log("order controller", req.body);
   const { items, totalAmount, paymentStatus, paymentMethod, shippingAddress } =
     req.body;
 
@@ -42,8 +41,6 @@ const createOrder = asyncHandler(async (req, res) => {
     await shop.save();
   });
 
-  console.log("order created", order);
-
   res.status(201).json(order);
 });
 
@@ -68,13 +65,11 @@ const getOrder = asyncHandler(async (req, res) => {
 
   if (shopId && shopId !== "null" && shopId !== "undefined") {
     const shop = await Shop.findById(shopId);
-    console.log("shop", shop);
     if (!shop) {
       res.status(404);
       throw new Error("Shop not found");
     }
 
-    console.log("order", order);
     const orderItems = order.items.filter(
       (item) => item.shopId._id.toString() === shopId.toString()
     );
@@ -99,8 +94,6 @@ const getOrdersByShop = asyncHandler(async (req, res) => {
   const shopId = req.user.shopId;
   const refundStatus = req.query.refundStatus === "true";
 
-  console.log("shopId", shopId);
-
   let orders = await Order.find({ items: { $elemMatch: { shopId } } })
     .populate("shippingAddress")
     .sort({ createdAt: -1 });
@@ -109,7 +102,6 @@ const getOrdersByShop = asyncHandler(async (req, res) => {
     orders = orders.filter((order) => order.refundStatus !== "none");
   }
 
-  // Filter items and calculate shop-specific total
   const shopSpecificOrders = orders.map((order) => {
     const shopItems = order.items.filter(
       (item) => item.shopId.toString() === shopId.toString()

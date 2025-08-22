@@ -13,7 +13,6 @@ export const createEventThunk = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await createEventApi(data);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -26,7 +25,6 @@ export const deleteEventThunk = createAsyncThunk(
   async (eventId, thunkAPI) => {
     try {
       const res = await deleteEventApi(eventId);
-      console.log(res);
       return eventId;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -39,7 +37,6 @@ export const getShopEventsThunk = createAsyncThunk(
   async ({ page, limit }, thunkAPI) => {
     try {
       const res = await getShopEventsApi({ page, limit });
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -52,7 +49,6 @@ export const updateEventThunk = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     try {
       const res = await updateEventApi(id, data);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -65,10 +61,8 @@ export const getActiveEventsThunk = createAsyncThunk(
   async ({ sortBy, limit }, thunkAPI) => {
     try {
       const res = await getActiveEventsApi({ sortBy, limit });
-      console.log(res);
       return res.data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -84,7 +78,6 @@ export const getAllEventsAdminThunk = createAsyncThunk(
         onlyActive,
         sortBy,
       });
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -191,7 +184,6 @@ const eventSlice = createSlice({
       .addCase(getActiveEventsThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.success = true;
-        console.log("MAAA", action.payload);
         const { sortBy, limit } = action.meta.arg;
         if (sortBy === "sales" && limit === 1) {
           state.popularEvent = action.payload[0];

@@ -64,17 +64,6 @@ const AdminEventsSection = () => {
   }, [dispatch, page, limit]);
 
   const handleEventStatusChange = (value) => {
-    // if (value === "sales") {
-    //   console.log("sales");
-    //   dispatch(
-    //     getAllEventsAdminThunk({
-    //       onlyActive: "",
-    //       sortBy: "sales",
-    //       page: 1,
-    //       limit,
-    //     })
-    //   );
-    // } else
     if (value === "all") {
       dispatch(
         getAllEventsAdminThunk({

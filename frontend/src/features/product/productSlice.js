@@ -15,7 +15,6 @@ export const createProductThunk = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const res = await createProductApi(data);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -28,7 +27,6 @@ export const getProductsByShopThunk = createAsyncThunk(
   async ({ page, limit }, thunkAPI) => {
     try {
       const res = await getProductsByShopApi({ page, limit });
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -41,7 +39,6 @@ export const deleteProductThunk = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const res = await deleteProductApi(id);
-      console.log(res);
       return id;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -54,7 +51,6 @@ export const updateProductThunk = createAsyncThunk(
   async ({ id, data }, thunkAPI) => {
     try {
       const res = await updateProductApi(id, data);
-      console.log(res);
       return { id, updatedProduct: res.data };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -73,10 +69,8 @@ export const getAllProductsThunk = createAsyncThunk(
         sortBy,
         search,
       });
-      console.log(res);
       return res.data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -87,7 +81,6 @@ export const getProductByIdThunk = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const res = await getProductByIdApi(id);
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -121,7 +114,6 @@ export const getAllProductsAdminThunk = createAsyncThunk(
         onlyActive,
         sortBy,
       });
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -139,7 +131,6 @@ export const getBestSellingProductsHomepageThunk = createAsyncThunk(
         page,
         limit,
       });
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -156,7 +147,6 @@ export const getBestSellingProductsThunk = createAsyncThunk(
         limit,
         page,
       });
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -172,7 +162,6 @@ export const getFeaturedProductsThunk = createAsyncThunk(
         isFeatured: true,
         limit,
       });
-      console.log(res);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -185,10 +174,8 @@ export const getSearchBarProductsThunk = createAsyncThunk(
   async ({ search, limit, page }, thunkAPI) => {
     try {
       const res = await getAllProductsApi({ search, limit, page });
-      console.log(res);
       return res.data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -199,10 +186,8 @@ export const getSearchPageProductsThunk = createAsyncThunk(
   async ({ search, limit, page }, thunkAPI) => {
     try {
       const res = await getAllProductsApi({ search, limit, page });
-      console.log(res);
       return res.data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -339,7 +324,6 @@ const productSlice = createSlice({
         const { sortBy, limit, category, search } = action.meta.arg;
 
         if (sortBy === "sales") {
-          console.log("MAIN CHAL RAHA");
           state.bestSellingProducts = action.payload.products;
           state.totalPages = action.payload.totalPages;
         }
@@ -354,10 +338,8 @@ const productSlice = createSlice({
         // }
 
         // This block should be your fallback when no specific filters are passed
-        console.log(!category && !(sortBy === "sales"));
-        console.log(search);
+
         if (!category && !(sortBy === "sales") && search === undefined) {
-          console.log(action.payload.products);
           state.allProducts = action.payload.products;
           state.totalPages = action.payload.totalPages;
           state.searchBarProducts = [];

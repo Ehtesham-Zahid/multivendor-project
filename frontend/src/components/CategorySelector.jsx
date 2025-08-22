@@ -14,7 +14,6 @@ import { CATEGORIES } from "@/constants/";
 import { Link } from "react-router";
 
 const CategorySelector = ({ setCategoryValue, defaultValue }) => {
-  console.log("CategorySelector rendered with defaultValue:", defaultValue);
   return (
     <Select onValueChange={setCategoryValue} defaultValue={defaultValue}>
       <SelectTrigger className="w-full">
@@ -25,11 +24,7 @@ const CategorySelector = ({ setCategoryValue, defaultValue }) => {
           {/* <SelectLabel>CATEGORY</SelectLabel> */}
           {CATEGORIES.map((category) => {
             return (
-              <SelectItem
-                value={category.name}
-                className="hover:bg-sky-200"
-                onClick={() => console.log(category.name)}
-              >
+              <SelectItem value={category.name} className="hover:bg-sky-200">
                 {" "}
                 {category.name}
               </SelectItem>

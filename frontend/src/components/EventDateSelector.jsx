@@ -29,8 +29,6 @@ const EventDateSelector = ({ title, onDateChange }) => {
   const [month, setMonth] = useState(date);
   const [value, setValue] = useState(formatDate(date));
 
-  console.log(value);
-
   useEffect(() => {
     if (isValidDate(date)) {
       onDateChange?.(date); // notify parent

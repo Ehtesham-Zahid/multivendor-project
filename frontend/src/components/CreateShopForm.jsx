@@ -56,7 +56,6 @@ const CreateShopForm = ({ page }) => {
     const resultAction = await dispatch(createShopThunk(formData));
 
     if (createShopThunk.fulfilled.match(resultAction)) {
-      console.log("HEMLO G");
       toast.success("Shop Created Successfully!");
       navigate("/dashboard");
     }

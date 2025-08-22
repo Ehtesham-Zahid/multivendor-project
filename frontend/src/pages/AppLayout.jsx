@@ -9,7 +9,6 @@ const AppLayout = () => {
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
-  console.log("user");
   return (
     <>
       <ScrollToTop />

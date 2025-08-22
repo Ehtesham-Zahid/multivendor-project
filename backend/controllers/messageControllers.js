@@ -7,11 +7,9 @@ const { getIO } = require("../socket");
 // @route   POST /api/messages
 // @access  Private
 const sendMessage = asyncHandler(async (req, res) => {
-  console.log("req.body", req.body);
   const isShop = req.query.isShop === "true";
   const userId = isShop ? req.user.shopId.toString() : req.user._id.toString();
 
-  console.log("userId", userId);
   const {
     conversationId,
     message,
@@ -20,14 +18,12 @@ const sendMessage = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (!conversationId || !message) {
-    console.log("conversationId and message are required");
     res.status(400);
     throw new Error("conversationId and message are required");
   }
 
   // Verify conversation exists and user is participant
   const conversation = await ChatConversation.findById(conversationId);
-  console.log("conversation", conversation);
   if (!conversation) {
     res.status(404);
     throw new Error("Conversation not found");
@@ -38,7 +34,6 @@ const sendMessage = asyncHandler(async (req, res) => {
       .map((participant) => participant.participantId.toString())
       .includes(userId)
   ) {
-    console.log("Not authorized to send message in this conversation");
     res.status(403);
     throw new Error("Not authorized to send message in this conversation");
   }
@@ -47,8 +42,6 @@ const sendMessage = asyncHandler(async (req, res) => {
   const receiverId = conversation.participants.find(
     (participant) => participant.participantId.toString() !== userId
   );
-
-  // console.log("receiverId", receiverId);
 
   if (!receiverId) {
     res.status(400);
@@ -68,8 +61,6 @@ const sendMessage = asyncHandler(async (req, res) => {
     isRead: false,
   });
 
-  console.log("newMessage", newMessage);
-
   // Populate sender and receiver details
   await newMessage.populate("sender", "fullname email shopName imageUrl");
   await newMessage.populate("receiver", "fullname email shopName imageUrl");
@@ -82,7 +73,6 @@ const sendMessage = asyncHandler(async (req, res) => {
   const senderIndex = conversation.participants.findIndex(
     (participant) => participant.participantId.toString() === userId
   );
-  console.log("senderIndex", senderIndex);
   const senderType = conversation.participants[senderIndex].participantModel;
 
   const io = getIO();
@@ -144,7 +134,6 @@ const getMessages = asyncHandler(async (req, res) => {
   }
 
   const participantIds = conversation.participants.map((p) => p.participantId);
-  console.log("participantIds", participantIds);
 
   const messages = await ChatMessage.find({
     $or: [
@@ -155,8 +144,6 @@ const getMessages = asyncHandler(async (req, res) => {
     .populate("sender", "fullname email shopName imageUrl")
     .populate("receiver", "fullname email shopName imageUrl")
     .sort({ createdAt: 1 });
-
-  // console.log("messages", messages);
 
   // Mark messages as read
   await ChatMessage.updateMany(
