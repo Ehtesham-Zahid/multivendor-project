@@ -193,38 +193,66 @@ export const getSearchPageProductsThunk = createAsyncThunk(
   }
 );
 const initialState = {
-  allProducts: [],
-  adminProducts: [],
-  shopProducts: [],
-  categoryProducts: [],
-  bestSellingProducts: [],
-  bestSellingProductsHomepage: [],
-  featuredProducts: [],
-  searchBarProducts: [],
-  searchPageProducts: [],
-  singleProduct: null,
-  isLoading: false,
   error: null,
-  success: false,
-  totalPages: 0,
-  totalProducts: 0,
-  totalAdminProducts: 0,
-  totalAdminPages: 0,
-  bestSellingProductsTotalPages: 0,
-  totalSearchPages: 0,
-  totalSearchProducts: 0,
   searchTerm: "",
 
-  isBestSellingProductsHomePageLoading: false,
-  isBestSellingProductsLoading: false,
-  isFeaturedProductsLoading: false,
+  // Search Bar Products
   isSearchBarProductsLoading: false,
-  isSearchPageProductsLoading: false,
-  isProductByIdLoading: false,
-  isProductsByCategoryLoading: false,
+  searchBarProducts: [],
 
+  // Search Page Products
+  isSearchPageProductsLoading: false,
+  searchPageProducts: [],
+  totalSearchPages: 0,
+
+  // All Products
+  isAllProductsLoading: false,
+  allProducts: [],
+  totalAllProductsPages: 0,
+
+  // Best Selling Products
+  isBestSellingProductsLoading: false,
+  bestSellingProducts: [],
+  totalBestSellingPages: 0,
+  totalBestSellingProducts: 0,
+
+  // Best Selling Products Homepage
+  isBestSellingProductsHomePageLoading: false,
+  bestSellingProductsHomepage: [],
+
+  // Featured Products
+  isFeaturedProductsLoading: false,
+  featuredProducts: [],
+
+  // Category Products
+  isCategoryProductsLoading: false,
+  categoryProducts: [],
   totalCategoryPages: 0,
-  totalCategoryProducts: 0,
+
+  // Product By Id
+  isSingleProductLoading: false,
+  singleProduct: null,
+
+  // Create Product
+  isCreateProductLoading: false,
+
+  // Update Product
+  isUpdateProductLoading: false,
+
+  // Delete Product
+  isDeleteProductLoading: false,
+
+  // Shop Products
+  isShopProductsLoading: false,
+  shopProducts: [],
+  totalShopProductsPages: 0,
+  totalShopProducts: 0,
+
+  // All Products Admin
+  isAllProductsAdminLoading: false,
+  adminProducts: [],
+  totalAdminProductsPages: 0,
+  totalAdminProducts: 0,
 };
 
 const productSlice = createSlice({
@@ -241,60 +269,56 @@ const productSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createProductThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isCreateProductLoading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(createProductThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isCreateProductLoading = false;
         state.shopProducts.push(action.payload);
       })
       .addCase(createProductThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isCreateProductLoading = false;
         state.error = action.payload;
       });
     builder
       .addCase(getProductsByShopThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isShopProductsLoading = true;
         state.error = null;
       })
       .addCase(getProductsByShopThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isShopProductsLoading = false;
         state.shopProducts = action.payload.products;
-        state.totalPages = action.payload.totalPages;
-        state.totalProducts = action.payload.totalProducts;
+        state.totalShopProductsPages = action.payload.totalPages;
+        state.totalShopProducts = action.payload.totalProducts;
       })
       .addCase(getProductsByShopThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isShopProductsLoading = false;
         state.error = action.payload;
       });
     builder
       .addCase(deleteProductThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isDeleteProductLoading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(deleteProductThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.success = true;
+        state.isDeleteProductLoading = false;
         state.shopProducts = state.shopProducts.filter(
           (product) => action.payload !== product._id
         );
         state.totalProducts = state.totalProducts - 1;
       })
       .addCase(deleteProductThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isDeleteProductLoading = false;
         state.error = action.payload;
-        state.success = false;
       });
     builder
       .addCase(updateProductThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isUpdateProductLoading = true;
         state.error = null;
         state.success = false;
       })
       .addCase(updateProductThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isUpdateProductLoading = false;
         state.success = true;
         state.shopProducts = state.shopProducts.map((product) => {
           if (product._id === action.payload.id) {
@@ -307,96 +331,68 @@ const productSlice = createSlice({
         });
       })
       .addCase(updateProductThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isUpdateProductLoading = false;
         state.error = action.payload;
         state.success = false;
       });
     builder
       .addCase(getAllProductsThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isAllProductsLoading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(getAllProductsThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.success = true;
+        state.isAllProductsLoading = false;
+        state.allProducts = action.payload.products;
+        state.totalAllProductsPages = action.payload.totalPages;
 
-        const { sortBy, limit, category, search } = action.meta.arg;
-
-        if (sortBy === "sales") {
-          state.bestSellingProducts = action.payload.products;
-          state.totalPages = action.payload.totalPages;
-        }
-        if (category) {
-          state.categoryProducts = action.payload.products;
-          state.totalPages = action.payload.totalPages;
-        }
-
-        // if (search) {
-        //   state.searchPageProducts = action.payload.products;
-        //   state.totalPages = action.payload.totalPages;
-        // }
-
-        // This block should be your fallback when no specific filters are passed
-
-        if (!category && !(sortBy === "sales") && search === undefined) {
-          state.allProducts = action.payload.products;
-          state.totalPages = action.payload.totalPages;
-          state.searchBarProducts = [];
-          state.searchPageProducts = [];
-        }
+        state.searchBarProducts = [];
+        state.searchPageProducts = [];
       })
-
       .addCase(getAllProductsThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isAllProductsLoading = false;
         state.error = action.payload;
-        state.success = false;
       });
     builder
       .addCase(getProductByIdThunk.pending, (state) => {
-        state.isProductByIdLoading = true;
+        state.isSingleProductLoading = true;
         state.error = null;
       })
       .addCase(getProductByIdThunk.fulfilled, (state, action) => {
-        state.isProductByIdLoading = false;
+        state.isSingleProductLoading = false;
         state.singleProduct = action.payload;
       })
       .addCase(getProductByIdThunk.rejected, (state, action) => {
-        state.isProductByIdLoading = false;
+        state.isSingleProductLoading = false;
         state.error = action.payload;
       });
     builder
       .addCase(getProductsByCategoryThunk.pending, (state) => {
-        state.isProductsByCategoryLoading = true;
+        state.isCategoryProductsLoading = true;
         state.error = null;
       })
       .addCase(getProductsByCategoryThunk.fulfilled, (state, action) => {
-        state.isProductsByCategoryLoading = false;
+        state.isCategoryProductsLoading = false;
         state.categoryProducts = action.payload.products;
         state.totalCategoryPages = action.payload.totalPages;
-        state.totalCategoryProducts = action.payload.totalProducts;
       })
       .addCase(getProductsByCategoryThunk.rejected, (state, action) => {
-        state.isProductsByCategoryLoading = false;
+        state.isCategoryProductsLoading = false;
         state.error = action.payload;
       });
     builder
       .addCase(getAllProductsAdminThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isAllProductsAdminLoading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(getAllProductsAdminThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.success = true;
+        state.isAllProductsAdminLoading = false;
         state.adminProducts = action.payload.products;
+        state.totalAdminProductsPages = action.payload.totalPages;
         state.totalAdminProducts = action.payload.totalProducts;
-        state.totalAdminPages = action.payload.totalPages;
       })
       .addCase(getAllProductsAdminThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isAllProductsAdminLoading = false;
         state.error = action.payload;
-        state.success = false;
       });
     builder
       .addCase(getBestSellingProductsHomepageThunk.pending, (state) => {
@@ -425,7 +421,8 @@ const productSlice = createSlice({
       .addCase(getBestSellingProductsThunk.fulfilled, (state, action) => {
         state.isBestSellingProductsLoading = false;
         state.bestSellingProducts = action.payload.products;
-        state.bestSellingProductsTotalPages = action.payload.totalPages;
+        state.totalBestSellingPages = action.payload.totalPages;
+        state.totalBestSellingProducts = action.payload.totalProducts;
       })
       .addCase(getBestSellingProductsThunk.rejected, (state, action) => {
         state.isBestSellingProductsLoading = false;

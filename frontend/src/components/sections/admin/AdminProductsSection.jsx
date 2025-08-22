@@ -35,10 +35,10 @@ const AdminProductsSection = () => {
   const [limit, setLimit] = useState(10);
   const {
     adminProducts,
-    isLoading,
+    isAllProductsAdminLoading,
     error,
+    totalAdminProductsPages,
     totalAdminProducts,
-    totalAdminPages,
   } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
@@ -114,7 +114,7 @@ const AdminProductsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isAllProductsAdminLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={8}
@@ -185,7 +185,7 @@ const AdminProductsSection = () => {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={8}
                   className="text-center py-4 font-semibold"
                 >
                   No products yet.
@@ -209,7 +209,7 @@ const AdminProductsSection = () => {
             </span>
           </div>
         )}
-        {totalAdminPages > 1 && (
+        {totalAdminProductsPages > 1 && (
           <div className="flex justify-center items-center">
             <Pagination>
               <PaginationContent>
@@ -219,7 +219,7 @@ const AdminProductsSection = () => {
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   />
                 </PaginationItem>
-                {Array.from({ length: totalAdminPages }, (_, index) => (
+                {Array.from({ length: totalAdminProductsPages }, (_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
                       href="#"
@@ -234,7 +234,9 @@ const AdminProductsSection = () => {
                   <PaginationNext
                     href="#"
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, totalAdminPages))
+                      setPage((prev) =>
+                        Math.min(prev + 1, totalAdminProductsPages)
+                      )
                     }
                   />
                 </PaginationItem>

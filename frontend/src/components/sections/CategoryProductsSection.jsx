@@ -22,7 +22,7 @@ const CategoryProductsSection = () => {
   const { category } = useParams();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const { categoryProducts, isProductsByCategoryLoading, totalCategoryPages } =
+  const { categoryProducts, isCategoryProductsLoading, totalCategoryPages } =
     useSelector((state) => state.product);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const CategoryProductsSection = () => {
         {category}
       </p>
       <div>
-        {isProductsByCategoryLoading ? (
+        {isCategoryProductsLoading ? (
           <Spinner />
         ) : categoryProducts.length === 0 ? (
           <p className="text-center uppercase text-black text-2xl  font-bold absolute  left-1/2 transform -translate-x-1/2 -translate-y-1/2">

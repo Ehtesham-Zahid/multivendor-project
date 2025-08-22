@@ -28,8 +28,14 @@ import { PaginationLink } from "../../shadcn/pagination";
 const DashboardProductsSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
-  const { shopProducts, isLoading, error, totalPages, totalProducts } =
-    useSelector((state) => state.product);
+  const {
+    shopProducts,
+    isShopProductsLoading,
+    error,
+    totalShopProductsPages,
+    totalShopProducts,
+    isDeleteProductLoading,
+  } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -63,7 +69,7 @@ const DashboardProductsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isShopProductsLoading || isDeleteProductLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={8}
@@ -117,7 +123,7 @@ const DashboardProductsSection = () => {
         </Table>
       </div>
       <div className="flex flex-col sm:flex-row gap-5 justify-between items-center mt-4 w-full">
-        {totalProducts > 10 && (
+        {totalShopProducts > 10 && (
           <div className="flex items-center gap-2 text-sm w-fit">
             <span>Show</span>
             <LimitSelector
@@ -126,11 +132,11 @@ const DashboardProductsSection = () => {
               setPage={setPage}
             />
             <span className="text-sm flex items-center text-nowrap">
-              entries of {totalProducts} total products
+              entries of {totalShopProducts} total products
             </span>
           </div>
         )}
-        {totalPages > 1 && (
+        {totalShopProductsPages > 1 && (
           <div className="flex justify-center items-center">
             <Pagination>
               <PaginationContent>
@@ -140,7 +146,7 @@ const DashboardProductsSection = () => {
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   />
                 </PaginationItem>
-                {Array.from({ length: totalPages }, (_, index) => (
+                {Array.from({ length: totalShopProductsPages }, (_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
                       href="#"
@@ -155,7 +161,9 @@ const DashboardProductsSection = () => {
                   <PaginationNext
                     href="#"
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, totalPages))
+                      setPage((prev) =>
+                        Math.min(prev + 1, totalShopProductsPages)
+                      )
                     }
                   />
                 </PaginationItem>

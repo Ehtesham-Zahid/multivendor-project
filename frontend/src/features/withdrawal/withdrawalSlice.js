@@ -67,7 +67,6 @@ const initialState = {
   isMyWithdrawalsLoading: false,
   adminWithdrawals: [],
   isAdminWithdrawalsLoading: false,
-  success: false,
   error: null,
   isRequestWithdrawalLoading: false,
   isUpdateWithdrawalStatusAdminLoading: false,
@@ -80,26 +79,20 @@ const withdrawalSlice = createSlice({
     clearWithdrawalError: (state) => {
       state.error = null;
     },
-    clearWithdrawalSuccess: (state) => {
-      state.success = false;
-    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(requestWithdrawalThunk.pending, (state) => {
         state.isRequestWithdrawalLoading = true;
         state.error = null;
-        state.success = false;
       })
       .addCase(requestWithdrawalThunk.fulfilled, (state, action) => {
         state.isRequestWithdrawalLoading = false;
-        state.success = true;
         state.myWithdrawals.unshift(action.payload);
       })
       .addCase(requestWithdrawalThunk.rejected, (state, action) => {
         state.isRequestWithdrawalLoading = false;
         state.error = action.payload;
-        state.success = false;
       });
     builder
       .addCase(getMyWithdrawalsThunk.pending, (state) => {
@@ -117,15 +110,15 @@ const withdrawalSlice = createSlice({
 
     builder
       .addCase(getAllWithdrawalsAdminThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isAdminWithdrawalsLoading = true;
         state.error = null;
       })
       .addCase(getAllWithdrawalsAdminThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isAdminWithdrawalsLoading = false;
         state.adminWithdrawals = action.payload;
       })
       .addCase(getAllWithdrawalsAdminThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isAdminWithdrawalsLoading = false;
         state.error = action.payload;
       });
 
@@ -136,7 +129,6 @@ const withdrawalSlice = createSlice({
       })
       .addCase(updateWithdrawalStatusAdminThunk.fulfilled, (state, action) => {
         state.isUpdateWithdrawalStatusAdminLoading = false;
-        state.success = true;
         const updated = action.payload;
         state.adminWithdrawals = state.adminWithdrawals.map((w) =>
           w._id === updated._id ? updated : w
@@ -149,6 +141,5 @@ const withdrawalSlice = createSlice({
   },
 });
 
-export const { clearWithdrawalError, clearWithdrawalSuccess } =
-  withdrawalSlice.actions;
+export const { clearWithdrawalError } = withdrawalSlice.actions;
 export default withdrawalSlice.reducer;

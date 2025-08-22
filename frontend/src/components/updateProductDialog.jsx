@@ -18,7 +18,9 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 
 const UpdateProductDialog = ({ product }) => {
-  const { isLoading, error } = useSelector((state) => state.product);
+  const { isUpdateProductLoading, error } = useSelector(
+    (state) => state.product
+  );
   const dispatch = useDispatch();
   const {
     register,
@@ -258,14 +260,14 @@ const UpdateProductDialog = ({ product }) => {
 
           {/* Submit Button */}
           <Button
-            disabled={isLoading}
+            disabled={isUpdateProductLoading}
             type="submit"
             className={"text-white text-md cursor-pointer w-full mt-3"}
           >
-            {isLoading ? (
+            {isUpdateProductLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <p>Update</p>
+              <p>Update Product</p>
             )}
           </Button>
         </form>

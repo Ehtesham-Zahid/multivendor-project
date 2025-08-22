@@ -23,7 +23,7 @@ import socket from "../../socket";
 import { getOrCreateConversationThunk } from "../../features/chat/chatSlice";
 
 const SingleProductSection = () => {
-  const { singleProduct, isProductByIdLoading } = useSelector(
+  const { singleProduct, isSingleProductLoading } = useSelector(
     (state) => state.product
   );
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -121,7 +121,7 @@ const SingleProductSection = () => {
     }
   };
 
-  return isProductByIdLoading ? (
+  return isSingleProductLoading ? (
     <div className="flex justify-center items-center h-screen pb-52">
       <Spinner />
     </div>

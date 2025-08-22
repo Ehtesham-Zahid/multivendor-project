@@ -19,7 +19,9 @@ import { set } from "mongoose";
 import { DialogClose } from "../shadcn/dialog";
 
 const CreateProductDialog = () => {
-  const { isLoading, error } = useSelector((state) => state.product);
+  const { isCreateProductLoading, error } = useSelector(
+    (state) => state.product
+  );
   const { currentUserShop } = useSelector((state) => state.shop);
   const dispatch = useDispatch();
   const {
@@ -263,14 +265,14 @@ const CreateProductDialog = () => {
 
           {/* Submit Button */}
           <Button
-            disabled={isLoading}
+            disabled={isCreateProductLoading}
             type="submit"
             className={"text-white text-md cursor-pointer w-full mt-3"}
           >
-            {isLoading ? (
+            {isCreateProductLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <p>Submit</p>
+              <p>Create Product</p>
             )}
           </Button>
         </form>

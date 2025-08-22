@@ -17,9 +17,12 @@ import { useEffect, useState } from "react";
 import { createEventThunk } from "../features/event/eventSlice";
 import { toast } from "react-toastify";
 import { getProductsByShopThunk } from "../features/product/productSlice";
+import Spinner from "./Spinner";
 
 const CreateEventDialog = () => {
-  const { shopProducts } = useSelector((state) => state.product);
+  const { shopProducts, isShopProductsLoading } = useSelector(
+    (state) => state.product
+  );
   const [productId, setProductId] = useState("");
   const [productPrice, setProductPrice] = useState("0");
   const [startDate, setStartDate] = useState("");
@@ -95,7 +98,9 @@ const CreateEventDialog = () => {
           <DialogTitle className="mb-5 font-bold text-start text-lg sm:text-xl">
             Create Event
           </DialogTitle>
-          {shopProducts?.length > 0 ? (
+          {isShopProductsLoading ? (
+            <Spinner />
+          ) : shopProducts?.length > 0 ? (
             <form
               className="flex flex-col gap-3 sm:gap-5"
               onSubmit={handleSubmit(onSubmit)}

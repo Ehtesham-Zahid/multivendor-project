@@ -22,10 +22,9 @@ const BestSelling = ({ limit }) => {
   const {
     bestSellingProductsHomepage,
     bestSellingProducts,
-    isLoading,
-    bestSellingProductsTotalPages,
     isBestSellingProductsHomePageLoading,
     isBestSellingProductsLoading,
+    totalBestSellingPages,
   } = useSelector((state) => state.product);
 
   useEffect(() => {
@@ -58,7 +57,7 @@ const BestSelling = ({ limit }) => {
               ))
             )}
           </div>
-          {limit !== 5 && bestSellingProductsTotalPages > 1 && (
+          {limit !== 5 && totalBestSellingPages > 1 && (
             <div className="mt-10 flex justify-center items-center col-span-full">
               <Pagination>
                 <PaginationContent>
@@ -68,26 +67,23 @@ const BestSelling = ({ limit }) => {
                       onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                     />
                   </PaginationItem>
-                  {Array.from(
-                    { length: bestSellingProductsTotalPages },
-                    (_, index) => (
-                      <PaginationItem key={index}>
-                        <PaginationLink
-                          href="#"
-                          onClick={() => setPage(index + 1)}
-                          className={page === index + 1 ? "active" : ""}
-                        >
-                          {index + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    )
-                  )}
+                  {Array.from({ length: totalBestSellingPages }, (_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink
+                        href="#"
+                        onClick={() => setPage(index + 1)}
+                        className={page === index + 1 ? "active" : ""}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
                   <PaginationItem>
                     <PaginationNext
                       href="#"
                       onClick={() =>
                         setPage((prev) =>
-                          Math.min(prev + 1, bestSellingProductsTotalPages)
+                          Math.min(prev + 1, totalBestSellingPages)
                         )
                       }
                     />

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -17,9 +16,8 @@ const AllProducts = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { allProducts, isLoading, error, totalPages } = useSelector(
-    (state) => state.product
-  );
+  const { allProducts, isAllProductsLoading, error, totalAllProductsPages } =
+    useSelector((state) => state.product);
   useEffect(() => {
     // Fetch all products when the component mounts
     dispatch(getAllProductsThunk({ page, limit }));
@@ -31,7 +29,7 @@ const AllProducts = () => {
         All Products
       </p>
       <div>
-        {isLoading ? (
+        {isAllProductsLoading ? (
           <Spinner />
         ) : error ? (
           <p>{error}</p>
@@ -44,7 +42,7 @@ const AllProducts = () => {
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
-            {totalPages > 1 && (
+            {totalAllProductsPages > 1 && (
               <div className="mt-10 flex justify-center">
                 <Pagination>
                   <PaginationContent>
@@ -54,22 +52,27 @@ const AllProducts = () => {
                         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                       />
                     </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                      <PaginationItem key={index}>
-                        <PaginationLink
-                          href="#"
-                          onClick={() => setPage(index + 1)}
-                          className={page === index + 1 ? "active" : ""}
-                        >
-                          {index + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
+                    {Array.from(
+                      { length: totalAllProductsPages },
+                      (_, index) => (
+                        <PaginationItem key={index}>
+                          <PaginationLink
+                            href="#"
+                            onClick={() => setPage(index + 1)}
+                            className={page === index + 1 ? "active" : ""}
+                          >
+                            {index + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      )
+                    )}
                     <PaginationItem>
                       <PaginationNext
                         href="#"
                         onClick={() =>
-                          setPage((prev) => Math.min(prev + 1, totalPages))
+                          setPage((prev) =>
+                            Math.min(prev + 1, totalAllProductsPages)
+                          )
                         }
                       />
                     </PaginationItem>
