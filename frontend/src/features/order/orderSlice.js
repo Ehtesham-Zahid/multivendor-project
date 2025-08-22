@@ -25,18 +25,6 @@ export const createOrderThunk = createAsyncThunk(
   }
 );
 
-export const getUserParentOrdersThunk = createAsyncThunk(
-  "order/getUserOrders",
-  async ({ page, limit, deliveryStatus }, thunkAPI) => {
-    try {
-      const res = await getUserParentOrdersApi(page, limit, deliveryStatus);
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
-    }
-  }
-);
-
 export const getOrderThunk = createAsyncThunk(
   "order/getOrder",
   async ({ orderId, shopId }, thunkAPI) => {
@@ -61,11 +49,42 @@ export const requestRefundThunk = createAsyncThunk(
   }
 );
 
+// Shop Orders
+
 export const getShopOrdersByCurrentShopThunk = createAsyncThunk(
   "order/getShopOrdersByCurrentShop",
   async (
     {
       refundOnly = false,
+      deliveryStatus = "",
+      page = 1,
+      limit = 10,
+      refundStatus = "",
+    },
+    thunkAPI
+  ) => {
+    try {
+      const res = await getShopOrdersByCurrentShopApi(
+        refundOnly,
+        deliveryStatus,
+        page,
+        limit,
+        refundStatus
+      );
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// Shop Refund Orders
+
+export const getShopRefundOrdersByCurrentShopThunk = createAsyncThunk(
+  "order/getShopRefundOrdersByCurrentShop",
+  async (
+    {
+      refundOnly = true,
       deliveryStatus = "",
       page = 1,
       limit = 10,
@@ -105,26 +124,6 @@ export const updateDeliveryStatusThunk = createAsyncThunk(
   async ({ shopOrderId, deliveryStatus }, thunkAPI) => {
     try {
       const res = await updateDeliveryStatusApi(shopOrderId, deliveryStatus);
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
-    }
-  }
-);
-
-export const getUserShopOrdersThunk = createAsyncThunk(
-  "order/getUserShopOrders",
-  async (
-    { refundOnly = false, refundStatus = "", page = 1, limit = 10 },
-    thunkAPI
-  ) => {
-    try {
-      const res = await getUserShopOrdersApi(
-        refundOnly,
-        refundStatus,
-        page,
-        limit
-      );
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -173,30 +172,88 @@ export const getAdminRefundsThunk = createAsyncThunk(
   }
 );
 
+// User Orders
+
+export const getUserOrdersThunk = createAsyncThunk(
+  "order/getUserOrders",
+  async ({ deliveryStatus = "", page = 1, limit = 10 }, thunkAPI) => {
+    try {
+      const res = await getUserParentOrdersApi(page, limit, deliveryStatus);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// User Refund Orders
+
+export const getUserRefundOrdersThunk = createAsyncThunk(
+  "order/getUserRefundOrders",
+  async (
+    { refundOnly = true, refundStatus = "", page = 1, limit = 10 },
+    thunkAPI
+  ) => {
+    try {
+      const res = await getUserShopOrdersApi(
+        refundOnly,
+        refundStatus,
+        page,
+        limit
+      );
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   order: null,
-  userOrders: [],
-  shopOrders: [],
-  refundOrders: [],
-  adminOrders: [],
-  adminRefunds: [],
   singleOrder: null,
   isLoading: false,
   error: null,
   success: false,
   totalPages: 0,
-  totalShopOrders: 0,
-  totalUserOrders: 0,
-  totalAdminOrders: 0,
-  totalAdminRefunds: 0,
-  adminOrderTotalPages: 0,
-  adminRefundTotalPages: 0,
-  isShopOrdersLoading: false,
-  isUserOrdersLoading: false,
-  isAdminOrdersLoading: false,
-  isAdminRefundsLoading: false,
   isSingleOrderLoading: false,
   isRequestRefundLoading: false,
+
+  // User Orders
+  userOrders: [],
+  isUserOrdersLoading: false,
+  totalUserOrdersPages: 0,
+  totalUserOrders: 0,
+
+  // User Refund Orders
+  userRefundOrders: [],
+  isUserRefundOrdersLoading: false,
+  totalUserRefundOrdersPages: 0,
+  totalUserRefundOrders: 0,
+
+  // Shop Orders
+  shopOrders: [],
+  isShopOrdersLoading: false,
+  totalShopOrdersPages: 0,
+  totalShopOrders: 0,
+
+  // Shop Refund Orders
+  shopRefundOrders: [],
+  isShopRefundOrdersLoading: false,
+  totalShopRefundOrdersPages: 0,
+  totalShopRefundOrders: 0,
+
+  // Admin Orders
+  adminOrders: [],
+  isAdminOrdersLoading: false,
+  totalAdminOrdersPages: 0,
+  totalAdminOrders: 0,
+
+  // Admin Refunds
+  adminRefunds: [],
+  isAdminRefundsLoading: false,
+  totalAdminRefundsPages: 0,
+  totalAdminRefunds: 0,
 };
 
 const orderSlice = createSlice({
@@ -220,21 +277,6 @@ const orderSlice = createSlice({
         state.isUserOrdersLoading = false;
         state.error = action.payload;
         state.success = false;
-      });
-    builder
-      .addCase(getUserParentOrdersThunk.pending, (state) => {
-        state.isUserOrdersLoading = true;
-        state.error = null;
-      })
-      .addCase(getUserParentOrdersThunk.fulfilled, (state, action) => {
-        state.isUserOrdersLoading = false;
-        state.userOrders = action.payload.orders;
-        state.totalPages = action.payload.totalPages;
-        state.totalUserOrders = action.payload.totalOrders;
-      })
-      .addCase(getUserParentOrdersThunk.rejected, (state, action) => {
-        state.isUserOrdersLoading = false;
-        state.error = action.payload;
       });
     builder
       .addCase(getOrderThunk.pending, (state) => {
@@ -269,20 +311,35 @@ const orderSlice = createSlice({
       })
       .addCase(getShopOrdersByCurrentShopThunk.fulfilled, (state, action) => {
         state.isShopOrdersLoading = false;
-
-        const { refundOnly } = action.meta.arg;
-        if (refundOnly) {
-          state.refundOrders = action.payload.shopOrders;
-        } else {
-          state.shopOrders = action.payload.shopOrders;
-        }
-        state.totalPages = action.payload.totalPages;
+        state.shopOrders = action.payload.shopOrders;
+        state.totalShopOrdersPages = action.payload.totalPages;
         state.totalShopOrders = action.payload.totalShopOrders;
       })
       .addCase(getShopOrdersByCurrentShopThunk.rejected, (state, action) => {
         state.isShopOrdersLoading = false;
         state.error = action.payload;
       });
+    builder
+      .addCase(getShopRefundOrdersByCurrentShopThunk.pending, (state) => {
+        state.isShopRefundOrdersLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        getShopRefundOrdersByCurrentShopThunk.fulfilled,
+        (state, action) => {
+          state.isShopRefundOrdersLoading = false;
+          state.shopRefundOrders = action.payload.shopOrders;
+          state.totalShopRefundOrdersPages = action.payload.totalPages;
+          state.totalShopRefundOrders = action.payload.totalShopOrders;
+        }
+      )
+      .addCase(
+        getShopRefundOrdersByCurrentShopThunk.rejected,
+        (state, action) => {
+          state.isShopRefundOrdersLoading = false;
+          state.error = action.payload;
+        }
+      );
     builder
       .addCase(getShopOrderByIdThunk.pending, (state) => {
         state.isSingleOrderLoading = true;
@@ -311,67 +368,77 @@ const orderSlice = createSlice({
         state.error = action.payload;
       });
     builder
-      .addCase(getUserShopOrdersThunk.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(getUserShopOrdersThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const { refundOnly, refundStatus, page, limit } = action.meta.arg;
-        if (refundOnly) {
-          state.refundOrders = action.payload.shopOrders;
-        } else {
-          state.shopOrders = action.payload.shopOrders;
-        }
-        state.totalPages = action.payload.totalPages;
-        state.totalShopOrders = action.payload.totalShopOrders;
-      })
-      .addCase(getUserShopOrdersThunk.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-      });
-    builder
       .addCase(updateRefundStatusThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isSingleOrderLoading = true;
         state.error = null;
       })
       .addCase(updateRefundStatusThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isSingleOrderLoading = false;
         state.success = true;
         state.singleOrder = action.payload;
       })
       .addCase(updateRefundStatusThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isSingleOrderLoading = false;
         state.error = action.payload;
       });
     builder
       .addCase(getAdminOrdersThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isAdminOrdersLoading = true;
         state.error = null;
       })
       .addCase(getAdminOrdersThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isAdminOrdersLoading = false;
         state.adminOrders = action.payload.shopOrders;
+        state.totalAdminOrdersPages = action.payload.totalPages;
         state.totalAdminOrders = action.payload.totalShopOrders;
-        state.adminOrderTotalPages = action.payload.totalPages;
       })
       .addCase(getAdminOrdersThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isAdminOrdersLoading = false;
         state.error = action.payload;
       });
     builder
       .addCase(getAdminRefundsThunk.pending, (state) => {
-        state.isLoading = true;
+        state.isAdminRefundsLoading = true;
         state.error = null;
       })
       .addCase(getAdminRefundsThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isAdminRefundsLoading = false;
         state.adminRefunds = action.payload.shopOrders;
+        state.totalAdminRefundsPages = action.payload.totalPages;
         state.totalAdminRefunds = action.payload.totalShopOrders;
-        state.adminRefundTotalPages = action.payload.totalPages;
       })
       .addCase(getAdminRefundsThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isAdminRefundsLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getUserOrdersThunk.pending, (state) => {
+        state.isUserOrdersLoading = true;
+        state.error = null;
+      })
+      .addCase(getUserOrdersThunk.fulfilled, (state, action) => {
+        state.isUserOrdersLoading = false;
+        state.userOrders = action.payload.orders;
+        state.totalUserOrdersPages = action.payload.totalPages;
+        state.totalUserOrders = action.payload.totalOrders;
+      })
+      .addCase(getUserOrdersThunk.rejected, (state, action) => {
+        state.isUserOrdersLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getUserRefundOrdersThunk.pending, (state) => {
+        state.isUserRefundOrdersLoading = true;
+        state.error = null;
+      })
+      .addCase(getUserRefundOrdersThunk.fulfilled, (state, action) => {
+        state.isUserRefundOrdersLoading = false;
+        state.userRefundOrders = action.payload.shopOrders;
+        state.totalUserRefundOrdersPages = action.payload.totalPages;
+        state.totalUserRefundOrders = action.payload.totalShopOrders;
+      })
+      .addCase(getUserRefundOrdersThunk.rejected, (state, action) => {
+        state.isUserRefundOrdersLoading = false;
         state.error = action.payload;
       });
   },

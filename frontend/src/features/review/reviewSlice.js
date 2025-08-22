@@ -74,6 +74,11 @@ const initialState = {
   isLoading: false,
   error: null,
   success: false,
+  createReviewLoading: false,
+  getShopReviewsLoading: false,
+  getProductReviewsLoading: false,
+  updateReviewLoading: false,
+  deleteReviewLoading: false,
 };
 
 const reviewSlice = createSlice({
@@ -90,81 +95,81 @@ const reviewSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createReviewThunk.pending, (state) => {
-        state.isLoading = true;
+        state.createReviewLoading = true;
         state.error = null;
         state.success = false;
       })
       .addCase(createReviewThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.createReviewLoading = false;
         state.productReviews.push(action.payload.review);
         state.success = true;
       })
       .addCase(createReviewThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.createReviewLoading = false;
         state.error = action.payload;
         state.success = false;
       });
     builder
       .addCase(getShopReviewsThunk.pending, (state) => {
-        state.isLoading = true;
+        state.getShopReviewsLoading = true;
         state.error = null;
         state.success = false;
       })
       .addCase(getShopReviewsThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.getShopReviewsLoading = false;
         state.shopReviews = action.payload.reviews;
         state.success = true;
       })
       .addCase(getShopReviewsThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.getShopReviewsLoading = false;
         state.error = action.payload;
         state.success = false;
       });
     builder
       .addCase(getProductReviewsThunk.pending, (state) => {
-        state.isLoading = true;
+        state.getProductReviewsLoading = true;
         state.error = null;
         state.success = false;
       })
       .addCase(getProductReviewsThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.getProductReviewsLoading = false;
         state.productReviews = action.payload.reviews;
         state.success = true;
       })
       .addCase(getProductReviewsThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.getProductReviewsLoading = false;
         state.error = action.payload;
         state.success = false;
       });
     builder
       .addCase(updateReviewThunk.pending, (state) => {
-        state.isLoading = true;
+        state.updateReviewLoading = true;
         state.error = null;
         state.success = false;
       })
       .addCase(updateReviewThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.updateReviewLoading = false;
         state.review = action.payload;
         state.success = true;
       })
       .addCase(updateReviewThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.updateReviewLoading = false;
         state.error = action.payload;
         state.success = false;
       });
     builder
       .addCase(deleteReviewThunk.pending, (state) => {
-        state.isLoading = true;
+        state.deleteReviewLoading = true;
         state.error = null;
         state.success = false;
       })
       .addCase(deleteReviewThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.deleteReviewLoading = false;
         state.review = action.payload;
         state.success = true;
       })
       .addCase(deleteReviewThunk.rejected, (state, action) => {
-        state.isLoading = false;
+        state.deleteReviewLoading = false;
         state.error = action.payload;
         state.success = false;
       });

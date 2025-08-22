@@ -18,7 +18,8 @@ import {
 
 const EditShopDialog = () => {
   const dispatch = useDispatch();
-  const { shop, isLoading, error } = useSelector((state) => state.shop);
+  const { shop, updateCurrentUserShopLoading, updateShopStatusLoading, error } =
+    useSelector((state) => state.shop);
 
   const [isOpen, setIsOpen] = useState(false);
   const [preview, setPreview] = useState(shop?.imageUrl || "");
@@ -177,11 +178,11 @@ const EditShopDialog = () => {
             )}
 
             <Button
-              disabled={isLoading}
+              disabled={updateCurrentUserShopLoading}
               type="submit"
               className="text-white text-md mt-2 cursor-pointer"
             >
-              {isLoading ? (
+              {updateCurrentUserShopLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 "Update Shop"
@@ -204,10 +205,10 @@ const EditShopDialog = () => {
             </div>
             <Button
               onClick={onToggleStatus}
-              disabled={isLoading}
+              disabled={updateShopStatusLoading}
               className="text-white text-sm bg-red-500 hover:bg-red-600 cursor-pointer"
             >
-              {isLoading ? (
+              {updateShopStatusLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <div className="flex items-center gap-2">

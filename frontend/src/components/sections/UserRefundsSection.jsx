@@ -10,7 +10,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserShopOrdersThunk } from "../../features/order/orderSlice";
+import { getUserRefundOrdersThunk } from "../../features/order/orderSlice";
 import Spinner from "../Spinner";
 import { formatDate } from "../../utils";
 import { Link } from "react-router";
@@ -27,9 +27,12 @@ import LimitSelector from "../LimitSelector";
 import { Badge } from "../../shadcn/badge";
 
 const UserRefundsSection = () => {
-  const { refundOrders, isLoading, totalShopOrders, totalPages } = useSelector(
-    (state) => state.order
-  );
+  const {
+    userRefundOrders,
+    isUserRefundOrdersLoading,
+    totalUserRefundOrders,
+    totalUserRefundOrdersPages,
+  } = useSelector((state) => state.order);
 
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
@@ -38,7 +41,7 @@ const UserRefundsSection = () => {
 
   useEffect(() => {
     dispatch(
-      getUserShopOrdersThunk({
+      getUserRefundOrdersThunk({
         refundOnly: true,
         refundStatus: "",
         page,
@@ -50,7 +53,7 @@ const UserRefundsSection = () => {
   const handleRefundStatusChange = (value) => {
     if (value === "all") {
       dispatch(
-        getUserShopOrdersThunk({
+        getUserRefundOrdersThunk({
           refundOnly: true,
           refundStatus: "",
           page: 1,
@@ -59,7 +62,7 @@ const UserRefundsSection = () => {
       );
     } else {
       dispatch(
-        getUserShopOrdersThunk({
+        getUserRefundOrdersThunk({
           refundOnly: true,
           refundStatus: value,
           page: 1,
@@ -91,7 +94,7 @@ const UserRefundsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isUserRefundOrdersLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={6}
@@ -100,8 +103,8 @@ const UserRefundsSection = () => {
                   <Spinner />
                 </TableCell>
               </TableRow>
-            ) : refundOrders?.length > 0 ? (
-              refundOrders?.map((order, index) => (
+            ) : userRefundOrders?.length > 0 ? (
+              userRefundOrders?.map((order, index) => (
                 <TableRow key={order._id} className="capitalize">
                   <TableCell className="font-medium">
                     {`SCR${1000 + index + 1 + (page - 1) * limit}`}
@@ -139,7 +142,7 @@ const UserRefundsSection = () => {
         </Table>
       </div>
       <div className="flex flex-col sm:flex-row gap-5 justify-between items-center mt-4 w-full">
-        {totalShopOrders > 10 && (
+        {totalUserRefundOrders > 10 && (
           <div className="flex items-center gap-2 text-sm w-fit">
             <span>Show</span>
             <LimitSelector
@@ -148,11 +151,11 @@ const UserRefundsSection = () => {
               setPage={setPage}
             />
             <span className="text-sm flex items-center text-nowrap">
-              entries of {totalShopOrders} total refunds
+              entries of {totalUserRefundOrders} total refunds
             </span>
           </div>
         )}
-        {totalPages > 1 && (
+        {totalUserRefundOrdersPages > 1 && (
           <div className="flex justify-center items-center">
             <Pagination>
               <PaginationContent>
@@ -162,22 +165,27 @@ const UserRefundsSection = () => {
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   />
                 </PaginationItem>
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <PaginationItem key={index}>
-                    <PaginationLink
-                      href="#"
-                      onClick={() => setPage(index + 1)}
-                      className={page === index + 1 ? "active" : ""}
-                    >
-                      {index + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
+                {Array.from(
+                  { length: totalUserRefundOrdersPages },
+                  (_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink
+                        href="#"
+                        onClick={() => setPage(index + 1)}
+                        className={page === index + 1 ? "active" : ""}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                )}
                 <PaginationItem>
                   <PaginationNext
                     href="#"
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, totalPages))
+                      setPage((prev) =>
+                        Math.min(prev + 1, totalUserRefundOrdersPages)
+                      )
                     }
                   />
                 </PaginationItem>

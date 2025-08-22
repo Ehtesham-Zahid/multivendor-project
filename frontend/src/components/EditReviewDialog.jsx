@@ -21,16 +21,16 @@ const EditReviewDialog = ({ review, trigger, orderId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(review?.rating || 1);
   const [hoveredRating, setHoveredRating] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  const { isLoading, error } = useSelector((state) => state.review);
+  const { updateReviewLoading, deleteReviewLoading, error } = useSelector(
+    (state) => state.review
+  );
   const dispatch = useDispatch();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     setValue,
   } = useForm();
 
@@ -112,7 +112,6 @@ const EditReviewDialog = ({ review, trigger, orderId }) => {
       return;
     }
 
-    setIsDeleting(true);
     try {
       const resultAction = await dispatch(deleteReviewThunk(review._id));
 
@@ -125,8 +124,6 @@ const EditReviewDialog = ({ review, trigger, orderId }) => {
       }
     } catch (err) {
       toast.error("Error deleting review");
-    } finally {
-      setIsDeleting(false);
     }
   };
 
@@ -202,11 +199,11 @@ const EditReviewDialog = ({ review, trigger, orderId }) => {
             <div className="flex gap-3 mt-3">
               {/* Update Button */}
               <Button
-                disabled={isLoading}
+                disabled={updateReviewLoading}
                 type="submit"
                 className="flex-1 text-white text-md bg-primary hover:bg-primary/90"
               >
-                {isLoading ? (
+                {updateReviewLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   <p>Update Review</p>
@@ -215,13 +212,13 @@ const EditReviewDialog = ({ review, trigger, orderId }) => {
 
               {/* Delete Button */}
               <Button
-                disabled={isDeleting}
+                disabled={deleteReviewLoading}
                 type="button"
                 variant="destructive"
                 onClick={handleDelete}
                 className="flex-1 text-white text-md bg-red-600 hover:bg-red-700"
               >
-                {isDeleting ? (
+                {deleteReviewLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   <div className="flex items-center justify-center gap-2">

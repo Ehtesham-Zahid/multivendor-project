@@ -8,7 +8,7 @@ import Spinner from "../Spinner";
 
 const ShopSection = () => {
   const { shopId } = useParams();
-  const { shop, isLoading } = useSelector((state) => state.shop);
+  const { shop, getShopByIdLoading } = useSelector((state) => state.shop);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const ShopSection = () => {
 
   return (
     <div className="flex  gap-5 items-center md:items-start     w-custom mx-auto my-10 lg:flex-row flex-col">
-      {isLoading ? (
+      {getShopByIdLoading ? (
         <div className="flex justify-center items-center h-full w-full">
           <Spinner />
         </div>

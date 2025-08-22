@@ -8,9 +8,12 @@ import { Link } from "react-router";
 import { getShopReviewsThunk } from "../features/review/reviewSlice";
 import { useEffect } from "react";
 import ReviewCard from "./ReviewCard";
+import Spinner from "./Spinner";
 
 const ShopDetails = ({ shop }) => {
-  const { shopReviews } = useSelector((state) => state.review);
+  const { shopReviews, getShopReviewsLoading } = useSelector(
+    (state) => state.review
+  );
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   useEffect(() => {
@@ -77,7 +80,9 @@ const ShopDetails = ({ shop }) => {
         )}
       </TabsContent>
       <TabsContent value="shopReviews">
-        {shopReviews?.length > 0 ? (
+        {getShopReviewsLoading ? (
+          <Spinner />
+        ) : shopReviews?.length > 0 ? (
           <div className="flex flex-wrap gap-3 justify-center sm:justify-start p-3">
             {shopReviews?.map((review) => (
               <ReviewCard key={review._id} review={review} />

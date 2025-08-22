@@ -29,8 +29,12 @@ import LimitSelector from "../LimitSelector";
 const DashboardOrdersSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
-  const { shopOrders, isShopOrdersLoading, totalPages, totalShopOrders } =
-    useSelector((state) => state.order);
+  const {
+    shopOrders,
+    isShopOrdersLoading,
+    totalShopOrdersPages,
+    totalShopOrders,
+  } = useSelector((state) => state.order);
 
   const dispatch = useDispatch();
 
@@ -176,7 +180,7 @@ const DashboardOrdersSection = () => {
             </span>
           </div>
         )}
-        {totalPages > 1 && (
+        {totalShopOrdersPages > 1 && (
           <div className="flex justify-center items-center">
             <Pagination>
               <PaginationContent>
@@ -186,7 +190,7 @@ const DashboardOrdersSection = () => {
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   />
                 </PaginationItem>
-                {Array.from({ length: totalPages }, (_, index) => (
+                {Array.from({ length: totalShopOrdersPages }, (_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
                       href="#"
@@ -201,7 +205,9 @@ const DashboardOrdersSection = () => {
                   <PaginationNext
                     href="#"
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, totalPages))
+                      setPage((prev) =>
+                        Math.min(prev + 1, totalShopOrdersPages)
+                      )
                     }
                   />
                 </PaginationItem>

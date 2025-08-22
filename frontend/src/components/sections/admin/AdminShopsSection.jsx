@@ -29,7 +29,7 @@ import {
 const AdminShopsSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
-  const { shops, isLoading, totalPages, totalShops } = useSelector(
+  const { shops, getAllShopsLoading, totalPages, totalShops } = useSelector(
     (state) => state.shop
   );
 
@@ -87,7 +87,7 @@ const AdminShopsSection = () => {
 
           {/* Conditionally render body or fallback row */}
           <TableBody>
-            {isLoading ? (
+            {getAllShopsLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={7}

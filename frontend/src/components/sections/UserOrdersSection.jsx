@@ -10,7 +10,7 @@ import {
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getUserParentOrdersThunk } from "../../features/order/orderSlice";
+import { getUserOrdersThunk } from "../../features/order/orderSlice";
 import { formatDate } from "../../utils";
 import Spinner from "../Spinner";
 import { Link } from "react-router";
@@ -27,9 +27,12 @@ import LimitSelector from "../LimitSelector";
 import DeliveryFilterSelector from "../DeliveryFilterSelector";
 
 const UserOrdersSection = () => {
-  const { userOrders, isLoading, totalUserOrders, totalPages } = useSelector(
-    (state) => state.order
-  );
+  const {
+    userOrders,
+    isUserOrdersLoading,
+    totalUserOrdersPages,
+    totalUserOrders,
+  } = useSelector((state) => state.order);
 
   const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [limit, setLimit] = useState("10");
@@ -37,7 +40,7 @@ const UserOrdersSection = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUserParentOrdersThunk({ page, limit, deliveryStatus: "" }));
+    dispatch(getUserOrdersThunk({ page, limit, deliveryStatus: "" }));
   }, [dispatch, page, limit]);
 
   const toggleExpand = (orderId) => {
@@ -47,7 +50,7 @@ const UserOrdersSection = () => {
   const handleDeliveryStatusChange = (value) => {
     if (value === "all") {
       dispatch(
-        getUserParentOrdersThunk({
+        getUserOrdersThunk({
           deliveryStatus: "",
           page: 1,
           limit,
@@ -55,7 +58,7 @@ const UserOrdersSection = () => {
       );
     } else {
       dispatch(
-        getUserParentOrdersThunk({
+        getUserOrdersThunk({
           deliveryStatus: value,
           page: 1,
           limit,
@@ -86,7 +89,7 @@ const UserOrdersSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isUserOrdersLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -235,7 +238,7 @@ const UserOrdersSection = () => {
             </span>
           </div>
         )}
-        {totalPages > 1 && (
+        {totalUserOrdersPages > 1 && (
           <div className="flex justify-center items-center">
             <Pagination>
               <PaginationContent>
@@ -245,7 +248,7 @@ const UserOrdersSection = () => {
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   />
                 </PaginationItem>
-                {Array.from({ length: totalPages }, (_, index) => (
+                {Array.from({ length: totalUserOrdersPages }, (_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
                       href="#"
@@ -260,7 +263,9 @@ const UserOrdersSection = () => {
                   <PaginationNext
                     href="#"
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, totalPages))
+                      setPage((prev) =>
+                        Math.min(prev + 1, totalUserOrdersPages)
+                      )
                     }
                   />
                 </PaginationItem>

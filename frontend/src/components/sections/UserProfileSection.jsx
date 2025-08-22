@@ -1,9 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import ProfileImage from "../../assets/images/category-1.jpg";
 import { Button } from "../../shadcn/button";
 import { Camera, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { updateMeThunk } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -13,8 +11,6 @@ const UserProfileSection = () => {
   const { user, isLoading, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [preview, setPreview] = useState(user?.imageUrl);
-
-  let navigate = useNavigate();
 
   const {
     register,

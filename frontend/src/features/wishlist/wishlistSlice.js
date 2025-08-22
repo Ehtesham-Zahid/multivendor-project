@@ -1,22 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const createShopThunk = createAsyncThunk(
-//   "shop/createShop",
-//   async (data, thunkAPI) => {
-//     try {
-//       const res = await createShopApi(data);
-//       return res.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.response.data.message);
-//     }
-//   }
-// );
-
 const initialState = {
   wishlist: [],
-  isLoading: false,
+  getWishlistLoading: false,
   error: null,
-  success: false,
 };
 
 const wishlistSlice = createSlice({

@@ -29,8 +29,12 @@ import LimitSelector from "../../LimitSelector";
 const AdminRefundsSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
-  const { adminRefunds, isLoading, adminRefundTotalPages, totalAdminRefunds } =
-    useSelector((state) => state.order);
+  const {
+    adminRefunds,
+    isAdminRefundsLoading,
+    totalAdminRefundsPages,
+    totalAdminRefunds,
+  } = useSelector((state) => state.order);
 
   const dispatch = useDispatch();
 
@@ -92,7 +96,7 @@ const AdminRefundsSection = () => {
 
           {/* Conditionally render body or fallback row */}
           <TableBody>
-            {isLoading ? (
+            {isAdminRefundsLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -169,7 +173,7 @@ const AdminRefundsSection = () => {
             </span>
           </div>
         )}
-        {adminRefundTotalPages > 1 && (
+        {totalAdminRefundsPages > 1 && (
           <div className="flex justify-center items-center">
             <Pagination>
               <PaginationContent>
@@ -179,7 +183,7 @@ const AdminRefundsSection = () => {
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   />
                 </PaginationItem>
-                {Array.from({ length: adminRefundTotalPages }, (_, index) => (
+                {Array.from({ length: totalAdminRefundsPages }, (_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
                       href="#"
@@ -195,7 +199,7 @@ const AdminRefundsSection = () => {
                     href="#"
                     onClick={() =>
                       setPage((prev) =>
-                        Math.min(prev + 1, adminRefundTotalPages)
+                        Math.min(prev + 1, totalAdminRefundsPages)
                       )
                     }
                   />

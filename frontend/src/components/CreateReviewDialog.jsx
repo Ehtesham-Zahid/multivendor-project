@@ -19,7 +19,7 @@ const CreateReviewDialog = ({ productId, shopId, trigger, orderId }) => {
   const [rating, setRating] = useState(1);
   const [hoveredRating, setHoveredRating] = useState(0);
 
-  const { isLoading, error } = useSelector((state) => state.review);
+  const { createReviewLoading, error } = useSelector((state) => state.review);
   const dispatch = useDispatch();
 
   const {
@@ -169,11 +169,11 @@ const CreateReviewDialog = ({ productId, shopId, trigger, orderId }) => {
 
             {/* Submit Button */}
             <Button
-              disabled={isLoading}
+              disabled={createReviewLoading}
               type="submit"
               className="text-white text-md mt-3"
             >
-              {isLoading ? (
+              {createReviewLoading ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <p>Submit Review</p>

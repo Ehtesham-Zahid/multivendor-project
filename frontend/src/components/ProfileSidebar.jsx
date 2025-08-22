@@ -1,6 +1,5 @@
 import {
   Calendar,
-  CircleAlert,
   Home,
   HomeIcon,
   Inbox,
@@ -8,26 +7,12 @@ import {
   Lock,
   LogOut,
   MessageCircleIcon,
-  Parentheses,
   Search,
   SendToBackIcon,
   Settings,
-  TrainTrack,
-  User,
   UserRound,
 } from "lucide-react";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/shadcn/sidebar";
-import { SidebarProvider } from "../shadcn/sidebar";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutThunk } from "../features/auth/authSlice";

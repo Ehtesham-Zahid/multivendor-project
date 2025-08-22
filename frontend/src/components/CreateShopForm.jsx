@@ -14,7 +14,7 @@ import { createShopThunk } from "../features/shop/shopSlice";
 
 const CreateShopForm = ({ page }) => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.shop);
+  const { createShopLoading, error } = useSelector((state) => state.shop);
   const [preview, setPreview] = useState(null);
 
   let navigate = useNavigate();
@@ -58,6 +58,8 @@ const CreateShopForm = ({ page }) => {
     if (createShopThunk.fulfilled.match(resultAction)) {
       toast.success("Shop Created Successfully!");
       navigate("/dashboard");
+    } else {
+      toast.error("Failed to create shop");
     }
 
     reset();
@@ -167,11 +169,11 @@ const CreateShopForm = ({ page }) => {
       ) : null}
 
       <Button
-        disabled={isLoading}
+        disabled={createShopLoading}
         type="submit"
         className={"text-white text-md cursor-pointer w-full mt-8"}
       >
-        {isLoading ? (
+        {createShopLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <p>Submit</p>

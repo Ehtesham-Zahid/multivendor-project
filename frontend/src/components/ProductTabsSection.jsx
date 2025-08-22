@@ -11,7 +11,9 @@ import { Link } from "react-router";
 
 const ProductTabsSection = ({ product, shop }) => {
   const [activeTab, setActiveTab] = useState("product-details");
-  const { productReviews, isLoading } = useSelector((state) => state.review);
+  const { productReviews, getProductReviewsLoading } = useSelector(
+    (state) => state.review
+  );
 
   return (
     <Tabs
@@ -93,7 +95,7 @@ const ProductTabsSection = ({ product, shop }) => {
         value="product-reviews"
         className="bg-background shadow-2xl p-5 mt-5 "
       >
-        {isLoading ? (
+        {getProductReviewsLoading ? (
           <Spinner />
         ) : (
           <div className="flex items-center gap-2 justify-center h-full   flex-col  ">

@@ -29,8 +29,12 @@ import LimitSelector from "../../LimitSelector";
 const AdminOrdersSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
-  const { adminOrders, isLoading, adminOrderTotalPages, totalAdminOrders } =
-    useSelector((state) => state.order);
+  const {
+    adminOrders,
+    isAdminOrdersLoading,
+    totalAdminOrdersPages,
+    totalAdminOrders,
+  } = useSelector((state) => state.order);
 
   const dispatch = useDispatch();
 
@@ -90,7 +94,7 @@ const AdminOrdersSection = () => {
 
           {/* Conditionally render body or fallback row */}
           <TableBody>
-            {isLoading ? (
+            {isAdminOrdersLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -182,7 +186,7 @@ const AdminOrdersSection = () => {
             </span>
           </div>
         )}
-        {adminOrderTotalPages > 1 && (
+        {totalAdminOrdersPages > 1 && (
           <div className="flex justify-center items-center">
             <Pagination>
               <PaginationContent>
@@ -192,7 +196,7 @@ const AdminOrdersSection = () => {
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                   />
                 </PaginationItem>
-                {Array.from({ length: adminOrderTotalPages }, (_, index) => (
+                {Array.from({ length: totalAdminOrdersPages }, (_, index) => (
                   <PaginationItem key={index}>
                     <PaginationLink
                       href="#"
@@ -208,7 +212,7 @@ const AdminOrdersSection = () => {
                     href="#"
                     onClick={() =>
                       setPage((prev) =>
-                        Math.min(prev + 1, adminOrderTotalPages)
+                        Math.min(prev + 1, totalAdminOrdersPages)
                       )
                     }
                   />
