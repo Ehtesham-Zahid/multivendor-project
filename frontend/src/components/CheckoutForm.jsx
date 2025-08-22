@@ -30,8 +30,10 @@ const CheckoutForm = () => {
   const { user } = useSelector((state) => state.auth);
   const { coupon } = useSelector((state) => state.coupon);
   const { totalAmount, cart } = useSelector((state) => state.cart);
-  const { addresses } = useSelector((state) => state.address);
-  const { isLoading } = useSelector((state) => state.order);
+  const { addresses, isCreateAddressLoading } = useSelector(
+    (state) => state.address
+  );
+  const { isUserOrdersLoading } = useSelector((state) => state.order);
 
   const [selectedOption, setSelectedOption] = useState("card");
   const [selectedAddress, setSelectedAddress] = useState(addresses[0]?._id);
@@ -283,11 +285,11 @@ const CheckoutForm = () => {
         </RadioGroup>
       </div>
       <Button
-        disabled={isLoading}
+        disabled={isUserOrdersLoading || isCreateAddressLoading}
         type="submit"
         className="w-full text-white mt-5 uppercase"
       >
-        {isLoading ? (
+        {isUserOrdersLoading || isCreateAddressLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <p>Pay Now</p>

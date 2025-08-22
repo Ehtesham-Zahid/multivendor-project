@@ -6,11 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/shadcn/table";
-import { Eye, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteEventThunk,
+  deleteEventAdminThunk,
   getAllEventsAdminThunk,
 } from "../../../features/event/eventSlice";
 import Spinner from "../../Spinner";
@@ -35,7 +35,7 @@ const AdminEventsSection = () => {
   const [limit, setLimit] = useState(10);
   const {
     adminEvents,
-    isLoading,
+    isAdminEventsLoading,
     error,
     totalAdminEvents,
     totalAdminEventsPages,
@@ -43,9 +43,9 @@ const AdminEventsSection = () => {
   const dispatch = useDispatch();
 
   const deleteEventHandler = async (id) => {
-    const resultAction = await dispatch(deleteEventThunk(id));
+    const resultAction = await dispatch(deleteEventAdminThunk(id));
 
-    if (deleteEventThunk.fulfilled.match(resultAction)) {
+    if (deleteEventAdminThunk.fulfilled.match(resultAction)) {
       toast.success("Event Deleted Successfully!");
     } else {
       toast.error(error);
@@ -108,7 +108,7 @@ const AdminEventsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isAdminEventsLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={8}

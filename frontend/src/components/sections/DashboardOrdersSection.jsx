@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -10,10 +9,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getShopOrdersByCurrentShopThunk,
-  getShopOrdersThunk,
-} from "../../features/order/orderSlice";
+import { getShopOrdersByCurrentShopThunk } from "../../features/order/orderSlice";
 import Spinner from "../Spinner";
 import { formatDate } from "../../utils";
 import { Link } from "react-router";
@@ -23,7 +19,6 @@ import { Badge } from "../../shadcn/badge";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -34,9 +29,8 @@ import LimitSelector from "../LimitSelector";
 const DashboardOrdersSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
-  const { shopOrders, isLoading, totalPages, totalShopOrders } = useSelector(
-    (state) => state.order
-  );
+  const { shopOrders, isShopOrdersLoading, totalPages, totalShopOrders } =
+    useSelector((state) => state.order);
 
   const dispatch = useDispatch();
 
@@ -98,7 +92,7 @@ const DashboardOrdersSection = () => {
 
           {/* Conditionally render body or fallback row */}
           <TableBody>
-            {isLoading ? (
+            {isShopOrdersLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={7}

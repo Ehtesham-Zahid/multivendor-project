@@ -10,10 +10,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getShopOrdersThunk,
-  getUserShopOrdersThunk,
-} from "../../features/order/orderSlice";
+import { getUserShopOrdersThunk } from "../../features/order/orderSlice";
 import Spinner from "../Spinner";
 import { formatDate } from "../../utils";
 import { Link } from "react-router";

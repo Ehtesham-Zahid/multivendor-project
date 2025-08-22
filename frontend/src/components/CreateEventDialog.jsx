@@ -25,7 +25,7 @@ const CreateEventDialog = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, error } = useSelector((state) => state.event);
+  const { isShopEventsLoading, error } = useSelector((state) => state.event);
   const { currentUserShop } = useSelector((state) => state.shop);
   const dispatch = useDispatch();
 
@@ -162,11 +162,11 @@ const CreateEventDialog = () => {
                 </span>
               )}
               <Button
-                disabled={isLoading}
+                disabled={isShopEventsLoading}
                 type="submit"
                 className={"text-white text-md mt-3"}
               >
-                {isLoading ? (
+                {isShopEventsLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
                   <p>Create</p>

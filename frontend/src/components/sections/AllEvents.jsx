@@ -6,7 +6,9 @@ import Spinner from "../Spinner";
 
 const AllEvents = () => {
   const dispatch = useDispatch();
-  const { allEvents, isLoading, error } = useSelector((state) => state.event);
+  const { allEvents, isAllEventsLoading, error } = useSelector(
+    (state) => state.event
+  );
 
   useEffect(() => {
     dispatch(getActiveEventsThunk({ sortBy: null, limit: null }));
@@ -18,8 +20,10 @@ const AllEvents = () => {
         All Events
       </p>
       <div className="flex flex-col gap-y-10">
-        {isLoading ? (
-          <Spinner />
+        {isAllEventsLoading ? (
+          <div className="mt-40">
+            <Spinner />
+          </div>
         ) : error ? (
           <p className="text-red-500 text-center">Error: {error}</p>
         ) : allEvents?.length === 0 ? (

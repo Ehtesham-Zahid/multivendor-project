@@ -25,9 +25,8 @@ import { PaginationLink } from "../../shadcn/pagination";
 const DashboardRefundsSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
-  const { refundOrders, isLoading, totalPages, totalShopOrders } = useSelector(
-    (state) => state.order
-  );
+  const { refundOrders, isShopOrdersLoading, totalPages, totalShopOrders } =
+    useSelector((state) => state.order);
 
   const dispatch = useDispatch();
 
@@ -85,7 +84,7 @@ const DashboardRefundsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isShopOrdersLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={7}

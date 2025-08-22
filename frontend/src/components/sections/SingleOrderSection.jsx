@@ -31,7 +31,8 @@ const SingleOrderSection = () => {
 
   const { orderId } = useParams();
 
-  const { singleOrder, isLoading } = useSelector((state) => state.order);
+  const { singleOrder, isSingleOrderLoading, isRequestRefundLoading } =
+    useSelector((state) => state.order);
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const SingleOrderSection = () => {
 
   return (
     <>
-      {isLoading ? (
+      {isSingleOrderLoading ? (
         <div className="flex justify-center items-center h-full mt-52">
           <Spinner />
         </div>
@@ -227,7 +228,7 @@ const SingleOrderSection = () => {
                         className="bg-danger text-white hover:bg-red-600 cursor-pointer"
                         onClick={handleRequestRefund}
                       >
-                        {isLoading ? (
+                        {isRequestRefundLoading ? (
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         ) : (
                           <p>Request a Refund</p>

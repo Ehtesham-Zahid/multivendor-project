@@ -1,9 +1,5 @@
 import API from "../../api/axios";
 
-// export const register = async (userData) => {
-//   return await API.post("/users/register", userData);
-// };
-
 export const getOrCreateConversation = async (shopId) => {
   return await API.get(`/conversations/get-or-create/${shopId}`, {
     withCredentials: true, // <== required to receive Set-Cookie

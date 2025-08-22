@@ -29,8 +29,13 @@ const DashboardEventsSection = () => {
   const [limit, setLimit] = useState("10");
   const [page, setPage] = useState(1);
 
-  const { shopEvents, isLoading, error, totalPages, totalShopEvents } =
-    useSelector((state) => state.event);
+  const {
+    shopEvents,
+    isShopEventsLoading,
+    error,
+    totalPages,
+    totalShopEvents,
+  } = useSelector((state) => state.event);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -65,7 +70,7 @@ const DashboardEventsSection = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isShopEventsLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={8}
