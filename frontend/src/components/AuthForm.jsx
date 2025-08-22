@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Button } from "../shadcn/button";
-import { CircleUserRound, Loader2 } from "lucide-react";
+import { CircleUserRound, Loader2, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -15,6 +15,7 @@ const AuthForm = ({ page }) => {
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.auth);
   const [preview, setPreview] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   let navigate = useNavigate();
 
@@ -127,12 +128,21 @@ const AuthForm = ({ page }) => {
       </div>
       <div className="flex flex-col mt-5">
         <label className="text-sm font-bold text-zinc-600">Password</label>
-        <input
-          type="password"
-          className="p-1.5 px-2   rounded-md border-2 border-zinc-300 outline-primary"
-          {...register("password", { required: true })}
-          placeholder="Enter your password"
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-full pr-10"
+            {...register("password", { required: true })}
+            placeholder="Enter your password"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-zinc-500 hover:text-zinc-700"
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
         {errors.password && (
           <span className="text-red-500 text-sm font-semibold">
             This field is required

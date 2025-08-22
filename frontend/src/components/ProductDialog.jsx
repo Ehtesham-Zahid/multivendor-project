@@ -15,13 +15,16 @@ import {
 } from "../features/wishlist/wishlistSlice";
 import { getDiscountPercentage } from "../utils";
 import { Link } from "react-router";
+import { getOrCreateConversationThunk } from "../features/chat/chatSlice";
+import { useNavigate } from "react-router";
 
 const ProductDialog = ({ product, small }) => {
   const [productQuantity, setProductQuantity] = useState(1);
   const { wishlist } = useSelector((state) => state.wishlist);
   const [isWished, setIsWished] = useState(false);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     // const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     const isProductInWishlist = wishlist.some(
@@ -71,6 +74,18 @@ const ProductDialog = ({ product, small }) => {
     dispatch(getCart());
   };
 
+  const handleContactShop = async () => {
+    if (!user) {
+      toast.error("Please login to contact the shop");
+      return;
+    }
+    const resultAction = await dispatch(
+      getOrCreateConversationThunk(product?.shopId?._id)
+    );
+    if (getOrCreateConversationThunk.fulfilled.match(resultAction)) {
+      navigate(`/profile/inbox/${resultAction.payload.conversation._id}`);
+    }
+  };
   return (
     <div>
       <Dialog className="w-screen max-h-screen">
@@ -175,7 +190,7 @@ const ProductDialog = ({ product, small }) => {
               <div className="flex gap-x-5 items-center">
                 <img
                   src={product?.shopId?.imageUrl || Logo}
-                  className="rounded-md w-16 h-16  object-contain border-2 "
+                  className="rounded-md w-12 h-12 sm:w-16 sm:h-16  object-contain border-2 "
                 />
                 <div className="flex flex-col">
                   <Link
@@ -189,13 +204,11 @@ const ProductDialog = ({ product, small }) => {
                   </p>
                 </div>
               </div>
-              <Button className="text-white cursor-pointer">
-                <Link
-                  to={`/inbox/${product?.shopId?._id}`}
-                  className="flex items-center gap-x-1"
-                >
-                  <MessageCirclePlus /> Contact
-                </Link>
+              <Button
+                className="text-white cursor-pointer"
+                onClick={handleContactShop}
+              >
+                <MessageCirclePlus /> Contact
               </Button>
             </div>
             <div className="flex lg:flex-row flex-col py-5 gap-3 lg:gap-5">

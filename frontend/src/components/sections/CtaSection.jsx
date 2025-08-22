@@ -1,6 +1,9 @@
+import { Link } from "react-router";
 import { Button } from "../../shadcn/button";
+import { useSelector } from "react-redux";
 
 const CtaSection = () => {
+  const { user } = useSelector((state) => state.auth);
   return (
     <div className="w-custom mx-auto my-20 cta-bg h-[500px] rounded-lg p-2">
       <div className="flex flex-col gap-8 justify-center items-center h-full">
@@ -15,12 +18,38 @@ const CtaSection = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
-            Become a Seller
-          </Button>
-          <Button className="text-black text-base bg-white border-white p-5 sm:p-6   hover:bg-white/80 cursor-pointer">
-            Start Shopping
-          </Button>
+          {user ? (
+            user.role === "vendor" ? (
+              <Link to={"/dashboard"}>
+                <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : user.role === "admin" ? (
+              <Link to={"/admin"}>
+                <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+                  Admin Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Link to={"/create-shop"}>
+                <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+                  Become a Seller
+                </Button>
+              </Link>
+            )
+          ) : (
+            <Link to={"/create-shop"}>
+              <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+                Become a Seller
+              </Button>
+            </Link>
+          )}
+          <Link to={"/all-products"}>
+            <Button className="text-black text-base bg-white border-white p-5 sm:p-6   hover:bg-white/80 cursor-pointer">
+              Start Shopping
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

@@ -65,12 +65,12 @@ const Menubar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/products">
+                  <Link to="/all-products">
                     <SheetClose>Products</SheetClose>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/events">
+                  <Link to="/all-events">
                     <SheetClose>Events</SheetClose>
                   </Link>
                 </li>

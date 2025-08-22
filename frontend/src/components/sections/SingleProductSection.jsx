@@ -169,12 +169,16 @@ const SingleProductSection = () => {
             </p>
           </div>
           <div className="my-3 flex flex-col gap-5 border-zinc-300 border-b-2 pb-5">
-            <div className="flex justify-between items-start">
+            <div
+              className={`flex flex-col ${
+                singleProduct?.eventId ? "flex-col gap-5" : "flex-row gap-2"
+              } justify-between items-start`}
+            >
               {singleProduct?.eventId &&
               new Date(singleProduct?.eventId?.startDate).getTime() <
                 Date.now() ? (
                 <div className=" bg-red-200 rounded-md border-4 border-red-500 flex flex-col p-3 gap-2">
-                  <div className="flex justify-between flex-col gap-2">
+                  <div className="flex justify-between flex-col gap-2 sm:gap-5">
                     <p className="text-3xl font-bold text-red-500 uppercase">
                       {singleProduct?.eventId?.name}
                     </p>
@@ -190,22 +194,37 @@ const SingleProductSection = () => {
                       ${singleProduct?.eventId?.originalPrice}
                     </p>
                   </div>
-                  <div className="flex gap-5 mt-8">
+                  <div className="flex gap-2 mt-8">
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
-                      <p className="text-4xl font-bold">{duration?.days}</p>
+                      <p className="text-3xl sm:text-4xl font-bold">
+                        {duration?.days}
+                      </p>
                       <p className="text-sm font-medium">DAYS</p>
                     </div>
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
-                      <p className="text-4xl font-bold">{duration?.hours}</p>
+                      <p className="text-3xl sm:text-4xl font-bold">
+                        {duration?.hours}
+                      </p>
                       <p className="text-sm font-medium">HOURS</p>
                     </div>
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
-                      <p className="text-4xl font-bold">{duration?.minutes}</p>
-                      <p className="text-sm font-medium">MINUTES</p>
+                      <p className="text-3xl sm:text-4xl font-bold">
+                        {duration?.minutes}
+                      </p>
+                      <p className="text-sm font-medium sm:hidden">MINS</p>
+                      <p className="text-sm font-medium hidden sm:block">
+                        MINUTES
+                      </p>
                     </div>
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
-                      <p className="text-4xl font-bold">{duration?.seconds}</p>
-                      <p className="text-sm font-medium">SECONDS</p>
+                      <p className="text-3xl sm:text-4xl font-bold">
+                        {duration?.seconds}
+                      </p>
+
+                      <p className="text-sm font-medium sm:hidden">SECS</p>
+                      <p className="text-sm font-medium hidden sm:block">
+                        SECONDS
+                      </p>
                     </div>
                   </div>
                 </div>

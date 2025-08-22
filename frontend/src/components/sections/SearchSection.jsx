@@ -33,7 +33,7 @@ const SearchSection = () => {
 
   return (
     <section className="w-custom m-auto mb-20">
-      <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
+      <p className="text-start text-3xl sm:text-4xl font-black tracking-wide mt-20 mb-10">
         Search Results for {search}
       </p>
       <div className=" ">

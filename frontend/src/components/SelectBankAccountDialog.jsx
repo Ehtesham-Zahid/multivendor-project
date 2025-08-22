@@ -101,7 +101,9 @@ const SelectBankAccountDialog = ({ trigger, onSelect, accountBalance }) => {
       <DialogContent className="w-full max-w-xl">
         <div className="flex items-center justify-between">
           <DialogHeader>
-            <DialogTitle className="mb-2">Select Bank Account</DialogTitle>
+            <DialogTitle className="mb-2 leading-6  text-start text-lg font-bold">
+              Select Bank Account
+            </DialogTitle>
           </DialogHeader>
           <CreateBankAccountDialog onSuccess={handleAdded} />
         </div>

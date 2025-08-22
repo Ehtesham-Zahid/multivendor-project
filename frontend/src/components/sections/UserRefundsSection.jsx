@@ -74,13 +74,12 @@ const UserRefundsSection = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-3 sm:mb-0">
         <p className="text-2xl sm:text-3xl font-bold mb-3">All Refunds</p>
         <RefundFilterSelector
           handleRefundStatusChange={handleRefundStatusChange}
         />
       </div>
-      <p className="text-2xl font-bold text-dark md:hidden">My Refunds</p>
       <div className="w-full  min-h-[450px]  overflow-y-scroll rounded-sm shadow-2xl">
         <Table>
           <TableHeader className="bg-primary rounded-md">

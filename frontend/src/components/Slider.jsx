@@ -43,7 +43,7 @@ const Slider = () => {
         </SwiperSlide>
 
         {/* Slide 2 */}
-        <SwiperSlide className="slider-1 p-2">
+        <SwiperSlide className="slider-2 p-2">
           <div className="flex flex-col justify-center items-center w-full h-full gap-y-10">
             <p className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-center max-[500px]:w-full w-5/6 sm:w-3/4 lg:w-2/3 2xl:w-1/2 text-white">
               Hot Deals On <span className="text-primary">Top Brands</span>
@@ -52,17 +52,19 @@ const Slider = () => {
               Save big on the brands you love. From Apple to Nike — enjoy
               discounts, quality, and style all in one place.
             </p>
-            <Button
-              className="text-white cursor-pointer text-lg py-6"
-              size="lg"
-            >
-              Shop Deals
-            </Button>
+            <Link to={"/all-products"}>
+              <Button
+                className="text-white cursor-pointer text-lg py-6"
+                size="lg"
+              >
+                Shop Deals
+              </Button>
+            </Link>
           </div>
         </SwiperSlide>
 
         {/* Slide 3 */}
-        <SwiperSlide className="slider-1 p-2">
+        <SwiperSlide className="slider-3 p-2">
           <div className="flex flex-col justify-center items-center w-full h-full gap-y-10">
             <p className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-center max-[500px]:w-full w-5/6 sm:w-3/4 lg:w-2/3 2xl:w-1/2 text-white">
               Fresh Finds For <span className="text-primary">Every Season</span>
@@ -71,12 +73,14 @@ const Slider = () => {
               Stay ahead with the latest arrivals in fashion, tech, and home
               essentials — curated just for you.
             </p>
-            <Button
-              className="text-white cursor-pointer text-lg py-6"
-              size="lg"
-            >
-              Explore Now
-            </Button>
+            <Link to={"/all-products"}>
+              <Button
+                className="text-white cursor-pointer text-lg py-6"
+                size="lg"
+              >
+                Explore Now
+              </Button>
+            </Link>
           </div>
         </SwiperSlide>
       </Swiper>

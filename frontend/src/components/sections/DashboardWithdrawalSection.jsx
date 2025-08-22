@@ -31,7 +31,7 @@ const DashboardWithdrawalSection = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="bg-gray-100   p-4 rounded-md flex gap-2 w-full justify-between items-center">
+      <div className="bg-gray-100   p-4 rounded-md flex flex-col sm:flex-row gap-5 sm:gap-2 w-full justify-between items-center">
         <div className="flex gap-2 items-center">
           <p className="text-lg text-gray-600 font-bold">Account Balance:</p>
           <p className="text-xl font-bold">

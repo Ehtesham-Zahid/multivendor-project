@@ -69,15 +69,17 @@ const CreateShopForm = ({ page }) => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
-      className="shadow-2xl rounded-md p-5 w-1/4 py-10 shadow-zinc-500"
+      className="shadow-2xl rounded-md w-full max-w-md sm:max-w-lg mx-4 p-5 sm:p-6 md:p-8 shadow-zinc-500"
     >
       <Link to="/" className="flex items-center justify-center">
-        <p className="text-5xl font-black">
+        <p className="text-4xl md:text-5xl font-black">
           Swift<span className="text-primary">Cart</span>
         </p>
       </Link>
 
-      <p className="text-2xl text-center font-bold mt-3">Create your Shop</p>
+      <p className="text-xl sm:text-2xl text-center font-bold mt-3">
+        Create your Shop
+      </p>
 
       <div className="flex flex-col mt-5">
         <label className="text-sm font-bold text-zinc-600">Shop Name</label>

@@ -24,6 +24,7 @@ import DeliveryStatusSelector from "../DeliveryStatusSelector";
 import RefundStatusSelector from "../RefundStatusSelector";
 import CreateReviewDialog from "../CreateReviewDialog";
 import EditReviewDialog from "../EditReviewDialog";
+import { getOrCreateConversationThunk } from "../../features/chat/chatSlice";
 
 const SingleOrderSection = () => {
   const [searchParams] = useSearchParams();
@@ -51,6 +52,18 @@ const SingleOrderSection = () => {
     }
   };
 
+  const handleContactShop = async () => {
+    if (!user) {
+      toast.error("Please login to contact the shop");
+      return;
+    }
+    const resultAction = await dispatch(
+      getOrCreateConversationThunk(singleOrder?.shopId?._id)
+    );
+    if (getOrCreateConversationThunk.fulfilled.match(resultAction)) {
+      navigate(`/profile/inbox/${resultAction.payload.conversation._id}`);
+    }
+  };
   return (
     <>
       {isSingleOrderLoading ? (
@@ -69,8 +82,10 @@ const SingleOrderSection = () => {
             <Table>
               <TableHeader className="bg-primary ">
                 <TableRow className="text-white">
-                  <TableHead>PRODUCT</TableHead>
-                  <TableHead>QUANTITY</TableHead>
+                  <TableHead className=" ">PRODUCT</TableHead>
+                  <TableHead className="text-center sm:text-left">
+                    QUANTITY
+                  </TableHead>
                   <TableHead>PRICE</TableHead>
                   <TableHead>TOTAL</TableHead>
                   {singleOrder?.deliveryStatus === "delivered" &&
@@ -92,7 +107,9 @@ const SingleOrderSection = () => {
                         {item.productId.name}
                       </Link>
                     </TableCell>
-                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell className="text-center sm:text-left">
+                      {item.quantity}
+                    </TableCell>
                     <TableCell className="capitalize">{item.price}</TableCell>
                     <TableCell className="capitalize">
                       {item.price * item.quantity}
@@ -166,7 +183,7 @@ const SingleOrderSection = () => {
               </div>
             </div>
             <div className="flex lg:gap-2 bg-zinc-300 p-4 rounded-md justify-between flex-col gap-5">
-              <div className="flex justify-between w-full">
+              <div className="flex flex-col sm:flex-row gap-3 justify-between w-full">
                 <div className="flex gap-1 items-center">
                   <p className="font-semibold text-zinc-600 text-md">
                     Total Amount:
@@ -185,7 +202,7 @@ const SingleOrderSection = () => {
                 </div>
               </div>
               {user?.role === "admin" ? (
-                <div className="flex justify-between w-full">
+                <div className="flex flex-col sm:flex-row gap-3 justify-between w-full">
                   <div className="flex gap-1 items-center">
                     <p className="font-semibold text-zinc-600 text-md">
                       Delivery Status:
@@ -218,8 +235,11 @@ const SingleOrderSection = () => {
                   />
                 </div>
               ) : (
-                <div className="flex justify-between">
-                  <Button className="bg-primary    text-white hover:bg-primary/80 cursor-pointer">
+                <div className="flex justify-between flex-col sm:flex-row gap-3">
+                  <Button
+                    className="bg-primary    text-white hover:bg-primary/80 cursor-pointer"
+                    onClick={handleContactShop}
+                  >
                     Contact Seller
                   </Button>
                   {singleOrder?.paymentStatus === "paid" ? (
