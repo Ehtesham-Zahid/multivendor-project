@@ -70,12 +70,12 @@ const ProductCard = ({ product, small }) => {
   return (
     <div
       className={`col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400  ${
-        small ? "w-56 h-56" : "w-80 h-[330px] "
+        small ? "w-56 h-56" : "w-80 mx-auto  sm:w-full h-[330px] "
       }`}
     >
       {!small && (
         <div
-          className={`flex flex-col absolute right-5 top-5 gap-y-2 z-10 ${
+          className={`flex flex-col absolute right-5 top-5  z-10 ${
             small ? "gap-y-0" : "gap-y-2"
           }`}
         >
@@ -154,12 +154,6 @@ const ProductCard = ({ product, small }) => {
                 {product?.eventId?.originalPrice}$
               </span>
             </p>
-            {/* <Badge
-              className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
-            >
-              {getDiscountPercentage(product?.price, product?.discountPrice)}%
-              off
-            </Badge> */}
             {small ? (
               <Badge
                 className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
@@ -196,7 +190,6 @@ const ProductCard = ({ product, small }) => {
             {product?.price}$
           </p>
         )}
-
         <Badge
           variant="default"
           className={`text-white bg-secondary ${small ? "text-[11px]" : "text-sm"}`}

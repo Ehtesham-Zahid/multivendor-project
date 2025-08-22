@@ -127,7 +127,7 @@ const SingleProductSection = () => {
     </div>
   ) : (
     <>
-      <section className="w-11/12 xl:w-5/6 2xl:w-4/5 m-auto grid grid-cols-1 lg:grid-cols-2 my-20 gap-x-10">
+      <section className="w-11/12 xl:w-5/6 2xl:w-4/5 m-auto grid grid-cols-1 lg:grid-cols-2 mt-20 mb-10 gap-x-10">
         <div className="flex gap-3 col-span-1 flex-col    rounded-md">
           {singleProduct?.images.length > 1 && (
             <div className="flex flex-row   gap-5 justify-around  items-center w-full ">

@@ -37,7 +37,8 @@ const AllProducts = () => {
           <p>No products available</p>
         ) : (
           <>
-            <div className="flex flex-wrap gap-5  justify-center md:justify-between ">
+            {/* <div className="flex flex-wrap gap-5  justify-center md:justify-between "> */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
               {allProducts?.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}

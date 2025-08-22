@@ -42,7 +42,7 @@ const BestSelling = ({ limit }) => {
       </p>
       <div className=" ">
         <>
-          <div className="flex flex-wrap gap-5 justify-center md:justify-between ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
             {limit === 5 && isBestSellingProductsHomePageLoading ? (
               <Spinner />
             ) : limit === 5 && !isBestSellingProductsHomePageLoading ? (
