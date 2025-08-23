@@ -1,8 +1,10 @@
 import { Outlet } from "react-router";
 import { Header, Footer } from "./components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import SearchDetails from "./components/SearchDetails";
+import { useEffect } from "react";
+import { getCurrentUser } from "./features/auth/authSlice";
 
 const App = () => {
   const { searchTerm } = useSelector((state) => state.product);

@@ -23,30 +23,46 @@ const CheckoutProducts = () => {
         })}{" "}
         <CouponCodeForm totalAmount={totalAmount} />
         <div className="flex justify-between items-center mt-5">
-          <p className="text-  ">subtotal</p>
-          <p className="  ">${totalAmount}</p>
-        </div>
-        <div className="flex justify-between items-center mt-3">
-          <p className="text-   ">shipping</p>
-          <p className="  ">${totalAmount}</p>
+          <p className=" font-medium  text-gray-600">Subtotal</p>
+          <p className=" font-medium text-gray-600">
+            ${Math.round(totalAmount)}
+          </p>
         </div>
         {coupon && (
-          <div className="flex justify-between items-center mt-3">
-            <p className="text-lg font-semibold text-sky-500">Discount</p>
-            <p className="text-lg font-medium text-sky-500">
-              ${coupon.discountAmount}
-            </p>
-          </div>
+          <>
+            <div className="flex justify-between items-center mt-3">
+              <p className=" font-semibold text-cyan-600">Discount</p>
+              <p className=" font-medium text-cyan-600">
+                - ${Math.round(coupon.discountAmount)}
+              </p>
+            </div>
+            <div className="flex justify-between items-center mt-3">
+              <p className=" font-semibold text-cyan-600">
+                Subtotal after discount
+              </p>
+              <p className=" font-medium text-cyan-600">
+                ${Math.round(coupon.newTotal)}
+              </p>
+            </div>
+          </>
         )}
+        <div className="flex justify-between items-center mt-3">
+          <p className=" font-medium  text-gray-600">Shipping</p>
+          <p className=" font-medium text-gray-600">+${100}</p>
+        </div>
         {coupon ? (
           <div className="flex justify-between items-center mt-3">
-            <p className="text-xl font-semibold">Total</p>
-            <p className=" text-xl font-medium ">${coupon.newTotal}</p>
+            <p className=" font-semibold text-black text-xl">Total</p>
+            <p className="text-xl font-medium text-black">
+              ${Math.round(coupon.newTotal + 100)}
+            </p>
           </div>
         ) : (
-          <div className="flex justify-between items-center mt-5">
-            <p className="text-xl font-semibold">Total</p>
-            <p className="text-xl font-medium">${totalAmount}</p>
+          <div className="flex justify-between items-center mt-3">
+            <p className="text-xl font-semibold text-black">Total</p>
+            <p className="text-xl font-medium text-black">
+              ${Math.round(totalAmount + 100)}
+            </p>
           </div>
         )}
       </div>

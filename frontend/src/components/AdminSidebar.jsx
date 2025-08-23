@@ -9,6 +9,7 @@ import {
   Package,
   Banknote,
   Users,
+  Code,
 } from "lucide-react";
 
 import {
@@ -60,7 +61,11 @@ const items = [
     url: "/admin/products",
     icon: Package,
   },
-
+  {
+    title: "All Coupon Codes",
+    url: "/admin/coupon-codes",
+    icon: Code,
+  },
   {
     title: "All Withdrawals",
     url: "/admin/withdrawals",

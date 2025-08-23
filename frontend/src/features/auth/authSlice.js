@@ -120,20 +120,21 @@ export const getAllUsersThunk = createAsyncThunk(
 );
 
 const initialState = {
-  isAdminStatsLoading: false,
   user: null,
   isLoading: false,
   error: null,
   success: false,
+  isInitialized: false,
+  allUsers: [],
+  totalUsers: 0,
+  totalUsersPages: 1,
+  isAllUsersLoading: false,
+  isAdminStatsLoading: false,
   totalRevenue: 0,
   totalShops: 0,
   totalOrders: 0,
   totalRefunds: 0,
-  allUsers: [],
-  isAllUsersLoading: false,
   totalProducts: 0,
-  totalUsers: 0,
-  totalUsersPages: 0,
 };
 
 const authSlice = createSlice({
@@ -153,8 +154,9 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
         state.success = true;
+        state.user = action.payload;
+        state.isInitialized = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -201,11 +203,14 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.success = true;
         state.user = action.payload;
+        state.isInitialized = true;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.isLoading = false;
         state.success = false;
         state.error = action.payload;
+        state.isInitialized = true;
+        state.user = null;
       });
     builder
       .addCase(updateMeThunk.pending, (state) => {
@@ -248,6 +253,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.success = true;
         state.user = null;
+        state.isInitialized = true;
       })
       .addCase(logoutThunk.rejected, (state, action) => {
         state.isLoading = false;

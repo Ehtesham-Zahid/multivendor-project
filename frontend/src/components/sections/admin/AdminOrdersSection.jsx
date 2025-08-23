@@ -152,7 +152,7 @@ const AdminOrdersSection = () => {
                   </TableCell>
                   <TableCell>${order?.subtotal}</TableCell>
                   <TableCell className="text-primary">
-                    <Link to={`/dashboard/order/${order._id}?page=orders`}>
+                    <Link to={`/admin/order/${order._id}?page=orders`}>
                       <ArrowRight className="ml-auto" />
                     </Link>
                   </TableCell>

@@ -15,7 +15,13 @@ const CheckoutCard = ({ product }) => {
         </div>
         <p className="text- font-medium">{product?.name}</p>
       </div>
-      <p className="text-">${product?.price}</p>
+      <p className="text-">
+        {product?.eventId
+          ? `$${product?.eventId?.eventPrice}`
+          : product?.discountPrice
+            ? `$${product?.discountPrice}`
+            : `$${product?.price}`}
+      </p>
     </div>
   );
 };

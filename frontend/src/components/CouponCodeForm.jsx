@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 
 const CouponCodeForm = ({ totalAmount }) => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.coupon);
+  const { validateCouponLoading, error } = useSelector((state) => state.coupon);
   const {
     register,
     handleSubmit,
@@ -17,8 +17,12 @@ const CouponCodeForm = ({ totalAmount }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    console.log(totalAmount);
     const resultAction = await dispatch(
-      validateCouponThunk({ ...data, cartTotal: totalAmount })
+      validateCouponThunk({
+        code: data.code,
+        cartTotal: totalAmount,
+      })
     );
 
     reset();
@@ -49,11 +53,11 @@ const CouponCodeForm = ({ totalAmount }) => {
       {error && <p className="text-red-500 text-sm font-semibold">{error}</p>}
 
       <Button
-        disabled={isLoading}
+        disabled={validateCouponLoading}
         type="submit"
         className="text-white h-full py-2.5 w-full uppercase"
       >
-        {isLoading ? (
+        {validateCouponLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <p>APPLY</p>

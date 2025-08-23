@@ -12,15 +12,26 @@ const createCheckoutSession = asyncHandler(async (req, res) => {
   const { productsData, discountPercentage = 0, orderId } = req.body; // Default to 0 if not provided
 
   const data = productsData.map((product) => {
+    // Priority: Event Price > Discount Price > Original Price
+    let basePrice = product.price; // Original price as fallback
+
+    if (product.eventId && product.eventId.eventPrice) {
+      basePrice = product.eventId.eventPrice; // Event price takes highest priority
+    } else if (product.discountPrice) {
+      basePrice = product.discountPrice; // Discount price takes second priority
+    }
+
+    // Apply coupon discount to the determined base price
     const discountMultiplier = 1 - discountPercentage / 100; // Convert percentage to multiplier
-    const discountedPrice = product.price * discountMultiplier;
+    const finalPrice = basePrice * discountMultiplier;
+
     return {
       price_data: {
         currency: "usd",
         product_data: {
           name: product.name,
         },
-        unit_amount: Math.round(discountedPrice * 100), // Apply discount here
+        unit_amount: Math.round(finalPrice * 100), // Apply discount here
       },
       quantity: product.quantity,
     };
@@ -29,6 +40,15 @@ const createCheckoutSession = asyncHandler(async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: data,
+    shipping_options: [
+      {
+        shipping_rate_data: {
+          display_name: "Standard Delivery",
+          type: "fixed_amount",
+          fixed_amount: { amount: 10000, currency: "usd" }, // $10 delivery
+        },
+      },
+    ],
     mode: "payment",
     success_url: "http://localhost:5173/checkout/success",
     cancel_url: "http://localhost:5173/checkout/cancel",

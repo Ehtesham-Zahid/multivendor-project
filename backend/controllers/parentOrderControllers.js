@@ -6,8 +6,14 @@ const Product = require("../models/productModel");
 const Shop = require("../models/shopModel");
 
 const createParentOrder = asyncHandler(async (req, res) => {
-  const { items, totalAmount, paymentMethod, shippingAddress, paymentStatus } =
-    req.body;
+  const {
+    items,
+    totalAmount,
+    paymentMethod,
+    shippingAddress,
+    paymentStatus,
+    discountPercentage,
+  } = req.body;
 
   // 1. Validate shipping address
   const addressExists = await Address.findById(shippingAddress);
@@ -21,7 +27,7 @@ const createParentOrder = asyncHandler(async (req, res) => {
   // 2. Create Parent Order
   const parentOrder = await ParentOrder.create({
     userId,
-    totalAmount,
+    totalAmount: totalAmount + 100,
     paymentMethod,
     paymentStatus: paymentStatus || "pending",
     shippingAddress,
@@ -40,10 +46,28 @@ const createParentOrder = asyncHandler(async (req, res) => {
   const shopOrders = [];
   for (const shopId in shopGroups) {
     const shopItems = shopGroups[shopId];
-    const subtotal = shopItems.reduce(
-      (sum, i) => sum + i.price * i.quantity,
-      0
-    );
+
+    // Update item prices and calculate subtotal
+    const subtotal = shopItems.reduce((sum, item) => {
+      // Priority: Event Price > Discount Price > Original Price
+      let itemPrice = item.price; // Original price as fallback
+
+      if (item.eventId && item.eventId.eventPrice) {
+        itemPrice = item.eventId.eventPrice; // Event price takes highest priority
+      } else if (item.discountPrice) {
+        itemPrice = item.discountPrice; // Discount price takes second priority
+      }
+
+      // Calculate the discounted price
+      const discountedPrice = Number(
+        (itemPrice * (1 - discountPercentage / 100)).toFixed(2)
+      );
+
+      // Update the item's price property to reflect the actual price being used
+      item.price = discountedPrice;
+
+      return sum + discountedPrice * item.quantity; // Use discounted price for subtotal
+    }, 0);
 
     const shopOrder = await ShopOrder.create({
       userId,

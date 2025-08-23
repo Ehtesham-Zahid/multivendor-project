@@ -41,6 +41,7 @@ const CheckoutForm = () => {
   const [countryCode, setCountryCode] = useState("");
   const [state, setState] = useState("");
   const [addressId, setAddressId] = useState("");
+  console.log("totalAmount", totalAmount);
 
   const {
     register,
@@ -75,32 +76,46 @@ const CheckoutForm = () => {
     }
 
     if (addressId) {
-      const items = cart.map((product) => ({
-        productId: product._id,
-        shopId:
-          typeof product.shopId === "object"
-            ? product.shopId._id
-            : product.shopId,
-        quantity: product.quantity || 1,
-        price: product.discountPrice || product.price,
-      }));
+      const items = cart.map((product) => {
+        // Priority: Event Price > Discount Price > Original Price
+        let itemPrice = product.price; // Original price as fallback
+
+        if (product.eventId && product.eventId.eventPrice) {
+          itemPrice = product.eventId.eventPrice; // Event price takes highest priority
+        } else if (product.discountPrice) {
+          itemPrice = product.discountPrice; // Discount price takes second priority
+        }
+
+        return {
+          productId: product._id,
+          shopId:
+            typeof product.shopId === "object"
+              ? product.shopId._id
+              : product.shopId,
+          quantity: product.quantity || 1,
+          price: itemPrice,
+        };
+      });
+
+      console.log("coupon", coupon);
 
       const orderData = {
         items,
         paymentMethod: selectedOption,
-        totalAmount: coupon ? coupon.newTotal : totalAmount,
+        totalAmount: coupon
+          ? Math.round(coupon?.newTotal)
+          : Math.round(totalAmount),
         shippingAddress: addressId,
         paymentStatus: "pending",
+        discountPercentage: coupon?.discountPercentage || 0,
       };
 
       const resultAction2 = await dispatch(createOrderThunk(orderData));
 
       if (createOrderThunk.fulfilled.match(resultAction2)) {
         if (selectedOption === "card") {
-          const total = coupon ? coupon.newTotal : totalAmount;
           const res = await API.post("/payments/create-checkout-session", {
             productsData: cart,
-            totalAmount: total,
             discountPercentage: coupon?.discountPercentage || 0,
             orderId: resultAction2.payload.parentOrder._id,
           });
@@ -287,7 +302,7 @@ const CheckoutForm = () => {
       <Button
         disabled={isUserOrdersLoading || isCreateAddressLoading}
         type="submit"
-        className="w-full text-white mt-5 uppercase"
+        className="w-full text-white mt-5 uppercase cursor-pointer"
       >
         {isUserOrdersLoading || isCreateAddressLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -18,7 +18,6 @@ import DashboardSection from "./sections/DashboardSection";
 import OrdersSection from "./sections/UserOrdersSection";
 import DashboardProductsSection from "./sections/DashboardProductsSection";
 import DashboardOrdersSection from "./sections/DashboardOrdersSection";
-import DashboardCouponCodesSection from "./sections/DashboardCouponCodesSection";
 import RefundsSection from "./sections/UserRefundsSection";
 import CheckoutSection from "./sections/CheckoutSection";
 import DashboardEventsSection from "./sections/DashboardEventsSection";
@@ -55,6 +54,7 @@ import EditShopDialog from "./EditShopDialog";
 import AdminUsersSection from "./sections/admin/AdminUsersSection";
 import RoleRoute from "./RoleRoute";
 import NotFoundSection from "./sections/NotFoundSection";
+
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -79,7 +79,6 @@ export {
   CreateProductDialog,
   CreateEventDialog,
   CreateCouponCodeDialog,
-  DashboardCouponCodesSection,
   DashboardSettingsSection,
   RefundsSection,
   DashboardOrdersSection,

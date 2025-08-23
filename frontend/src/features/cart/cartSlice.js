@@ -1,7 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 function calculateTotal(cart) {
-  return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  return cart.reduce((total, item) => {
+    // Priority: Event Price > Discount Price > Original Price
+    let itemPrice = item.price; // Original price as fallback
+
+    if (item.eventId && item.eventId.eventPrice) {
+      itemPrice = item.eventId.eventPrice; // Event price takes highest priority
+    } else if (item.discountPrice) {
+      itemPrice = item.discountPrice; // Discount price takes second priority
+    }
+
+    return total + itemPrice * item.quantity;
+  }, 0);
 }
 
 const initialState = {
@@ -20,6 +31,7 @@ const cartSlice = createSlice({
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       state.cart = cart;
       state.totalAmount = calculateTotal(cart);
+      console.log("state.totalAmount", state.totalAmount);
     },
     removeFromCart(state, action) {
       state.cart = state.cart.filter((item) => item._id !== action.payload);

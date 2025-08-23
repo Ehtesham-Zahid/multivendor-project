@@ -23,7 +23,6 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import DashboardOrdersPage from "./pages/DashboardOrdersPage.jsx";
 import DashboardProductsPage from "./pages/DashboardProductsPage.jsx";
 import DashboardEventsPage from "./pages/DashboardEventsPage.jsx";
-import DashboardCouponCodesPage from "./pages/DashboardCouponCodesPage.jsx";
 import DashboardRefundsPage from "./pages/DashboardRefundsPage.jsx";
 import DashboardSettingsPage from "./pages/DashboardSettingsPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
@@ -109,7 +108,6 @@ let router = createBrowserRouter([
           { path: "orders", Component: DashboardOrdersPage },
           { path: "products", Component: DashboardProductsPage },
           { path: "events", Component: DashboardEventsPage },
-          { path: "coupon-codes", Component: DashboardCouponCodesPage },
           { path: "refunds", Component: DashboardRefundsPage },
           { path: "settings", Component: DashboardSettingsPage },
           { path: "inbox", Component: DashboardConversationsPage },
@@ -144,6 +142,7 @@ let router = createBrowserRouter([
           { path: "shops", Component: AdminShopsPage },
           { path: "withdrawals", Component: AdminWithdrawalPage },
           { path: "users", Component: AdminUsersPage },
+          { path: "order/:orderId", Component: SingleOrderPage },
         ],
       },
     ],

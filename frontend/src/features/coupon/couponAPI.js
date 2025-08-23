@@ -17,3 +17,12 @@ export const validateCouponApi = async (data) => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const getAllCouponCodesAdminApi = async ({ page, limit, status }) => {
+  return await API.get(
+    `/coupons/admin?page=${page}&limit=${limit}&status=${status}`,
+    {
+      withCredentials: true, // <== required to receive Set-Cookie
+    }
+  );
+};
