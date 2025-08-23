@@ -15,8 +15,6 @@ import { useState } from "react";
 import { createProductThunk } from "../features/product/productSlice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { set } from "mongoose";
-import { DialogClose } from "../shadcn/dialog";
 
 const CreateProductDialog = () => {
   const { isCreateProductLoading, error } = useSelector(
