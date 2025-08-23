@@ -7,6 +7,7 @@ import {
   registerUser,
   loginUser,
   resetError,
+  getCurrentUser,
 } from "../features/auth/authSlice";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -57,6 +58,7 @@ const CreateShopForm = ({ page }) => {
 
     if (createShopThunk.fulfilled.match(resultAction)) {
       toast.success("Shop Created Successfully!");
+      dispatch(getCurrentUser());
       navigate("/dashboard");
     } else {
       toast.error("Failed to create shop");
