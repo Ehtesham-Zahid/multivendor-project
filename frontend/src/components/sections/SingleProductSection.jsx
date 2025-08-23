@@ -230,6 +230,15 @@ const SingleProductSection = () => {
                     </div>
                   </div>
                 </div>
+              ) : singleProduct?.discountPrice ? (
+                <div className="flex items-center gap-2">
+                  <p className="text-3xl font-bold text-sky-500 ">
+                    ${singleProduct?.discountPrice}
+                  </p>
+                  <p className="text-2xl font-medium text-gray-500 line-through">
+                    ${singleProduct?.price}
+                  </p>
+                </div>
               ) : (
                 <p className="text-3xl font-bold text-sky-500 ">
                   ${singleProduct?.price}
