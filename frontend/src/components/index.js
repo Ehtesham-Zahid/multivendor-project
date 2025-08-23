@@ -53,6 +53,8 @@ import AdminWithdrawalSection from "./sections/admin/AdminWithdrawalSection";
 import ScrollToTop from "./ScrollToTop";
 import EditShopDialog from "./EditShopDialog";
 import AdminUsersSection from "./sections/admin/AdminUsersSection";
+import RoleRoute from "./RoleRoute";
+import NotFoundSection from "./sections/NotFoundSection";
 // import UserInboxSection from "./sections/UserInboxSection";
 
 export {
@@ -111,5 +113,7 @@ export {
   AdminWithdrawalSection,
   ScrollToTop,
   EditShopDialog,
+  RoleRoute,
+  NotFoundSection,
   // UserInboxSection,
 };

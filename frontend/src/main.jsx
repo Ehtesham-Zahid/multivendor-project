@@ -1,4 +1,4 @@
-import { StrictMode, useEffect } from "react";
+// import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
@@ -8,9 +8,8 @@ import Auth from "./pages/Auth.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "./app/store.js";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import CreateShop from "./pages/CreateShop.jsx";
@@ -19,7 +18,6 @@ import AllProductsPage from "./pages/AllProductsPage.jsx";
 import AllEventsPage from "./pages/AllEventsPage.jsx";
 import CategoryPage from "./pages/CategoryPage.jsx";
 import SingleProductPage from "./pages/SingleProductPage.jsx";
-// import DashboardPage from "./pages/DashboardLayout.jsx";
 import DashboardLayout from "./pages/DashboardLayout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import DashboardOrdersPage from "./pages/DashboardOrdersPage.jsx";
@@ -41,7 +39,6 @@ import UserChangePasswordSection from "./components/sections/UserChangePasswordS
 import UserAddressesSection from "./components/sections/UserAddressesSection.jsx";
 import CheckoutLayout from "./pages/CheckoutLayout.jsx";
 import ShopPage from "./pages/ShopPage.jsx";
-import ShopLayout from "./pages/ShopLayout.jsx";
 import AdminLayout from "./pages/AdminLayout.jsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
 import AdminOrdersPage from "./pages/AdminOrdersPage.jsx";
@@ -58,6 +55,7 @@ import DashboardConversationsPage from "./pages/DashboardConversationsPage.jsx";
 import DashboardWithdrawalPage from "./pages/DashboardWithdrawalPage.jsx";
 import AdminWithdrawalPage from "./pages/AdminWithdrawalPage.jsx";
 import AdminUsersPage from "./pages/AdminUsersPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 let router = createBrowserRouter([
   {
@@ -76,8 +74,6 @@ let router = createBrowserRouter([
           { path: "search/:search", Component: SearchPage },
           { path: "category/:category", Component: CategoryPage },
           { path: "product/:productId", Component: SingleProductPage },
-          { path: "order/:orderId", Component: SingleOrderPage },
-
           { path: "shop/:shopId", Component: ShopPage },
           {
             path: "profile",
@@ -118,7 +114,6 @@ let router = createBrowserRouter([
           { path: "settings", Component: DashboardSettingsPage },
           { path: "inbox", Component: DashboardConversationsPage },
           { path: "inbox/:conversationId", Component: SingleInboxPage },
-          { path: "category/:cateogry", Component: CategoryPage },
           { path: "order/:orderId", Component: SingleOrderPage },
           { path: "withdrawal", Component: DashboardWithdrawalPage },
         ],
@@ -135,7 +130,6 @@ let router = createBrowserRouter([
       {
         path: "dashboard/shop/:shopId",
         Component: ShopPage,
-        // children: [{ path: ":shopId", Component: ShopPage }],
       },
       {
         path: "admin",
@@ -153,6 +147,10 @@ let router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    Component: NotFoundPage,
   },
 ]);
 
