@@ -60,10 +60,6 @@ const createEvent = asyncHandler(async (req, res) => {
   const end = new Date(endDate);
   end.setHours(23, 59, 59, 999);
 
-  console.log("Today:", today);
-  console.log("Start:", start);
-  console.log("End:", end);
-
   // Date-only comparison: start date cannot be before today
   if (start < today) {
     res.status(400);

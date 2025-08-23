@@ -187,6 +187,7 @@ const authSlice = createSlice({
       .addCase(verifyEmail.fulfilled, (state) => {
         state.isLoading = false;
         state.success = true;
+        state.error = null;
       })
       .addCase(verifyEmail.rejected, (state, action) => {
         state.isLoading = false;

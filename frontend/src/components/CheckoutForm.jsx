@@ -41,7 +41,6 @@ const CheckoutForm = () => {
   const [countryCode, setCountryCode] = useState("");
   const [state, setState] = useState("");
   const [addressId, setAddressId] = useState("");
-  console.log("totalAmount", totalAmount);
 
   const {
     register,
@@ -96,8 +95,6 @@ const CheckoutForm = () => {
           price: itemPrice,
         };
       });
-
-      console.log("coupon", coupon);
 
       const orderData = {
         items,

@@ -5,7 +5,6 @@ const asyncHandler = require("express-async-handler");
 // @route POST /api/coupons
 // @access Admin only
 const createCoupon = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const {
     code,
     discountPercentage,
@@ -154,7 +153,6 @@ const getAllCouponCodesAdmin = asyncHandler(async (req, res) => {
   const limitNumber = parseInt(limit) || 10;
   const skip = (pageNumber - 1) * limitNumber;
 
-  console.log(status);
   const filter = {};
   if (status && status !== "undefined") {
     filter.isActive = status === "active";

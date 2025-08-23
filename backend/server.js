@@ -24,6 +24,7 @@ const ParentOrder = require("./models/parentOrderModel");
 const ShopOrder = require("./models/shopOrderModel");
 const Event = require("./models/eventModel");
 const Product = require("./models/productModel");
+const Coupon = require("./models/couponModel");
 
 // Add withdrawals router import
 const withdrawalRouter = require("./routes/withdrawalRoutes");
@@ -80,29 +81,60 @@ cron.schedule("0 * * * *", async () => {
   const now = new Date();
 
   // Find expired events
-  const eventsToUpdate = await Event.find({
+  const expiredEvents = await Event.find({
     endDate: { $lt: now },
     isActive: true,
   });
 
-  if (eventsToUpdate.length === 0) {
+  if (expiredEvents.length === 0) {
     console.log("No expired events found.");
     return;
   }
 
-  // Mark them inactive
-  await Event.updateMany(
-    { _id: { $in: eventsToUpdate.map((e) => e._id) } },
-    { $set: { isActive: false } }
-  );
+  // Get event IDs for product unlinking
+  const eventIds = expiredEvents.map((e) => e._id);
 
-  // Unlink from products
+  // Unlink from products first (set eventId to null)
   await Product.updateMany(
-    { eventId: { $in: eventsToUpdate.map((e) => e._id) } },
+    { eventId: { $in: eventIds } },
     { $set: { eventId: null } }
   );
 
-  console.log(`[CRON] Deactivated ${eventsToUpdate.length} expired events`);
+  // Delete expired events completely
+  await Event.deleteMany({
+    _id: { $in: eventIds },
+  });
+
+  console.log(
+    `[CRON] Deleted ${expiredEvents.length} expired events and unlinked from products`
+  );
+});
+
+// Cron job to deactivate expired coupon codes
+cron.schedule("0 * * * *", async () => {
+  console.log("[CRON] Running coupon code cleanup...");
+  const now = new Date();
+
+  // Find expired coupon codes
+  const expiredCoupons = await Coupon.find({
+    endDate: { $lt: now },
+    isActive: true,
+  });
+
+  if (expiredCoupons.length === 0) {
+    console.log("No expired coupon codes found.");
+    return;
+  }
+
+  // Deactivate expired coupon codes
+  await Coupon.updateMany(
+    { _id: { $in: expiredCoupons.map((c) => c._id) } },
+    { $set: { isActive: false } }
+  );
+
+  console.log(
+    `[CRON] Deactivated ${expiredCoupons.length} expired coupon codes`
+  );
 });
 
 // Runs every 10 minutes to mark abandoned orders as failed

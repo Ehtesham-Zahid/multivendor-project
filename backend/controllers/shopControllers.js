@@ -78,13 +78,11 @@ const updateCurrentUserShop = asyncHandler(async (req, res) => {
     });
   if (!shop) {
     res.status(404);
-    console.log("Shop not found");
     throw new Error("Shop not found");
   }
 
   if (shop.ownerId.toString() !== req.user._id.toString()) {
     res.status(403);
-    console.log("Not authorized to update this shop");
     throw new Error("Not authorized to update this shop");
   }
 
@@ -98,7 +96,7 @@ const updateCurrentUserShop = asyncHandler(async (req, res) => {
   }
 
   await shop.save();
-  console.log("Shop updated");
+
   res.status(200).json(shop);
 });
 

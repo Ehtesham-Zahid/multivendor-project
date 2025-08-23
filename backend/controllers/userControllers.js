@@ -8,6 +8,7 @@ const ShopOrder = require("../models/shopOrderModel");
 const Product = require("../models/productModel");
 const Event = require("../models/eventModel");
 const Shop = require("../models/shopModel");
+const sendMail = require("../utils/email");
 
 const generateToken = (id, expire) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: expire });
@@ -65,7 +66,7 @@ const registerUser = asyncHandler(async (req, res) => {
         `,
   };
 
-  await POST(emailDetails);
+  await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
 
   res.status(201).json({
     message: "Account created. Please verify your email address to continue.",

@@ -31,7 +31,6 @@ const cartSlice = createSlice({
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       state.cart = cart;
       state.totalAmount = calculateTotal(cart);
-      console.log("state.totalAmount", state.totalAmount);
     },
     removeFromCart(state, action) {
       state.cart = state.cart.filter((item) => item._id !== action.payload);

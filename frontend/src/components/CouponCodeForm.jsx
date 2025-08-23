@@ -17,7 +17,6 @@ const CouponCodeForm = ({ totalAmount }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(totalAmount);
     const resultAction = await dispatch(
       validateCouponThunk({
         code: data.code,

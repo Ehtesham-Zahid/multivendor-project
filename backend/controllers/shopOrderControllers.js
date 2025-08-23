@@ -27,8 +27,6 @@ const getShopOrderById = asyncHandler(async (req, res) => {
     })
     .lean();
 
-  console.log(shopOrder);
-
   if (!shopOrder) {
     res.status(404);
     throw new Error("Shop order not found");

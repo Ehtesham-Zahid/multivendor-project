@@ -201,7 +201,6 @@ export const getUserRefundOrdersThunk = createAsyncThunk(
         page,
         limit
       );
-      console.log(res.data);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
