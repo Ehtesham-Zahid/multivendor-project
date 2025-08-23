@@ -17,36 +17,36 @@ const CtaSection = () => {
             with ease, and grow your business effortlessly.
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 w-44 sm:w-auto">
           {user ? (
             user.role === "vendor" ? (
               <Link to={"/dashboard"}>
-                <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+                <Button className="text-white w-full sm:w-auto text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
                   Dashboard
                 </Button>
               </Link>
             ) : user.role === "admin" ? (
               <Link to={"/admin"}>
-                <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+                <Button className="text-white w-full sm:w-auto text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
                   Admin Dashboard
                 </Button>
               </Link>
             ) : (
               <Link to={"/create-shop"}>
-                <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+                <Button className="text-white w-full sm:w-auto text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
                   Become a Seller
                 </Button>
               </Link>
             )
           ) : (
             <Link to={"/create-shop"}>
-              <Button className="text-white text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
+              <Button className="text-white w-full sm:w-auto text-base bg-primary p-5 sm:p-6   hover:bg-primary/90 cursor-pointer">
                 Become a Seller
               </Button>
             </Link>
           )}
           <Link to={"/all-products"}>
-            <Button className="text-black text-base bg-white border-white p-5 sm:p-6   hover:bg-white/80 cursor-pointer">
+            <Button className="text-black w-full sm:w-auto text-base bg-white border-white p-5 sm:p-6   hover:bg-white/80 cursor-pointer">
               Start Shopping
             </Button>
           </Link>

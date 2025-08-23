@@ -171,7 +171,9 @@ const SingleProductSection = () => {
           <div className="my-3 flex flex-col gap-5 border-zinc-300 border-b-2 pb-5">
             <div
               className={`flex flex-col ${
-                singleProduct?.eventId ? "flex-col gap-5" : "flex-row gap-2"
+                singleProduct?.eventId
+                  ? "flex-col sm:flex-row gap-5 sm:gap-2"
+                  : "flex-row gap-2"
               } justify-between items-start`}
             >
               {singleProduct?.eventId &&
@@ -197,19 +199,19 @@ const SingleProductSection = () => {
                   <div className="flex gap-2 mt-8">
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-3xl sm:text-4xl font-bold">
-                        {duration?.days}
+                        {duration?.days || 0}
                       </p>
                       <p className="text-sm font-medium">DAYS</p>
                     </div>
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-3xl sm:text-4xl font-bold">
-                        {duration?.hours}
+                        {duration?.hours || 0}
                       </p>
                       <p className="text-sm font-medium">HOURS</p>
                     </div>
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-3xl sm:text-4xl font-bold">
-                        {duration?.minutes}
+                        {duration?.minutes || 0}
                       </p>
                       <p className="text-sm font-medium sm:hidden">MINS</p>
                       <p className="text-sm font-medium hidden sm:block">
@@ -218,7 +220,7 @@ const SingleProductSection = () => {
                     </div>
                     <div className="text-center bg-red-100  text-dark py-0.5 px-3 rounded-md border-2 border-red-500">
                       <p className="text-3xl sm:text-4xl font-bold">
-                        {duration?.seconds}
+                        {duration?.seconds || 0}
                       </p>
 
                       <p className="text-sm font-medium sm:hidden">SECS</p>

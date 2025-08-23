@@ -87,18 +87,20 @@ const EventCard = ({ event, small }) => {
           </div>
           <div className="flex gap-2.5 sm:gap-5 mt-8">
             <div className="text-center bg-blue-200  text-dark py-0.5 px-2 sm:px-3  rounded-md border-2 border-blue-500">
-              <p className="text-2xl sm:text-4xl font-bold">{duration?.days}</p>
+              <p className="text-2xl sm:text-4xl font-bold">
+                {duration?.days || 0}
+              </p>
               <p className="text-xs sm:text-sm font-medium">DAYS</p>
             </div>
             <div className="text-center bg-blue-200  text-dark py-0.5  px-2 sm:px-3 rounded-md border-2 border-blue-500">
               <p className="text-2xl sm:text-4xl font-bold">
-                {duration?.hours}
+                {duration?.hours || 0}
               </p>
               <p className="text-xs sm:text-sm font-medium">HOURS</p>
             </div>
             <div className="text-center bg-blue-200  text-dark py-0.5  px-2 sm:px-3 rounded-md border-2 border-blue-500">
               <p className="text-2xl sm:text-4xl font-bold">
-                {duration?.minutes}
+                {duration?.minutes || 0}
               </p>
               <p className="text-xs sm:text-sm font-medium">
                 {small ? "MINS" : "MINUTES"}
@@ -106,7 +108,7 @@ const EventCard = ({ event, small }) => {
             </div>
             <div className="text-center bg-blue-200  text-dark py-0.5   px-2 sm:px-3 rounded-md border-2 border-blue-500">
               <p className="text-2xl sm:text-4xl font-bold">
-                {duration?.seconds}
+                {duration?.seconds || 0}
               </p>
               <p className="text-xs sm:text-sm font-medium">
                 {small ? "SECS" : "SECONDS"}

@@ -16,7 +16,7 @@ const FeaturedProducts = () => {
 
   return (
     <section className="w-custom m-auto">
-      <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
+      <p className="text-start sm:text-4xl text-3xl font-black tracking-wide mt-20 mb-10">
         Featured Products
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">

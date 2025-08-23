@@ -31,7 +31,7 @@ const CategoryProductsSection = () => {
 
   return (
     <section className="w-custom m-auto h-full mb-20">
-      <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
+      <p className="text-start sm:text-4xl text-3xl font-black tracking-wide mt-20 mb-10">
         {category}
       </p>
       <div>

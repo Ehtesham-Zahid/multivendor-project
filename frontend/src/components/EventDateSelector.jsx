@@ -25,7 +25,7 @@ function isValidDate(date) {
 
 const EventDateSelector = ({ title, onDateChange }) => {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(new Date("2025-06-01"));
+  const [date, setDate] = useState(new Date());
   const [month, setMonth] = useState(date);
   const [value, setValue] = useState(formatDate(date));
 

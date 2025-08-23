@@ -48,10 +48,38 @@ const createEvent = asyncHandler(async (req, res) => {
 
   let event;
 
-  const start = new Date(startDate);
-  const end = new Date(endDate);
+  // Get current date at start of day (00:00:00)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  const isActive = start <= new Date() && end >= new Date();
+  // Get start date at start of day
+  const start = new Date(startDate);
+  start.setHours(0, 0, 0, 0);
+
+  // Get end date at end of day (23:59:59) to allow same-day events
+  const end = new Date(endDate);
+  end.setHours(23, 59, 59, 999);
+
+  console.log("Today:", today);
+  console.log("Start:", start);
+  console.log("End:", end);
+
+  // Date-only comparison: start date cannot be before today
+  if (start < today) {
+    res.status(400);
+    throw new Error("Start date cannot be in the past");
+  }
+
+  // End date cannot be before start date
+  if (end < start) {
+    res.status(400);
+    throw new Error("End date cannot be before start date");
+  }
+
+  // Check if event is active (current date is between start and end, inclusive)
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+  const isActive = start <= currentDate && end >= currentDate;
 
   try {
     event = await Event.create({

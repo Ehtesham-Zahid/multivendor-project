@@ -1,13 +1,29 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "../utils";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "../shadcn/button";
 import { Star } from "lucide-react";
 import EditShopDialog from "./EditShopDialog";
+import { getOrCreateConversationThunk } from "../features/chat/chatSlice";
+import { toast } from "react-toastify";
 
 const ShopInfo = ({ shop }) => {
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleContactShop = async () => {
+    if (!user) {
+      toast.error("Please login to contact the shop");
+      return;
+    }
+    const resultAction = await dispatch(
+      getOrCreateConversationThunk(shop?._id)
+    );
+    if (getOrCreateConversationThunk.fulfilled.match(resultAction)) {
+      navigate(`/profile/inbox/${resultAction.payload.conversation._id}`);
+    }
+  };
   return (
     <div className="flex flex-col gap-4 lg:w-[350px] w-full p-5 shadow-2xl rounded-md h-full">
       <div className="flex flex-col gap-2 justify-center items-center mb-5">
@@ -72,9 +88,18 @@ const ShopInfo = ({ shop }) => {
           <p>{formatDate(shop?.createdAt)}</p>
         </div>
       </div>
-      {user?._id === shop?.ownerId && (
+      {user?._id === shop?.ownerId ? (
         <div className="flex justify-center items-center mt-5">
           <EditShopDialog />
+        </div>
+      ) : (
+        <div className="flex justify-center items-center mt-5">
+          <Button
+            className="bg-primary text-white w-full text-md cursor-pointer"
+            onClick={handleContactShop}
+          >
+            Contact Seller
+          </Button>
         </div>
       )}
     </div>
