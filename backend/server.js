@@ -4,6 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const cron = require("node-cron");
 const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 const { createServer } = require("http");
 const { initSocket } = require("./socket");
 
@@ -42,10 +43,17 @@ const server = createServer(app);
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend origin
+    origin: process.env.FRONTEND_URL, // frontend origin
     credentials: true, // required to allow cookies
   })
 );
+
+// Log only in development OR always (depending on your need)
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev")); // pretty output
+} else {
+  app.use(morgan("combined")); // Apache-style logs, good for production
+}
 
 // Stripe webhook route - raw body
 app.post(
@@ -219,6 +227,8 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
   });
 });
+
+console.log("✅ Server booted, waiting for requests...");
 
 server.listen(port, () => {
   console.log("Server is Running!");
