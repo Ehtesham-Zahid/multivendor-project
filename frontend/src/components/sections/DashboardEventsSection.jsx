@@ -15,7 +15,6 @@ import {
 } from "../../features/event/eventSlice";
 import Spinner from "../Spinner";
 import { toast } from "react-toastify";
-import UpdateEventDialog from "../updateEventDialog";
 import { formatDate } from "../../utils";
 import LimitSelector from "../LimitSelector";
 import { Pagination } from "../../shadcn/pagination";
