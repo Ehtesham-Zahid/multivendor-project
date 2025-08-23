@@ -230,6 +230,8 @@ io.on("connection", (socket) => {
 
 console.log("✅ Server booted, waiting for requests...");
 
+// Fix: Listen on the server, not app
 server.listen(port, () => {
-  console.log("Server is Running!");
+  console.log(`🚀 Server is running on port ${port}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
 });
