@@ -8,6 +8,7 @@ const CheckoutProducts = () => {
   const dispatch = useDispatch();
   const { cart, totalAmount } = useSelector((state) => state.cart);
   const { coupon } = useSelector((state) => state.coupon);
+
   useEffect(() => {
     // Fetch wishlist items if needed
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
