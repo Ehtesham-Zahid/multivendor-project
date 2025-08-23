@@ -14,7 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../shadcn/sheet";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import WishlistSheet from "./WishlistSheet";
 import CartSheet from "./CartSheet";
 import logo from "../assets/images/logo.png";
@@ -23,15 +23,26 @@ import { Button } from "../shadcn/button";
 import CategoryDropdown from "./CategoryDropdown";
 import { useSelector } from "react-redux";
 import SidebarSearchDetails from "./SidebarSearchDetails";
+import { useEffect, useRef } from "react";
 
 const Menubar = () => {
   const { user } = useSelector((state) => state.auth);
   const { searchBarProducts } = useSelector((state) => state.product);
+  const location = useLocation();
+  const sheetCloseRef = useRef();
+
+  useEffect(() => {
+    // Close sheet whenever route changes
+    if (sheetCloseRef.current) {
+      sheetCloseRef.current.click();
+    }
+  }, [location.pathname]);
+
   return (
     <div className="lg:hidden">
       <Sheet>
         <div className="flex justify-between items-center p-5 bg-primary">
-          <SheetTrigger className="lg:hidden w-[120px] ">
+          <SheetTrigger className="lg:hidden w-[120px] cursor-pointer">
             <MenuIcon className="text-white" />
           </SheetTrigger>
           {/* <img src={logo} alt="logo" className="w-20 h-20" /> */}
@@ -56,46 +67,52 @@ const Menubar = () => {
               <ul className="mt-5 flex flex-col gap-5 text-lg">
                 <li>
                   <Link to="/">
-                    <SheetClose>Home</SheetClose>
+                    <SheetClose className="cursor-pointer">Home</SheetClose>
                   </Link>
                 </li>
                 <li>
                   <Link to="/best-selling">
-                    <SheetClose>Best Selling</SheetClose>
+                    <SheetClose className="cursor-pointer">
+                      Best Selling
+                    </SheetClose>
                   </Link>
                 </li>
                 <li>
                   <Link to="/all-products">
-                    <SheetClose>Products</SheetClose>
+                    <SheetClose className="cursor-pointer">Products</SheetClose>
                   </Link>
                 </li>
                 <li>
                   <Link to="/all-events">
-                    <SheetClose>Events</SheetClose>
+                    <SheetClose className="cursor-pointer">Events</SheetClose>
                   </Link>
                 </li>
                 <li>
                   <Link to="/faqs">
-                    <SheetClose>FAQs</SheetClose>
+                    <SheetClose className="cursor-pointer">FAQs</SheetClose>
                   </Link>
                 </li>
-                <CategoryDropdown />
+                <div className="my-auto ">
+                  <CategoryDropdown />
+                </div>
 
                 {user ? (
                   user?.hasShop ? (
                     <Link to="/dashboard">
                       <Button
-                        className="bg-primary text-white w-full text-lg    cursor-pointer"
+                        className="bg-primary text-white w-full text-lg cursor-pointer"
                         size="lg"
                       >
-                        <SheetClose>Dashboard</SheetClose>{" "}
+                        <SheetClose className="cursor-pointer">
+                          Dashboard
+                        </SheetClose>{" "}
                         <ArrowRightIcon className="ml-2 w-8 h-8" />
                       </Button>
                     </Link>
                   ) : (
                     <Link to="/create-shop">
                       <Button
-                        className="bg-primary text-white w-full text-md   cursor-pointer"
+                        className="bg-primary text-white w-full text-md cursor-pointer"
                         size="lg"
                       >
                         <SheetClose>Become Seller</SheetClose>{" "}
@@ -106,7 +123,7 @@ const Menubar = () => {
                 ) : (
                   <Link to="/auth/login">
                     <Button
-                      className="bg-primary text-white w-full text-md   cursor-pointer"
+                      className="bg-primary text-white w-full text-md cursor-pointer"
                       size="lg"
                     >
                       <SheetClose>Become Seller</SheetClose>{" "}
@@ -136,6 +153,9 @@ const Menubar = () => {
               </span>
             </Link>
           </SheetFooter>
+
+          {/* Hidden ref for programmatic closing */}
+          <SheetClose ref={sheetCloseRef} className="hidden" />
         </SheetContent>
       </Sheet>
     </div>

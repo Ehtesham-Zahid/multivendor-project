@@ -53,12 +53,12 @@ const Header = () => {
             </Link>
           )}
         </div>
-        <div className="secondary-nav bg-primary w-full flex justify-center ">
-          <div className="w-custom flex justify-between  text-white font-semibold">
-            <div className="text-dark py-1">
+        <div className="secondary-nav bg-primary w-full flex justify-center">
+          <div className="w-custom flex justify-between  text-white font-semibold items-center">
+            <div className="text-dark py-1 my-auto">
               <CategoryDropdown />
             </div>
-            <ul className="flex gap-12 py-5 ">
+            <ul className="  gap-12 flex items-center ">
               <li>
                 <Link to="/" className="relative inline-block group">
                   <span className="relative z-10">Home</span>
@@ -98,7 +98,7 @@ const Header = () => {
                 </Link>
               </li>
             </ul>
-            <div className="flex gap-5 py-5  ">
+            <div className="flex gap-5 py-5 items-center ">
               <WishlistSheet />
               <CartSheet />
               {user ? (

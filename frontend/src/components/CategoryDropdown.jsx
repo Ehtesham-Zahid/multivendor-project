@@ -16,15 +16,15 @@ const CategoryDropdown = () => {
   const [category, setCategory] = useState("bottom");
   return (
     <DropdownMenu className="outline-none ">
-      <DropdownMenuTrigger asChild className="lg:w-[200px] w-full ">
+      <DropdownMenuTrigger asChild className="lg:w-[200px] w-full h-fit ">
         <Button
           variant="outline"
-          className="   border-t-2 border-b-2 ring-0 ring-transparent focus:ring-0  h-full rounded-md border-primary  text-lg font-bold flex gap-5 items-center cursor-pointer"
+          className="p-3   border-t-2 border-b-2 ring-0 ring-transparent focus:ring-0  h-fit rounded-md border-primary  text-lg font-bold flex gap-5 items-center cursor-pointer"
         >
           All Categories <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-full p-0 bg-white  text-dark font-semibold">
+      <DropdownMenuContent className="w-max lg:w-full p-0 bg-white  text-dark font-semibold">
         <DropdownMenuGroup
           value={category}
           onValueChange={setCategory}
