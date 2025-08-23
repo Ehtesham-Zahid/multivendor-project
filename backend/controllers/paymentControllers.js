@@ -50,8 +50,8 @@ const createCheckoutSession = asyncHandler(async (req, res) => {
       },
     ],
     mode: "payment",
-    success_url: "http://localhost:5173/checkout/success",
-    cancel_url: "http://localhost:5173/checkout/cancel",
+    success_url: `${process.env.FRONTEND_URL}/checkout/success`,
+    cancel_url: `${process.env.FRONTEND_URL}/checkout/cancel`,
     metadata: {
       orderId: orderId,
     },

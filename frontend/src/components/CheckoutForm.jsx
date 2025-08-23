@@ -21,9 +21,7 @@ import CreateAddressDialog from "./CreateAddressDialog";
 import Spinner from "./Spinner";
 
 const CheckoutForm = () => {
-  const stripePromise = loadStripe(
-    "pk_test_51RtPHKBTJUPkctEDjF0z9JDkW96NEMYHHUx1rXTX6AjvGywa9yUEZVW7hoD48BYw3IEiPaCh5BfboCJr6WfRwbd400TQjxpmSE"
-  );
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

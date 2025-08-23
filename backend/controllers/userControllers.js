@@ -49,7 +49,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  const tokenLink = `http://localhost:5173/auth/verify-email/${verifiedToken}`;
+  const tokenLink = `${process.env.FRONTEND_URL}/auth/verify-email/${verifiedToken}`;
 
   const emailDetails = {
     to: user.email,
