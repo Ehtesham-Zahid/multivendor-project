@@ -178,12 +178,14 @@ const ProductCard = ({ product, small }) => {
                 {product?.price}$
               </span>
             </p>
-            <Badge
-              className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
-            >
-              {getDiscountPercentage(product?.price, product?.discountPrice)}%
-              off
-            </Badge>
+            {!small && (
+              <Badge
+                className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+              >
+                {getDiscountPercentage(product?.price, product?.discountPrice)}%
+                off
+              </Badge>
+            )}
           </div>
         ) : (
           <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
