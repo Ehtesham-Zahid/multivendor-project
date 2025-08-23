@@ -235,7 +235,7 @@ const SingleProductSection = () => {
                   <p className="text-3xl font-bold text-sky-500 ">
                     ${singleProduct?.discountPrice}
                   </p>
-                  <p className="text-2xl font-medium text-gray-500 line-through">
+                  <p className="text-xl font-bold text-gray-500 line-through">
                     ${singleProduct?.price}
                   </p>
                 </div>
