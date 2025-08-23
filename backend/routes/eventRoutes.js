@@ -9,13 +9,13 @@ const {
   getShopEvents,
   getAllEventsAdmin,
 } = require("../controllers/eventControllers");
-const { protect, isAdmin } = require("../middlewares/authMiddleware");
+const { protect, isAdmin, isVendor } = require("../middlewares/authMiddleware");
 
-router.post("/", protect, createEvent);
+router.post("/", protect, isVendor, createEvent);
 router.get("/getActiveEvents", getActiveEvents);
 router.get("/getShopEvents", protect, getShopEvents);
-router.patch("/:eventId", protect, updateEvent);
-router.delete("/:eventId", protect, deleteEvent);
+router.patch("/:eventId", protect, isVendor, updateEvent);
+router.delete("/:eventId", protect, isVendor, deleteEvent);
 router.get("/:eventId", getEventById);
 
 // Admin Routes

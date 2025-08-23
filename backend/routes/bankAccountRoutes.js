@@ -7,18 +7,18 @@ const {
   deleteBankAccount,
 } = require("../controllers/bankAccountControllers");
 
-const { protect } = require("../middlewares/authMiddleware");
+const { protect, isVendor } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router
   .route("/")
-  .post(protect, createBankAccount)
-  .get(protect, getBankAccounts);
+  .post(protect, isVendor, createBankAccount)
+  .get(protect, isVendor, getBankAccounts);
 
 router
   .route("/:id")
-  .get(protect, getBankAccountById)
-  .put(protect, updateBankAccount)
-  .delete(protect, deleteBankAccount);
+  .get(protect, isVendor, getBankAccountById)
+  .put(protect, isVendor, updateBankAccount)
+  .delete(protect, isVendor, deleteBankAccount);
 
 module.exports = router;

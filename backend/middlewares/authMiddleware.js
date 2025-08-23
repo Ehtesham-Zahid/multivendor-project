@@ -43,9 +43,9 @@ const isAdmin = asyncHandler(async (req, res, next) => {
 });
 
 const isVendor = asyncHandler(async (req, res, next) => {
-  if (req.user.role !== "vendor") {
+  if (req.user.role !== "vendor" && req.user.role !== "admin") {
     res.status(401);
-    throw new Error("Not authorized, vendor only");
+    throw new Error("Not authorized, vendor or admin only");
   }
   next();
 });

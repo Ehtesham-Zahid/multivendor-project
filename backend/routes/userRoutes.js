@@ -23,7 +23,8 @@ router.get("/me", protect, me);
 router.patch("/update-me", upload.single("image"), protect, updateMe);
 router.patch("/change-password", protect, changePassword);
 router.post("/logout", protect, logout);
+
 router.get("/admin/admin-stats", protect, isAdmin, getAdminStats);
-router.get("/admin/all-users", protect, getAllUsers);
+router.get("/admin/all-users", protect, isAdmin, getAllUsers);
 
 module.exports = router;

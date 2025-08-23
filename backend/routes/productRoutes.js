@@ -10,15 +10,21 @@ const {
   getProductsByCategory,
   getAllProductsAdmin,
 } = require("../controllers/productControllers");
-const { protect, isAdmin } = require("../middlewares/authMiddleware");
+const { protect, isAdmin, isVendor } = require("../middlewares/authMiddleware");
 const upload = require("../middlewares/uploadMiddleware");
 
 router.post("/", protect, upload.array("images"), createProduct);
 router.get("/", getAllProducts);
 router.get("/getProductsByShop", protect, getProductsByShop);
 router.get("/:productId", getProductById);
-router.patch("/:productId", protect, upload.array("images"), updateProduct);
-router.delete("/:productId", deleteProduct);
+router.patch(
+  "/:productId",
+  protect,
+  isVendor,
+  upload.array("images"),
+  updateProduct
+);
+router.delete("/:productId", protect, isVendor, deleteProduct);
 router.get("/category/:category", getProductsByCategory);
 
 // Admin Routes

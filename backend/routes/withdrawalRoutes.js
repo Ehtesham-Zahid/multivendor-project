@@ -7,11 +7,11 @@ const {
   updateWithdrawalStatusAdmin,
   getMyWithdrawals,
 } = require("../controllers/withdrawalControllers");
-const { protect, isAdmin } = require("../middlewares/authMiddleware");
+const { protect, isAdmin, isVendor } = require("../middlewares/authMiddleware");
 
 // Vendor routes
-router.post("/", protect, requestWithdrawal);
-router.get("/getMyWithdrawals", protect, getMyWithdrawals);
+router.post("/", protect, isVendor, requestWithdrawal);
+router.get("/getMyWithdrawals", protect, isVendor, getMyWithdrawals);
 
 // Admin routes
 router.get("/admin/all-withdrawals", protect, isAdmin, getAllWithdrawalsAdmin);

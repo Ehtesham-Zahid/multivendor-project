@@ -11,15 +11,21 @@ const {
 } = require("../controllers/shopOrderControllers");
 const { protect, isAdmin, isVendor } = require("../middlewares/authMiddleware");
 
-router.get("/current-shop", protect, getShopOrdersByCurrentShop);
+router.get("/current-shop", protect, isVendor, getShopOrdersByCurrentShop);
 router.get("/getUserShopOrders", protect, getUserShopOrders);
 router.post("/request-refund/:shopOrderId", protect, requestRefundShopOrder);
 router.patch(
   "/update-delivery-status/:shopOrderId",
   protect,
+  isVendor,
   updateShopOrderDeliveryStatus
 );
-router.patch("/update-refund-status/:id", protect, updateShopOrderRefundStatus);
+router.patch(
+  "/update-refund-status/:id",
+  protect,
+  isVendor,
+  updateShopOrderRefundStatus
+);
 
 // Dynamic routes go last
 router.get("/:id", protect, getShopOrderById);
