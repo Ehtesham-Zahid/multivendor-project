@@ -154,13 +154,7 @@ const ProductCard = ({ product, small }) => {
                 {product?.eventId?.originalPrice}$
               </span>
             </p>
-            {small ? (
-              <Badge
-                className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
-              >
-                Event
-              </Badge>
-            ) : (
+            {!small && (
               <Badge
                 className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
               >
