@@ -42,6 +42,8 @@ const getShopConversations = asyncHandler(async (req, res) => {
 const getOrCreateConversation = asyncHandler(async (req, res) => {
   const { shopId } = req.params;
   const userId = req.user._id;
+  console.log("userId", userId);
+  console.log("shopId", shopId);
 
   // Check if conversation already exists
   let conversation = await ChatConversation.findOne({
