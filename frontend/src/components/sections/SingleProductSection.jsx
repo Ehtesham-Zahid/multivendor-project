@@ -75,15 +75,15 @@ const SingleProductSection = () => {
     );
 
     if (existingItemIndex !== -1) {
+      // Product already exists, update quantity
       cart[existingItemIndex].quantity =
         (cart[existingItemIndex].quantity || 1) + productQuantity;
-
-      localStorage.setItem("cart", JSON.stringify(cart));
     } else {
-      // Product not in cart, add with quantity 1
+      // Product not in cart, add with quantity
       cart.push({ ...singleProduct, quantity: productQuantity });
     }
 
+    // Set localStorage only once
     localStorage.setItem("cart", JSON.stringify(cart));
     toast.success("Product added to cart");
     setProductQuantity(1);
