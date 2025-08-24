@@ -39,7 +39,7 @@ const SingleProductSection = () => {
   useEffect(() => {
     dispatch(getProductByIdThunk(productId));
     dispatch(getProductReviewsThunk(productId));
-  }, []);
+  }, [productId]);
 
   useEffect(() => {
     const isProductInWishlist = wishlist.some(
