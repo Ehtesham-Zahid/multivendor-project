@@ -125,7 +125,7 @@ const updateShopOrderRefundStatus = asyncHandler(async (req, res) => {
     .populate({
       path: "parentOrderId",
       select:
-        "userId shippingAddress paymentMethod paymentStatus totalAmount createdAt",
+        "userId shippingAddress paymentMethod paymentStatus totalAmount createdAt paymentIntentId",
       populate: {
         path: "shippingAddress",
       },
@@ -148,6 +148,12 @@ const updateShopOrderRefundStatus = asyncHandler(async (req, res) => {
     shopOrder.parentOrderId.paymentMethod === "card" &&
     shopOrder.paymentStatus === "paid"
   ) {
+    // Check if paymentIntentId exists
+    if (!shopOrder.parentOrderId.paymentIntentId) {
+      res.status(400);
+      throw new Error("Payment intent ID not found for this order");
+    }
+
     try {
       // Create a refund
       const refund = await stripe.refunds.create({
