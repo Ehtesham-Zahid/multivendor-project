@@ -11,6 +11,9 @@ import Menubar from "./Menubar";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
+  const { shop } = useSelector((state) => state.shop);
+
+  console.log(shop);
 
   return (
     <>
