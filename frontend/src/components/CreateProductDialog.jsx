@@ -198,20 +198,25 @@ const CreateProductDialog = () => {
               className="p-2 px-3 rounded-md border-2 border-zinc-300 outline-primary w-full text-sm sm:text-base"
               placeholder="Enter discounted price (optional)"
               {...register("discountPrice", {
-                valueAsNumber: true,
                 validate: (value) => {
                   // If no value provided, it's valid (optional field)
                   if (value === "" || value === null || value === undefined) {
                     return true;
                   }
+
+                  // Convert to number for validation
+                  const numValue = Number(value);
+
                   // If value is NaN, it's invalid
-                  if (isNaN(value)) {
+                  if (isNaN(numValue)) {
                     return "Please enter a valid number";
                   }
+
                   // Check if negative
-                  if (value < 0) {
+                  if (numValue < 0) {
                     return "Discount cannot be negative";
                   }
+
                   return true;
                 },
               })}
