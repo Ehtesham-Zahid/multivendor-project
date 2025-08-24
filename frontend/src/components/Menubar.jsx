@@ -97,39 +97,49 @@ const Menubar = () => {
                 </div>
 
                 {user ? (
-                  user?.hasShop ? (
-                    <Link to="/dashboard">
-                      <Button
-                        className="bg-primary text-white w-full text-lg cursor-pointer"
-                        size="lg"
+                  user?.role === "vendor" ? (
+                    <Button className="bg-primary text-white w-full text-lg cursor-pointer p-5">
+                      <Link
+                        className=" flex items-center gap-2"
+                        to="/dashboard"
                       >
                         <SheetClose className="cursor-pointer">
                           Dashboard
                         </SheetClose>{" "}
-                        <ArrowRightIcon className="ml-2 w-8 h-8" />
-                      </Button>
-                    </Link>
+                        <ArrowRightIcon className=" w-10 h-10" />
+                      </Link>
+                    </Button>
+                  ) : user?.role === "admin" ? (
+                    <Button className="bg-primary text-white w-full text-lg cursor-pointer p-5">
+                      <Link className=" flex items-center gap-2" to="/admin">
+                        <SheetClose className="cursor-pointer">
+                          Admin Dashboard
+                        </SheetClose>{" "}
+                        <ArrowRightIcon className=" w-10 h-10" />
+                      </Link>
+                    </Button>
                   ) : (
-                    <Link to="/create-shop">
-                      <Button
-                        className="bg-primary text-white w-full text-md cursor-pointer"
-                        size="lg"
+                    <Button className="bg-primary text-white w-full text-lg cursor-pointer p-5">
+                      <Link
+                        className=" flex items-center gap-2"
+                        to="/create-shop"
                       >
-                        <SheetClose>Become Seller</SheetClose>{" "}
-                        <ArrowRight size={20} />
-                      </Button>
-                    </Link>
+                        <SheetClose className="cursor-pointer">
+                          Become Seller
+                        </SheetClose>{" "}
+                        <ArrowRightIcon className=" w-10 h-10" />
+                      </Link>
+                    </Button>
                   )
                 ) : (
-                  <Link to="/auth/login">
-                    <Button
-                      className="bg-primary text-white w-full text-md cursor-pointer"
-                      size="lg"
-                    >
-                      <SheetClose>Become Seller</SheetClose>{" "}
-                      <ArrowRight size={20} />
-                    </Button>
-                  </Link>
+                  <Button className="bg-primary text-white w-full text-lg cursor-pointer p-5">
+                    <Link className=" flex items-center gap-2" to="/auth/login">
+                      <SheetClose className="cursor-pointer">
+                        Become Seller
+                      </SheetClose>{" "}
+                      <ArrowRightIcon className=" w-10 h-10" />
+                    </Link>
+                  </Button>
                 )}
               </ul>
             </SheetDescription>
