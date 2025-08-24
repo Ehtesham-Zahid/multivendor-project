@@ -85,7 +85,9 @@ const CreateProductDialog = () => {
 
     // Only append discountPrice if it's a valid number greater than 0
     if (
-      data.discountPrice &&
+      data.discountPrice !== undefined &&
+      data.discountPrice !== null &&
+      data.discountPrice !== "" &&
       !isNaN(data.discountPrice) &&
       data.discountPrice > 0
     ) {
