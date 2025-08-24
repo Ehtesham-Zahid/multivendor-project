@@ -27,7 +27,7 @@ import { useEffect, useRef } from "react";
 
 const Menubar = () => {
   const { user } = useSelector((state) => state.auth);
-  const { searchBarProducts } = useSelector((state) => state.product);
+  const { searchTerm } = useSelector((state) => state.product);
   const location = useLocation();
   const sheetCloseRef = useRef();
 
@@ -55,7 +55,7 @@ const Menubar = () => {
           </div>
         </div>
         <SheetContent side="left">
-          {searchBarProducts?.length > 0 && <SidebarSearchDetails />}
+          {searchTerm && <SidebarSearchDetails />}
           <SheetHeader>
             <SheetTitle>
               <Link className="text-4xl font-black w-[120px]" to="/">
