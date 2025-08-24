@@ -30,7 +30,13 @@ const CreateAddressDialog = ({ page }) => {
     reset,
   } = useForm();
 
-  const onAddressSubmit = async (data) => {
+  const onAddressSubmit = async (data, event) => {
+    // Prevent form submission from bubbling up to parent forms
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     try {
       const resultAction = await dispatch(createAddressThunk(data));
       if (createAddressThunk.fulfilled.match(resultAction)) {
@@ -72,7 +78,11 @@ const CreateAddressDialog = ({ page }) => {
           </DialogTitle>
           <form
             className="flex flex-col gap-5"
-            onSubmit={handleSubmit(onAddressSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit(onAddressSubmit)(e);
+            }}
           >
             {/* Full Name */}
             <div className="flex flex-col ">

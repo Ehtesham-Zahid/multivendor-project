@@ -69,7 +69,11 @@ const CreateBankAccountDialog = ({ page, onSuccess }) => {
           </DialogTitle>
           <form
             className="flex flex-col gap-5"
-            onSubmit={handleSubmit(onCreateBankAccountSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit(onCreateBankAccountSubmit)(e);
+            }}
           >
             {/* Account Holder Name */}
             <div className="flex flex-col">

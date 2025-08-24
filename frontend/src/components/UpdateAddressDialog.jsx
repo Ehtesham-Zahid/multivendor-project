@@ -76,7 +76,11 @@ const UpdateAddressDialog = ({ address }) => {
         </DialogHeader>
         <form
           className="flex flex-col gap-3 sm:gap-5"
-          onSubmit={handleSubmit(onUpdateAddressSubmit)}
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSubmit(onUpdateAddressSubmit)(e);
+          }}
         >
           {[
             { name: "fullName", label: "Full Name", placeholder: "John Doe" },
