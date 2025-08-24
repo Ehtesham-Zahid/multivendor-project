@@ -1,16 +1,5 @@
 import CategoryCard from "../CategoryCard";
 
-import CategoryImage1 from "../../assets/images/category-1.png";
-import CategoryImage2 from "../../assets/images/category-2.png";
-import CategoryImage3 from "../../assets/images/category-3.png";
-import CategoryImage4 from "../../assets/images/category-4.png";
-import CategoryImage5 from "../../assets/images/category-5.png";
-import CategoryImage6 from "../../assets/images/category-6.png";
-import CategoryImage7 from "../../assets/images/category-7.png";
-import CategoryImage8 from "../../assets/images/category-8.png";
-import CategoryImage9 from "../../assets/images/category-9.png";
-import CategoryImage10 from "../../assets/images/category-10.png";
-
 const Categories = () => {
   return (
     <section className="w-custom m-auto">
@@ -21,7 +10,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Clothing & Shoes"
           productTitle="Sneakers"
-          image={CategoryImage1}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/noywqwpsizavm1oknktz.webp"
+          }
           bgColor="bg-red-100"
           textColor="text-red-500"
           loading="lazy"
@@ -29,7 +20,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Mobile & Electronics"
           productTitle="Z-FLIP"
-          image={CategoryImage2}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/p6uktopq2kfkp1nozsss.webp"
+          }
           bgColor="bg-zinc-200"
           textColor="text-zinc-500"
           loading="lazy"
@@ -37,7 +30,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Pet Care"
           productTitle="Cat Food"
-          image={CategoryImage9}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/wagvlaknxkvkkfidlpus.webp"
+          }
           bgColor="bg-purple-200"
           textColor="text-purple-500"
           loading="lazy"
@@ -45,7 +40,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Home & Kitchen"
           productTitle="Sofa"
-          image={CategoryImage3}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/jreyo83g5jmozoknxrez.webp"
+          }
           bgColor="bg-green-100"
           textColor="text-green-500"
           loading="lazy"
@@ -53,7 +50,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Beauty & Personal Care"
           productTitle="Moisturizer"
-          image={CategoryImage4}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/xwjkkuwcrt6n3ucfwyxe.webp"
+          }
           bgColor="bg-blue-100"
           textColor="text-blue-500"
           loading="lazy"
@@ -61,7 +60,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Grocery & Food"
           productTitle="Bread"
-          image={CategoryImage5}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/pkekelaxdzzjkxrjbiv0.webp"
+          }
           bgColor="bg-amber-100"
           textColor="text-amber-500"
           loading="lazy"
@@ -69,7 +70,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Health & Fitness"
           productTitle="Dumbells"
-          image={CategoryImage6}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/evu3idehsr2uzaulfpuv.webp"
+          }
           bgColor="bg-gray-300"
           textColor="text-gray-500"
           loading="lazy"
@@ -77,7 +80,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Books & Stationery"
           productTitle="Pencils"
-          image={CategoryImage7}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/vijpharenscewn1gf7fk.webp"
+          }
           bgColor="bg-pink-100"
           textColor="text-pink-500"
           loading="lazy"
@@ -85,7 +90,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Others"
           productTitle="Gift Box Set"
-          image={CategoryImage10}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/csor3nystap9exfgz7br.webp"
+          }
           bgColor="bg-fuchsia-200"
           textColor="text-fuchsia-500"
           loading="lazy"
@@ -93,7 +100,9 @@ const Categories = () => {
         <CategoryCard
           categoryTitle="Toy & Baby Items"
           productTitle="Train"
-          image={CategoryImage8}
+          image={
+            "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/yluer9pbnqp5xjrvvepc.webp"
+          }
           bgColor="bg-yellow-100"
           span={1}
           textColor="text-yellow-500"
