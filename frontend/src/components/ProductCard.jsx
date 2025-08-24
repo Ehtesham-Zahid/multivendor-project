@@ -149,7 +149,7 @@ const ProductCard = ({ product, small }) => {
             <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
               {product?.eventId?.eventPrice}${" "}
               <span
-                className={`${small ? "text-base" : "text-lg"} line-through text-gray-500`}
+                className={`${small ? "text-base" : "text-base"} line-through text-gray-500`}
               >
                 {product?.eventId?.originalPrice}$
               </span>
