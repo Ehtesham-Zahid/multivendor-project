@@ -19,16 +19,17 @@ const createProduct = asyncHandler(async (req, res) => {
     throw new Error("Product name already exists");
   }
 
-  // Debug logging to see what's being compared
-  console.log("=== DISCOUNT PRICE VALIDATION DEBUG ===");
-  console.log("discountPrice:", discountPrice, "Type:", typeof discountPrice);
-  console.log("price:", price, "Type:", typeof price);
-  console.log("discountPrice >= price:", discountPrice >= price);
-  console.log("discountPrice == price:", discountPrice == price);
-  console.log("discountPrice === price:", discountPrice === price);
-  console.log("=====================================");
+  // Convert to numbers for proper comparison
+  const discountPriceNum = Number(discountPrice);
+  const priceNum = Number(price);
 
-  if (discountPrice >= price) {
+  // Validate that both are valid numbers
+  if (isNaN(discountPriceNum) || isNaN(priceNum)) {
+    res.status(400);
+    throw new Error("Invalid price values provided");
+  }
+
+  if (discountPriceNum >= priceNum) {
     res.status(400);
     throw new Error(
       "Discount price cannot be greater than or equal to original price"
