@@ -96,14 +96,12 @@ const loginUser = asyncHandler(async (req, res) => {
         secure: true, // set this only if using HTTPS
         sameSite: "None", // Required for cross-origin
         maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days in ms
-        domain: undefined, // Let browser handle domain
       });
     } else {
       res.cookie("token", token, {
         httpOnly: true,
         secure: true,
         sameSite: "None", // Required for cross-origin
-        domain: undefined, // Let browser handle domain
         // No maxAge → session cookie → deleted when browser closes
       });
     }
@@ -115,6 +113,7 @@ const loginUser = asyncHandler(async (req, res) => {
       role: user.role,
       _id: user._id,
       shopId: user.shopId,
+      token,
     });
   } else {
     res.status(400);

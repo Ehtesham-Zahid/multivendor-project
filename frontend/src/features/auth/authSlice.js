@@ -135,6 +135,7 @@ const initialState = {
   totalOrders: 0,
   totalRefunds: 0,
   totalProducts: 0,
+  token: null,
 };
 
 const authSlice = createSlice({
@@ -157,6 +158,8 @@ const authSlice = createSlice({
         state.success = true;
         state.user = action.payload;
         state.isInitialized = true;
+        state.token = action.payload.token;
+        localStorage.setItem("token", action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -255,6 +258,8 @@ const authSlice = createSlice({
         state.success = true;
         state.user = null;
         state.isInitialized = true;
+        state.token = null;
+        localStorage.removeItem("token");
       })
       .addCase(logoutThunk.rejected, (state, action) => {
         state.isLoading = false;

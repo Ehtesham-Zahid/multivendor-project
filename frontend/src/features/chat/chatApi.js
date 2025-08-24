@@ -1,8 +1,20 @@
 import API from "../../api/axios";
 
 export const getOrCreateConversation = async (shopId) => {
+  // Manual token extraction as backup
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
+
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   return await API.get(`/conversations/get-or-create/${shopId}`, {
-    withCredentials: true, // <== required to receive Set-Cookie
+    withCredentials: true,
+    headers,
   });
 };
 
