@@ -20,20 +20,34 @@ const createProduct = asyncHandler(async (req, res) => {
   }
 
   // Convert to numbers for proper comparison
-  const discountPriceNum = Number(discountPrice);
   const priceNum = Number(price);
 
-  // Validate that both are valid numbers
-  if (isNaN(discountPriceNum) || isNaN(priceNum)) {
+  // Validate that price is a valid number
+  if (isNaN(priceNum)) {
     res.status(400);
-    throw new Error("Invalid price values provided");
+    throw new Error("Invalid price value provided");
   }
 
-  if (discountPriceNum >= priceNum) {
-    res.status(400);
-    throw new Error(
-      "Discount price cannot be greater than or equal to original price"
-    );
+  // Only validate discountPrice if it's provided
+  if (
+    discountPrice !== undefined &&
+    discountPrice !== null &&
+    discountPrice !== ""
+  ) {
+    const discountPriceNum = Number(discountPrice);
+
+    // Validate that discountPrice is a valid number
+    if (isNaN(discountPriceNum)) {
+      res.status(400);
+      throw new Error("Invalid discount price value provided");
+    }
+
+    if (discountPriceNum >= priceNum) {
+      res.status(400);
+      throw new Error(
+        "Discount price cannot be greater than or equal to original price"
+      );
+    }
   }
 
   // Ensure shop exists and is active before creating products
