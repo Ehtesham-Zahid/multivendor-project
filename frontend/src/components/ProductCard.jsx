@@ -70,7 +70,7 @@ const ProductCard = ({ product, small }) => {
   return (
     <div
       className={`col-span-1 rounded-md  bg-white p-3 shadow-xl shadow-zinc-300   relative hover:shadow-2xl hover:shadow-zinc-400  ${
-        small ? "w-56 h-56" : "w-80 mx-auto  sm:w-full h-[330px] "
+        small ? "w-56 h-56" : "w-80 mx-auto  sm:w-full min-h-[330px] "
       }`}
     >
       {!small && (
