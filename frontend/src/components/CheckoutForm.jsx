@@ -311,7 +311,7 @@ const CheckoutForm = () => {
         {isUserOrdersLoading || isCreateAddressLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <p>Pay Now</p>
+          <p>Complete Order</p>
         )}
       </Button>
     </form>
