@@ -197,11 +197,14 @@ const changePassword = asyncHandler(async (req, res) => {
 });
 
 const logout = asyncHandler(async (req, res) => {
+  // Clear cookie with EXACT same options as login
   res.clearCookie("token", {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "None", // Match login exactly
+    // No path needed - match login
   });
+
   res.status(200).json({ message: "Logged out" });
 });
 
