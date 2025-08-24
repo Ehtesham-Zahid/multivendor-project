@@ -83,6 +83,16 @@ const MiniCard = ({ sheet, product }) => {
                 ${product?.eventId?.eventPrice}
               </p>
             )
+          ) : product?.discountPrice ? (
+            sheet === "cart" ? (
+              <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
+                ${product?.discountPrice * product?.quantity}
+              </p>
+            ) : (
+              <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
+                ${product?.discountPrice}
+              </p>
+            )
           ) : sheet === "cart" ? (
             <p className="font-bold text-xl   text-sky-500 my-1.5 md:my-0">
               ${product?.price * product?.quantity}
