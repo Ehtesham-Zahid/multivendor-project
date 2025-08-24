@@ -57,83 +57,75 @@ const CheckoutForm = () => {
   }, [addresses, selectedAddress]);
 
   const onSubmit = async (data) => {
-    try {
-      let finalAddressId = addressId;
+    // let finalAddressId = addressId;
+    if (user) {
+      setAddressId(selectedAddress);
+    } else {
+      const addressData = {
+        ...data,
+        country: country,
+        state: state,
+      };
+      const resultAction = await dispatch(createAddressThunk(addressData));
 
-      // If no existing address, create one
-      if (!user || !addressId) {
-        const addressData = {
-          ...data,
-          country: country,
-          state: state,
+      if (createAddressThunk.fulfilled.match(resultAction)) {
+        setAddressId(resultAction.payload._id);
+      }
+    }
+
+    if (addressId) {
+      const items = cart.map((product) => {
+        // Priority: Event Price > Discount Price > Original Price
+        let itemPrice = product.price; // Original price as fallback
+
+        if (product.eventId && product.eventId.eventPrice) {
+          itemPrice = product.eventId.eventPrice; // Event price takes highest priority
+        } else if (product.discountPrice) {
+          itemPrice = product.discountPrice; // Discount price takes second priority
+        }
+
+        return {
+          productId: product._id,
+          shopId:
+            typeof product.shopId === "object"
+              ? product.shopId._id
+              : product.shopId,
+          quantity: product.quantity || 1,
+          price: itemPrice,
         };
-        const resultAction = await dispatch(createAddressThunk(addressData));
+      });
 
-        if (createAddressThunk.fulfilled.match(resultAction)) {
-          finalAddressId = resultAction.payload._id;
+      const orderData = {
+        items,
+        paymentMethod: selectedOption,
+        totalAmount: coupon
+          ? Math.round(coupon?.newTotal)
+          : Math.round(totalAmount),
+        shippingAddress: addressId,
+        paymentStatus: "pending",
+        discountPercentage: coupon?.discountPercentage || 0,
+      };
+
+      const resultAction2 = await dispatch(createOrderThunk(orderData));
+
+      if (createOrderThunk.fulfilled.match(resultAction2)) {
+        if (selectedOption === "card") {
+          const res = await API.post("/payments/create-checkout-session", {
+            productsData: cart,
+            discountPercentage: coupon?.discountPercentage || 0,
+            orderId: resultAction2.payload.parentOrder._id,
+          });
+
+          const stripe = await stripePromise;
+          if (!stripe) {
+            return;
+          }
+
+          await stripe.redirectToCheckout({ sessionId: res.data.id });
         } else {
-          console.error("Failed to create address");
-          return;
+          navigate("/checkout/success");
         }
       }
-
-      // Now proceed with order creation using finalAddressId
-      if (finalAddressId) {
-        const items = cart.map((product) => {
-          // Priority: Event Price > Discount Price > Original Price
-          let itemPrice = product.price; // Original price as fallback
-
-          if (product.eventId && product.eventId.eventPrice) {
-            itemPrice = product.eventId.eventPrice; // Event price takes highest priority
-          } else if (product.discountPrice) {
-            itemPrice = product.discountPrice; // Discount price takes second priority
-          }
-
-          return {
-            productId: product._id,
-            shopId:
-              typeof product.shopId === "object"
-                ? product.shopId._id
-                : product.shopId,
-            quantity: product.quantity || 1,
-            price: itemPrice,
-          };
-        });
-
-        const orderData = {
-          items,
-          paymentMethod: selectedOption,
-          totalAmount: coupon
-            ? Math.round(coupon?.newTotal)
-            : Math.round(totalAmount),
-          shippingAddress: finalAddressId,
-          paymentStatus: "pending",
-          discountPercentage: coupon?.discountPercentage || 0,
-        };
-
-        const resultAction2 = await dispatch(createOrderThunk(orderData));
-
-        if (createOrderThunk.fulfilled.match(resultAction2)) {
-          if (selectedOption === "card") {
-            const res = await API.post("/payments/create-checkout-session", {
-              productsData: cart,
-              discountPercentage: coupon?.discountPercentage || 0,
-              orderId: resultAction2.payload.parentOrder._id,
-            });
-
-            const stripe = await stripePromise;
-            if (!stripe) {
-              return;
-            }
-
-            await stripe.redirectToCheckout({ sessionId: res.data.id });
-          } else {
-            navigate("/checkout/success");
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error in checkout submission:", error);
     }
   };
 
@@ -311,7 +303,7 @@ const CheckoutForm = () => {
         {isUserOrdersLoading || isCreateAddressLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <p>Complete Order</p>
+          <p>Pay Now</p>
         )}
       </Button>
     </form>

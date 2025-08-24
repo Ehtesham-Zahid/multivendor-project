@@ -41,7 +41,7 @@ const UpdateAddressDialog = ({ address }) => {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onUpdateAddressSubmit = async (data) => {
     try {
       const resultAction = await dispatch(
         updateAddressThunk({ addressId: address._id, addressData: data })
@@ -76,7 +76,7 @@ const UpdateAddressDialog = ({ address }) => {
         </DialogHeader>
         <form
           className="flex flex-col gap-3 sm:gap-5"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onUpdateAddressSubmit)}
         >
           {[
             { name: "fullName", label: "Full Name", placeholder: "John Doe" },

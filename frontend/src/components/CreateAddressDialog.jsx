@@ -30,7 +30,7 @@ const CreateAddressDialog = ({ page }) => {
     reset,
   } = useForm();
 
-  const onSubmit = async (data) => {
+  const onAddressSubmit = async (data) => {
     try {
       const resultAction = await dispatch(createAddressThunk(data));
       if (createAddressThunk.fulfilled.match(resultAction)) {
@@ -72,7 +72,7 @@ const CreateAddressDialog = ({ page }) => {
           </DialogTitle>
           <form
             className="flex flex-col gap-5"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onAddressSubmit)}
           >
             {/* Full Name */}
             <div className="flex flex-col ">

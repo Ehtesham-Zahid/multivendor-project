@@ -29,7 +29,7 @@ const CreateBankAccountDialog = ({ page, onSuccess }) => {
     reset,
   } = useForm();
 
-  const onSubmit = async (data) => {
+  const onCreateBankAccountSubmit = async (data) => {
     if (shopBankAccounts.length === 0) {
       data.isDefault = true;
     }
@@ -69,7 +69,7 @@ const CreateBankAccountDialog = ({ page, onSuccess }) => {
           </DialogTitle>
           <form
             className="flex flex-col gap-5"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onCreateBankAccountSubmit)}
           >
             {/* Account Holder Name */}
             <div className="flex flex-col">
