@@ -17,14 +17,14 @@ const Categories = () => {
       <p className="text-start text-4xl font-black tracking-wide mt-20 mb-10">
         Product Categories
       </p>
-      <div className="grid max-[500px]:grid-cols-1 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 ">
+      <div className="grid max-[500px]:grid-cols-1 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         <CategoryCard
           categoryTitle="Clothing & Shoes"
           productTitle="Sneakers"
           image={CategoryImage1}
           bgColor="bg-red-100"
           textColor="text-red-500"
-          // span={1}
+          loading="lazy"
         />
         <CategoryCard
           categoryTitle="Mobile & Electronics"
@@ -32,34 +32,39 @@ const Categories = () => {
           image={CategoryImage2}
           bgColor="bg-zinc-200"
           textColor="text-zinc-500"
-        />{" "}
+          loading="lazy"
+        />
         <CategoryCard
           categoryTitle="Pet Care"
           productTitle="Cat Food"
           image={CategoryImage9}
           bgColor="bg-purple-200"
           textColor="text-purple-500"
-        />{" "}
+          loading="lazy"
+        />
         <CategoryCard
           categoryTitle="Home & Kitchen"
           productTitle="Sofa"
           image={CategoryImage3}
           bgColor="bg-green-100"
           textColor="text-green-500"
-        />{" "}
+          loading="lazy"
+        />
         <CategoryCard
           categoryTitle="Beauty & Personal Care"
           productTitle="Moisturizer"
           image={CategoryImage4}
           bgColor="bg-blue-100"
           textColor="text-blue-500"
-        />{" "}
+          loading="lazy"
+        />
         <CategoryCard
           categoryTitle="Grocery & Food"
           productTitle="Bread"
           image={CategoryImage5}
           bgColor="bg-amber-100"
           textColor="text-amber-500"
+          loading="lazy"
         />
         <CategoryCard
           categoryTitle="Health & Fitness"
@@ -67,6 +72,7 @@ const Categories = () => {
           image={CategoryImage6}
           bgColor="bg-gray-300"
           textColor="text-gray-500"
+          loading="lazy"
         />
         <CategoryCard
           categoryTitle="Books & Stationery"
@@ -74,6 +80,7 @@ const Categories = () => {
           image={CategoryImage7}
           bgColor="bg-pink-100"
           textColor="text-pink-500"
+          loading="lazy"
         />
         <CategoryCard
           categoryTitle="Others"
@@ -81,7 +88,8 @@ const Categories = () => {
           image={CategoryImage10}
           bgColor="bg-fuchsia-200"
           textColor="text-fuchsia-500"
-        />{" "}
+          loading="lazy"
+        />
         <CategoryCard
           categoryTitle="Toy & Baby Items"
           productTitle="Train"
@@ -89,17 +97,8 @@ const Categories = () => {
           bgColor="bg-yellow-100"
           span={1}
           textColor="text-yellow-500"
+          loading="lazy"
         />
-        {/* <CategoryCard
-          categoryTitle="Car & Bike Accessories"
-          productTitle="Sneakers"
-          image={CategoryImage1}
-        />
-        <CategoryCard
-          categoryTitle="Others"
-          productTitle="Sneakers"
-          image={CategoryImage1}
-        /> */}
       </div>
     </section>
   );
