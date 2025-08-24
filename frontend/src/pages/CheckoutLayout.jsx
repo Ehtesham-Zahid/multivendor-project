@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 const CheckoutLayout = () => {
   return (
     <div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <Outlet />
     </div>
   );

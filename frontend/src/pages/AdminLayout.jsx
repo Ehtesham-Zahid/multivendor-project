@@ -10,7 +10,7 @@ const AdminLayout = () => {
         <SidebarProvider>
           <AdminSidebar />
           <main className="w-full h-screen">
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             <SidebarTrigger />
             <Outlet />
           </main>

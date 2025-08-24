@@ -20,7 +20,7 @@ const DashboardLayout = () => {
         <SidebarProvider>
           <DashboardSidebar />
           <main className="w-full h-screen">
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             <SidebarTrigger />
             <Outlet />
           </main>

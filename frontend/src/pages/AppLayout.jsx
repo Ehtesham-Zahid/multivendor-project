@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "../features/auth/authSlice";
 import { ScrollToTop } from "../components";
+import { ToastContainer } from "react-toastify";
 
 const AppLayout = () => {
   const { user, isInitialized, isLoading } = useSelector((state) => state.auth);
@@ -36,6 +37,7 @@ const AppLayout = () => {
 
   return (
     <>
+      <ToastContainer />
       <ScrollToTop />
       <Outlet />
     </>

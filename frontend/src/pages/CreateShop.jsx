@@ -6,7 +6,7 @@ const CreateShop = () => {
   return (
     <RoleRoute roles={["user"]}>
       <div className="flex justify-center items-center w-full h-screen">
-        <ToastContainer position="top-right" autoClose={3000} />
+        {/* <ToastContainer position="top-right" autoClose={3000} /> */}
         <CreateShopForm />
       </div>
     </RoleRoute>

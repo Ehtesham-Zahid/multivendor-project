@@ -8,7 +8,7 @@ const ProfileLayout = () => {
     <RoleRoute roles={["user", "vendor", "admin"]}>
       <div className="w-full">
         <main className="w-custom m-auto flex flex-col md:flex-row my-10 gap-10">
-          <ToastContainer />
+          {/* <ToastContainer /> */}
           <ProfileSidebar />
           <Outlet />
         </main>
