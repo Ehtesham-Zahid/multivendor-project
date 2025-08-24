@@ -19,6 +19,15 @@ const createProduct = asyncHandler(async (req, res) => {
     throw new Error("Product name already exists");
   }
 
+  // Debug logging to see what's being compared
+  console.log("=== DISCOUNT PRICE VALIDATION DEBUG ===");
+  console.log("discountPrice:", discountPrice, "Type:", typeof discountPrice);
+  console.log("price:", price, "Type:", typeof price);
+  console.log("discountPrice >= price:", discountPrice >= price);
+  console.log("discountPrice == price:", discountPrice == price);
+  console.log("discountPrice === price:", discountPrice === price);
+  console.log("=====================================");
+
   if (discountPrice >= price) {
     res.status(400);
     throw new Error(

@@ -68,18 +68,32 @@ const CreateProductDialog = () => {
       return;
     }
 
+    // Validate discount price logic
+    if (data.discountPrice && data.discountPrice > 0) {
+      if (data.discountPrice >= data.price) {
+        toast.error("Discount price must be less than original price");
+        return;
+      }
+    }
+
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("category", categoryValue);
     formData.append("stock", data.stock);
     formData.append("price", data.price);
-    if (data.discountPrice) {
+
+    // Only append discountPrice if it's a valid number greater than 0
+    if (
+      data.discountPrice &&
+      !isNaN(data.discountPrice) &&
+      data.discountPrice > 0
+    ) {
       formData.append("discountPrice", data.discountPrice);
     }
 
     images.forEach((img) => {
-      formData.append("images", img); // FIX: append each image individually
+      formData.append("images", img);
     });
 
     try {
@@ -87,7 +101,7 @@ const CreateProductDialog = () => {
 
       if (createProductThunk.fulfilled.match(resultAction)) {
         toast.success("Product Created!");
-        reset(); // reset form
+        reset();
         setImages([]);
         setPreviews([]);
         setOpen(false);
@@ -182,12 +196,23 @@ const CreateProductDialog = () => {
               type="number"
               defaultValue=""
               className="p-2 px-3 rounded-md border-2 border-zinc-300 outline-primary w-full text-sm sm:text-base"
-              placeholder="Enter discounted price"
+              placeholder="Enter discounted price (optional)"
               {...register("discountPrice", {
                 valueAsNumber: true,
                 validate: (value) => {
-                  if (isNaN(value)) return true;
-                  return value >= 0 || "Discount cannot be negative";
+                  // If no value provided, it's valid (optional field)
+                  if (value === "" || value === null || value === undefined) {
+                    return true;
+                  }
+                  // If value is NaN, it's invalid
+                  if (isNaN(value)) {
+                    return "Please enter a valid number";
+                  }
+                  // Check if negative
+                  if (value < 0) {
+                    return "Discount cannot be negative";
+                  }
+                  return true;
                 },
               })}
             />
