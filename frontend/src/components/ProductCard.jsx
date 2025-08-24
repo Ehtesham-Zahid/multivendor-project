@@ -111,11 +111,26 @@ const ProductCard = ({ product, small }) => {
           </p>
         </Link>
       )}
-      <Link to={`/product/${product?._id}`}>
-        <p className={`${small ? "text-md" : "text-xl"} font-bold mt-1`}>
-          {product?.name}
-        </p>
-      </Link>
+      <div className="flex flex-row gap-x-2 items-center justify-between w-full">
+        <Link to={`/product/${product?._id}`}>
+          <p className={`${small ? "text-md" : "text-xl"} font-bold mt-1`}>
+            {product?.name}
+          </p>
+        </Link>
+        {product?.eventId ? (
+          <Badge
+            className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+          >
+            Event Sale
+          </Badge>
+        ) : product?.discountPrice ? (
+          <Badge
+            className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
+          >
+            {getDiscountPercentage(product?.price, product?.discountPrice)}% off
+          </Badge>
+        ) : null}
+      </div>
       <div
         className={`flex text-sm gap-0.5 items-center ${small ? "mt-1" : "mt-3"}`}
       >
@@ -154,13 +169,6 @@ const ProductCard = ({ product, small }) => {
                 {product?.eventId?.originalPrice}$
               </span>
             </p>
-            {!small && (
-              <Badge
-                className={`text-red-600 bg-red-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
-              >
-                Event Sale
-              </Badge>
-            )}
           </div>
         ) : product?.discountPrice ? (
           <div className="flex flex-row gap-x-2">
@@ -172,14 +180,14 @@ const ProductCard = ({ product, small }) => {
                 {product?.price}$
               </span>
             </p>
-            {!small && (
+            {/* {!small && (
               <Badge
                 className={`text-sky-600 bg-sky-200 mt-auto mb-0.5 ${small ? "text-[11px]" : "text-xs"}`}
               >
                 {getDiscountPercentage(product?.price, product?.discountPrice)}%
                 off
               </Badge>
-            )}
+            )} */}
           </div>
         ) : (
           <p className={`font-bold ${small ? "text-lg" : "text-2xl"}`}>
