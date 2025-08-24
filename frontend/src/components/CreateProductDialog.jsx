@@ -219,6 +219,13 @@ const CreateProductDialog = () => {
 
                   return true;
                 },
+                setValueAs: (value) => {
+                  // Convert empty string to undefined so it's not sent to backend
+                  if (value === "" || value === null || value === undefined) {
+                    return undefined;
+                  }
+                  return Number(value);
+                },
               })}
             />
             {errors.discountPrice && (
