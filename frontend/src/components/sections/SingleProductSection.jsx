@@ -109,15 +109,38 @@ const SingleProductSection = () => {
   };
 
   const handleContactShop = async () => {
+    console.log("Contact shop button clicked");
+
     if (!user) {
       toast.error("Please login to contact the shop");
       return;
     }
-    const resultAction = await dispatch(
-      getOrCreateConversationThunk(singleProduct?.shopId?._id)
-    );
-    if (getOrCreateConversationThunk.fulfilled.match(resultAction)) {
-      navigate(`/profile/inbox/${resultAction.payload.conversation._id}`);
+
+    if (!singleProduct?.shopId?._id) {
+      console.error("No shop ID found:", singleProduct?.shopId);
+      toast.error("Shop information not available");
+      return;
+    }
+
+    console.log("Creating conversation for shop:", singleProduct.shopId._id);
+
+    try {
+      const resultAction = await dispatch(
+        getOrCreateConversationThunk(singleProduct.shopId._id)
+      );
+
+      console.log("Conversation result:", resultAction);
+
+      if (getOrCreateConversationThunk.fulfilled.match(resultAction)) {
+        console.log("Conversation created successfully:", resultAction.payload);
+        navigate(`/profile/inbox/${resultAction.payload.conversation._id}`);
+      } else if (getOrCreateConversationThunk.rejected.match(resultAction)) {
+        console.error("Conversation creation failed:", resultAction.payload);
+        toast.error("Failed to create conversation. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error in handleContactShop:", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -286,6 +309,9 @@ const SingleProductSection = () => {
             <Button
               className="text-white cursor-pointer"
               onClick={handleContactShop}
+              onTouchStart={handleContactShop} // Add touch event for mobile
+              type="button" // Ensure button type is explicit
+              disabled={!singleProduct?.shopId?._id} // Disable if no shop ID
             >
               <MessageCirclePlus /> Contact
             </Button>
