@@ -97,7 +97,7 @@ const CreateAddressDialog = ({ page }) => {
                 Email
               </label>
               <input
-                type="tel"
+                type="email"
                 {...register("email", { required: true })}
                 placeholder="johndoe@gmail.com"
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
@@ -115,7 +115,7 @@ const CreateAddressDialog = ({ page }) => {
                 Phone Number
               </label>
               <input
-                type="tel"
+                type="number"
                 {...register("phoneNumber", { required: true })}
                 placeholder="0300-1234567"
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm   lg:w-md"
@@ -204,7 +204,7 @@ const CreateAddressDialog = ({ page }) => {
                 ZIP Code
               </label>
               <input
-                type="text"
+                type="number"
                 {...register("zipCode", { required: true })}
                 placeholder="54000"
                 className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-xs sm:w-sm lg:w-md"
