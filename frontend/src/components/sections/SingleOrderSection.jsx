@@ -67,7 +67,7 @@ const SingleOrderSection = () => {
   return (
     <>
       {isSingleOrderLoading ? (
-        <div className="flex justify-center items-center h-full mt-52">
+        <div className="flex justify-center items-center h-full mt-24">
           <Spinner />
         </div>
       ) : (
