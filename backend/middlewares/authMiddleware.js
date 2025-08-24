@@ -13,7 +13,18 @@ const protect = asyncHandler(async (req, res, next) => {
   console.log("Cookie header:", req.headers.cookie);
   console.log("Authorization header:", req.headers.authorization);
 
-  const token = req.cookies.token;
+  // Try to get token from cookies first, then from Authorization header
+  let token = req.cookies.token;
+
+  if (!token && req.headers.authorization) {
+    // Fallback: Check Authorization header (Bearer token)
+    const authHeader = req.headers.authorization;
+    if (authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7); // Remove 'Bearer ' prefix
+      console.log("Using Authorization header token");
+    }
+  }
+
   console.log("Extracted token:", token ? "EXISTS" : "MISSING");
 
   if (!token) {
