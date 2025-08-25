@@ -26,7 +26,6 @@ const CategoryCard = ({
         className="h-48 w-full object-contain"
         loading={loading}
         decoding="async"
-        fetchPriority="low"
       />
     </Link>
   );
