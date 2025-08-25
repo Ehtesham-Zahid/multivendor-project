@@ -38,7 +38,7 @@ const AppLayout = () => {
 
   return (
     <>
-      <ReactLenis root />
+      {/* <ReactLenis root /> */}
       <ToastContainer />
       <ScrollToTop />
       <Outlet />
