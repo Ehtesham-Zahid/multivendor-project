@@ -11,7 +11,7 @@ import HomeSection from "./HomeSection";
 
 const Home = () => {
   return (
-    <div className="relative  ">
+    <div className="relative">
       <div>
         {/* <Slider /> */}
         <HomeSection />

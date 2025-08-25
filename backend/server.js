@@ -21,6 +21,7 @@ const parentOrderRouter = require("./routes/parentOrderRoutes");
 const conversationRouter = require("./routes/conversationRoutes");
 const messageRouter = require("./routes/messageRoutes");
 const bankAccountRouter = require("./routes/bankAccountRoutes");
+const categoryRouter = require("./routes/categoryRoutes");
 const ParentOrder = require("./models/parentOrderModel");
 const ShopOrder = require("./models/shopOrderModel");
 const Event = require("./models/eventModel");
@@ -66,6 +67,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
+
+// Serve static images
+app.use("/api/images", express.static(path.join(__dirname, "public/images")));
 
 // Runs every hour to delete unverified users
 cron.schedule("0 * * * *", async () => {
@@ -199,6 +203,7 @@ app.use("/api/parent-orders", parentOrderRouter);
 app.use("/api/conversations", conversationRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/bank-accounts", bankAccountRouter);
+app.use("/api/categories", categoryRouter);
 app.use("/api/withdrawals", withdrawalRouter);
 
 app.use(errorHandler);
