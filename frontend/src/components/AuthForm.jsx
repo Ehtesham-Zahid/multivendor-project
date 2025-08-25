@@ -165,7 +165,7 @@ const AuthForm = ({ page }) => {
               </label>
             </div>
             <Link
-              to="/auth/forgotpassword"
+              to="/auth/forgot-password"
               className="text-end text-sm mt-1 text-zinc-500 font-medium hover:underline  "
             >
               Forgot Password?
