@@ -14,6 +14,8 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, "Please add a password"],
+      minlength: [8, "Password must be at least 8 characters long"],
+      maxlength: [20, "Password must be less than 20 characters"],
     },
     imageUrl: {
       type: String,
@@ -54,6 +56,14 @@ const userSchema = mongoose.Schema(
     },
     stripeAccountId: {
       type: String,
+      default: null,
+    },
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+    resetPasswordTokenExpires: {
+      type: Date,
       default: null,
     },
   },

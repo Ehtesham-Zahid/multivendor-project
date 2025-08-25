@@ -53,3 +53,11 @@ export const getAllUsersAPI = async (data) => {
     withCredentials: true, // <== required to receive Set-Cookie
   });
 };
+
+export const forgotPasswordAPI = async (data) => {
+  return await API.post(`/users/forgot-password`, data);
+};
+
+export const resetPasswordAPI = async (data) => {
+  return await API.patch(`/users/reset-password`, data);
+};

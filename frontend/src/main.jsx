@@ -55,6 +55,8 @@ import DashboardWithdrawalPage from "./pages/DashboardWithdrawalPage.jsx";
 import AdminWithdrawalPage from "./pages/AdminWithdrawalPage.jsx";
 import AdminUsersPage from "./pages/AdminUsersPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 let router = createBrowserRouter([
   {
@@ -97,6 +99,8 @@ let router = createBrowserRouter([
           { path: "login", Component: Login },
           { path: "register", Component: Register },
           { path: "verify-email/:token", Component: VerifyEmail },
+          { path: "forgot-password", Component: ForgotPassword }, // enter email
+          { path: "reset-password/:token", Component: ResetPassword }, // enter new password
         ],
       },
       { path: "create-shop", Component: CreateShop },

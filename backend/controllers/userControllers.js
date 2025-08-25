@@ -248,6 +248,66 @@ const getAllUsers = asyncHandler(async (req, res) => {
   res.status(200).json({ users, totalUsers, totalUsersPages });
 });
 
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  const token = generateToken(user._id, "1h");
+  user.resetPasswordToken = token;
+  user.resetPasswordTokenExpires = Date.now() + 60 * 60 * 1000; // 1 hour from now
+  await user.save();
+
+  const tokenLink = `${process.env.FRONTEND_URL}/auth/reset-password/${token}`;
+
+  const emailDetails = {
+    to: user.email,
+    subject: "Reset Password",
+    html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px; line-height: 1.6;">
+            <h2 style="color: #2E3A8C;">Reset Your Password</h2>
+            <p>Click the button below to reset your password:</p>
+            <a href="${tokenLink}" style="display: inline-block; background-color: #2E3A8C; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+                Reset Password
+            </a>
+            <p style="margin-top: 20px; color: #555555;">⚠️ This reset link will expire in <strong>1 hour</strong>. If it expires, you’ll need to request a new one.</p>
+        </div>
+        `,
+  };
+
+  await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
+
+  res.status(200).json({
+    message: "Reset password link sent to your email",
+  });
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token, newPassword } = req.body;
+  const user = await User.findOne({ resetPasswordToken: token });
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid token");
+  }
+  if (user.resetPasswordTokenExpires < Date.now()) {
+    res.status(400);
+    throw new Error("Token has expired");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(newPassword, salt);
+  user.resetPasswordToken = null;
+  user.resetPasswordTokenExpires = null;
+  await user.save();
+
+  res.status(200).json({
+    message: "Password reset successfully",
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -258,4 +318,6 @@ module.exports = {
   logout,
   getAdminStats,
   getAllUsers,
+  forgotPassword,
+  resetPassword,
 };

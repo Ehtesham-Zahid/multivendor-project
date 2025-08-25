@@ -3,10 +3,12 @@ import {
   changePasswordAPI,
   getAdminStatsAPI,
   getAllUsersAPI,
+  forgotPasswordAPI,
   getMe,
   login,
   logoutAPI,
   register,
+  resetPasswordAPI,
   updateMeAPI,
   verifyToken,
 } from "./authAPI";
@@ -119,6 +121,30 @@ export const getAllUsersThunk = createAsyncThunk(
   }
 );
 
+export const forgotPasswordThunk = createAsyncThunk(
+  "auth/forgotPassword",
+  async (data, thunkAPI) => {
+    try {
+      const res = await forgotPasswordAPI(data);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const resetPasswordThunk = createAsyncThunk(
+  "auth/resetPassword",
+  async (data, thunkAPI) => {
+    try {
+      const res = await resetPasswordAPI(data);
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   user: null,
   isLoading: false,
@@ -136,6 +162,8 @@ const initialState = {
   totalRefunds: 0,
   totalProducts: 0,
   token: null,
+  isForgotPasswordLoading: false,
+  isResetPasswordLoading: false,
 };
 
 const authSlice = createSlice({
@@ -299,6 +327,38 @@ const authSlice = createSlice({
       })
       .addCase(getAllUsersThunk.rejected, (state, action) => {
         state.isAllUsersLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(forgotPasswordThunk.pending, (state) => {
+        state.isForgotPasswordLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(forgotPasswordThunk.fulfilled, (state) => {
+        state.isForgotPasswordLoading = false;
+        state.success = true;
+        state.error = null;
+      })
+      .addCase(forgotPasswordThunk.rejected, (state, action) => {
+        state.isForgotPasswordLoading = false;
+        state.success = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(resetPasswordThunk.pending, (state) => {
+        state.isResetPasswordLoading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(resetPasswordThunk.fulfilled, (state) => {
+        state.isResetPasswordLoading = false;
+        state.success = true;
+        state.error = null;
+      })
+      .addCase(resetPasswordThunk.rejected, (state, action) => {
+        state.isResetPasswordLoading = false;
+        state.success = false;
         state.error = action.payload;
       });
   },

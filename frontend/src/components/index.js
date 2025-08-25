@@ -54,6 +54,8 @@ import EditShopDialog from "./EditShopDialog";
 import AdminUsersSection from "./sections/admin/AdminUsersSection";
 import RoleRoute from "./RoleRoute";
 import NotFoundSection from "./sections/NotFoundSection";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 // import UserInboxSection from "./sections/UserInboxSection";
 
@@ -114,5 +116,7 @@ export {
   EditShopDialog,
   RoleRoute,
   NotFoundSection,
+  ResetPasswordForm,
+  ForgotPasswordForm,
   // UserInboxSection,
 };

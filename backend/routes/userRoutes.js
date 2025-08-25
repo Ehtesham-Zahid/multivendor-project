@@ -11,6 +11,8 @@ const {
   logout,
   getAdminStats,
   getAllUsers,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/userControllers.js");
 
 const upload = require("../middlewares/uploadMiddleware.js");
@@ -23,6 +25,9 @@ router.get("/me", protect, me);
 router.patch("/update-me", upload.single("image"), protect, updateMe);
 router.patch("/change-password", protect, changePassword);
 router.post("/logout", protect, logout);
+
+router.post("/forgot-password", forgotPassword);
+router.patch("/reset-password", resetPassword);
 
 router.get("/admin/admin-stats", protect, isAdmin, getAdminStats);
 router.get("/admin/all-users", protect, isAdmin, getAllUsers);
