@@ -6,7 +6,9 @@ import { useForm } from "react-hook-form";
 
 const ForgotPasswordForm = () => {
   const dispatch = useDispatch();
-  const { isForgotPasswordLoading, error } = useSelector((state) => state.auth);
+  const { isForgotPasswordLoading, forgotPasswordError } = useSelector(
+    (state) => state.auth
+  );
 
   const {
     register,
@@ -59,7 +61,9 @@ const ForgotPasswordForm = () => {
           {errors.email && (
             <p className="text-red-500 text-sm">{errors.email.message}</p>
           )}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {forgotPasswordError && (
+            <p className="text-red-500 text-sm">{forgotPasswordError}</p>
+          )}
         </div>
 
         <button

@@ -164,6 +164,8 @@ const initialState = {
   token: null,
   isForgotPasswordLoading: false,
   isResetPasswordLoading: false,
+  forgotPasswordError: null,
+  resetPasswordError: null,
 };
 
 const authSlice = createSlice({
@@ -332,34 +334,34 @@ const authSlice = createSlice({
     builder
       .addCase(forgotPasswordThunk.pending, (state) => {
         state.isForgotPasswordLoading = true;
-        state.error = null;
+        state.forgotPasswordError = null;
         state.success = false;
       })
       .addCase(forgotPasswordThunk.fulfilled, (state) => {
         state.isForgotPasswordLoading = false;
         state.success = true;
-        state.error = null;
+        state.forgotPasswordError = null;
       })
       .addCase(forgotPasswordThunk.rejected, (state, action) => {
         state.isForgotPasswordLoading = false;
         state.success = false;
-        state.error = action.payload;
+        state.forgotPasswordError = action.payload;
       });
     builder
       .addCase(resetPasswordThunk.pending, (state) => {
         state.isResetPasswordLoading = true;
-        state.error = null;
+        state.resetPasswordError = null;
         state.success = false;
       })
       .addCase(resetPasswordThunk.fulfilled, (state) => {
         state.isResetPasswordLoading = false;
         state.success = true;
-        state.error = null;
+        state.resetPasswordError = null;
       })
       .addCase(resetPasswordThunk.rejected, (state, action) => {
         state.isResetPasswordLoading = false;
         state.success = false;
-        state.error = action.payload;
+        state.resetPasswordError = action.payload;
       });
   },
 });

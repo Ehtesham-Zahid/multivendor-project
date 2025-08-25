@@ -8,7 +8,9 @@ import { useNavigate, useParams } from "react-router";
 const ResetPasswordForm = () => {
   const dispatch = useDispatch();
   const { token } = useParams();
-  const { isResetPasswordLoading, error } = useSelector((state) => state.auth);
+  const { isResetPasswordLoading, resetPasswordError } = useSelector(
+    (state) => state.auth
+  );
   let navigate = useNavigate();
 
   const {
@@ -102,7 +104,9 @@ const ResetPasswordForm = () => {
               {errors.confirmPassword.message}
             </p>
           )}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {resetPasswordError && (
+            <p className="text-red-500 text-sm">{resetPasswordError}</p>
+          )}
         </div>
 
         <button
