@@ -155,11 +155,18 @@ const AuthForm = ({ page }) => {
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
-        {errors.password && (
-          <span className="text-red-500 text-sm font-semibold">
-            {errors.password.message}
-          </span>
-        )}
+        {page === "register"
+          ? errors.password && (
+              <span className="text-red-500 text-sm font-semibold">
+                {errors.password.message}
+              </span>
+            )
+          : errors.password && (
+              <span className="text-red-500 text-sm font-semibold">
+                This field is required
+              </span>
+            )}
+
         {page === "login" ? (
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2 gap-2">
             <div className="flex gap-x-2 items-center ">
