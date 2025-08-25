@@ -21,16 +21,20 @@ const SingleInboxSection = () => {
   const { user } = useSelector((state) => state.auth);
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isShop = searchParams.get("isShop");
   const userId = isShop === "true" ? user?.shopId : user?._id;
 
-  // scroll to bottom when messages change
+  // scroll to bottom within the container when messages change
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    const el = messagesContainerRef.current;
+    if (!el) return;
+
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
+    if (nearBottom) {
+      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
     }
   }, [messages]);
 
@@ -87,7 +91,10 @@ const SingleInboxSection = () => {
         <ArrowLeftIcon className="w-4 h-4" /> Back
       </Link>
 
-      <div className="flex flex-col gap-3 w-full border border-gray-300 rounded-lg p-3 h-[450px] overflow-y-auto">
+      <div
+        ref={messagesContainerRef}
+        className="flex flex-col gap-3 w-full border border-gray-300 rounded-lg p-3 h-[450px] overflow-y-auto"
+      >
         {isMessagesLoading ? (
           <Spinner />
         ) : (
@@ -95,7 +102,6 @@ const SingleInboxSection = () => {
             {messages.map((msg) => (
               <MessageCard key={msg._id} message={msg} isShop={isShop} />
             ))}
-            <div ref={messagesEndRef} />
           </>
         )}
       </div>
