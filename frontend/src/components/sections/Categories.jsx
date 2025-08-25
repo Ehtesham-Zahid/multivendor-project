@@ -24,7 +24,7 @@ const Categories = () => {
           image={Category1}
           bgColor="bg-red-100"
           textColor="text-red-500"
-          loading="lazy"
+          loading="eager"
         />
         <CategoryCard
           categoryTitle="Mobile & Electronics"
@@ -32,7 +32,7 @@ const Categories = () => {
           image={Category2}
           bgColor="bg-zinc-200"
           textColor="text-zinc-500"
-          loading="lazy"
+          loading="eager"
         />
         <CategoryCard
           categoryTitle="Pet Care"
@@ -40,7 +40,7 @@ const Categories = () => {
           image={Category3}
           bgColor="bg-purple-200"
           textColor="text-purple-500"
-          loading="lazy"
+          loading="eager"
         />
         <CategoryCard
           categoryTitle="Home & Kitchen"
