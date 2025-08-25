@@ -5,7 +5,8 @@ const getCategories = async (req, res) => {
         id: 1,
         name: "Clothing & Shoes",
         productTitle: "Sneakers",
-        image: "/api/images/category-1.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126384/category-1_dvda5h.webp",
         bgColor: "bg-red-100",
         textColor: "text-red-500",
         slug: "clothing-shoes",
@@ -14,7 +15,8 @@ const getCategories = async (req, res) => {
         id: 2,
         name: "Mobile & Electronics",
         productTitle: "Z-FLIP",
-        image: "/api/images/category-2.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126384/category-2_ri4zhd.webp",
         bgColor: "bg-zinc-200",
         textColor: "text-zinc-500",
         slug: "mobile-electronics",
@@ -23,7 +25,8 @@ const getCategories = async (req, res) => {
         id: 3,
         name: "Pet Care",
         productTitle: "Cat Food",
-        image: "/api/images/category-3.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126381/category-3_xm5nn5.webp",
         bgColor: "bg-purple-200",
         textColor: "text-purple-500",
         slug: "pet-care",
@@ -32,7 +35,8 @@ const getCategories = async (req, res) => {
         id: 4,
         name: "Home & Kitchen",
         productTitle: "Sofa",
-        image: "/api/images/category-5.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126385/category-5_e8eync.webp",
         bgColor: "bg-green-100",
         textColor: "text-green-500",
         slug: "home-kitchen",
@@ -41,7 +45,8 @@ const getCategories = async (req, res) => {
         id: 5,
         name: "Beauty & Personal Care",
         productTitle: "Moisturizer",
-        image: "/api/images/category-7.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126383/category-7_xlpgmd.webp",
         bgColor: "bg-blue-100",
         textColor: "text-blue-500",
         slug: "beauty-personal-care",
@@ -50,7 +55,8 @@ const getCategories = async (req, res) => {
         id: 6,
         name: "Grocery & Food",
         productTitle: "Bread",
-        image: "/api/images/category-4.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126381/category-4_tvgyqo.webp",
         bgColor: "bg-amber-100",
         textColor: "text-amber-500",
         slug: "grocery-food",
@@ -59,7 +65,8 @@ const getCategories = async (req, res) => {
         id: 7,
         name: "Health & Fitness",
         productTitle: "Dumbells",
-        image: "/api/images/category-6.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126386/category-6_g91nvk.webp",
         bgColor: "bg-gray-300",
         textColor: "text-gray-500",
         slug: "health-fitness",
@@ -68,7 +75,8 @@ const getCategories = async (req, res) => {
         id: 8,
         name: "Books & Stationery",
         productTitle: "Pencils",
-        image: "/api/images/category-8.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126382/category-8_mapifr.webp",
         bgColor: "bg-pink-100",
         textColor: "text-pink-500",
         slug: "books-stationery",
@@ -77,7 +85,8 @@ const getCategories = async (req, res) => {
         id: 9,
         name: "Toy & Baby Items",
         productTitle: "Train",
-        image: "/api/images/category-9.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126385/category-9_s8u3bn.webp",
         bgColor: "bg-yellow-100",
         textColor: "text-yellow-500",
         slug: "toy-baby-items",
@@ -86,7 +95,8 @@ const getCategories = async (req, res) => {
         id: 10,
         name: "Others",
         productTitle: "Gift Box Set",
-        image: "/api/images/category-10.webp",
+        image:
+          "https://res.cloudinary.com/dvylumxml/image/upload/v1756126384/category-10_vwwuay.webp",
         bgColor: "bg-fuchsia-200",
         textColor: "text-fuchsia-500",
         slug: "others",
