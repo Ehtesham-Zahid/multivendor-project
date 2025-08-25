@@ -12,6 +12,8 @@ const Categories = () => {
       try {
         setLoading(true);
         const response = await API.get("/categories");
+        console.log("API Response:", response.data); // Debug log
+        console.log("Categories data:", response.data.data); // Debug log
         setCategories(response.data.data);
       } catch (err) {
         setError("Failed to load categories");
@@ -23,6 +25,9 @@ const Categories = () => {
 
     fetchCategories();
   }, []);
+
+  // Debug log for current state
+  console.log("Current categories state:", categories);
 
   if (loading) {
     return (
@@ -60,15 +65,18 @@ const Categories = () => {
       </p>
       <div className="grid max-[500px]:grid-cols-1 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {categories.map((category) => (
-          <CategoryCard
-            key={category.id}
-            categoryTitle={category.name}
-            productTitle={category.productTitle}
-            image={category.image}
-            bgColor={category.bgColor}
-            textColor={category.textColor}
-            loading="eager"
-          />
+          <div key={category.id} className="border border-red-500 p-2">
+            <p>Debug: {JSON.stringify(category)}</p>
+            <CategoryCard
+              key={category.id}
+              categoryTitle={category.name}
+              productTitle={category.productTitle}
+              image={category.image}
+              bgColor={category.bgColor}
+              textColor={category.textColor}
+              loading="eager"
+            />
+          </div>
         ))}
       </div>
     </section>
