@@ -15,8 +15,8 @@ const ForgotPasswordForm = () => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    const resultAction = dispatch(forgotPasswordThunk(data));
+  const onSubmit = async (data) => {
+    const resultAction = await dispatch(forgotPasswordThunk(data));
     if (forgotPasswordThunk.fulfilled.match(resultAction)) {
       toast.success("Reset link sent to your email");
       reset();
