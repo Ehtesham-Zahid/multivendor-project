@@ -85,6 +85,7 @@ const registerUser = asyncHandler(async (req, res) => {
   console.log("✅ [REGISTER] User saved with verification token");
 
   const tokenLink = `${process.env.FRONTEND_URL}/auth/verify-email/${verifiedToken}`;
+  console.log("🔗 [REGISTER] Verification link generated:", tokenLink);
 
   const emailDetails = {
     to: user.email,
@@ -101,8 +102,19 @@ const registerUser = asyncHandler(async (req, res) => {
         `,
   };
 
-  await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
+  console.log("📧 [REGISTER] Sending verification email to:", user.email);
+  try {
+    await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
+    console.log("✅ [REGISTER] Verification email sent successfully");
+  } catch (emailError) {
+    console.log("⚠️ [REGISTER] Email sending failed:", emailError.message);
+    // Continue even if email fails
+  }
 
+  console.log(
+    "🎉 [REGISTER] Registration completed successfully for user:",
+    user._id
+  );
   res.status(201).json({
     message: "Account created. Please verify your email address to continue.",
   });
