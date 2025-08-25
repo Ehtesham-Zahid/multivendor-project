@@ -132,7 +132,19 @@ const AuthForm = ({ page }) => {
           <input
             type={showPassword ? "text" : "password"}
             className="p-1.5 px-2 rounded-md border-2 border-zinc-300 outline-primary w-full pr-10"
-            {...register("password", { required: true })}
+            {...register("password", {
+              required: true,
+              ...(page === "register" && {
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters long",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Password must be less than 20 characters",
+                },
+              }),
+            })}
             placeholder="Enter your password"
           />
           <button
@@ -145,7 +157,7 @@ const AuthForm = ({ page }) => {
         </div>
         {errors.password && (
           <span className="text-red-500 text-sm font-semibold">
-            This field is required
+            {errors.password.message}
           </span>
         )}
         {page === "login" ? (
