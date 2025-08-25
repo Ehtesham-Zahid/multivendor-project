@@ -1,52 +1,52 @@
+import Category1 from "../assets/images/category-1.webp";
+import Category2 from "../assets/images/category-2.webp";
+import Category3 from "../assets/images/category-3.webp";
+import Category4 from "../assets/images/category-4.webp";
+import Category5 from "../assets/images/category-5.webp";
+import Category6 from "../assets/images/category-6.webp";
+import Category7 from "../assets/images/category-7.webp";
+import Category8 from "../assets/images/category-8.webp";
+import Category9 from "../assets/images/category-9.webp";
+import Category10 from "../assets/images/category-10.webp";
 export const CATEGORIES = [
   {
     name: "Clothing & Shoes",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/noywqwpsizavm1oknktz.webp",
+    image: Category1,
   },
   {
     name: "Mobile & Electronics",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/p6uktopq2kfkp1nozsss.webp",
+    image: Category2,
   },
   {
     name: "Pet Food",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/wagvlaknxkvkkfidlpus.webp",
+    image: Category3,
   },
   {
     name: "Home & Kitchen",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/jreyo83g5jmozoknxrez.webp",
+    image: Category5,
   },
   {
     name: "Beauty & Personal Care",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/xwjkkuwcrt6n3ucfwyxe.webp",
+    image: Category7,
   },
   {
     name: "Grocery & Food",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/pkekelaxdzzjkxrjbiv0.webp",
+    image: Category4,
   },
   {
     name: "Health & Fitness",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/evu3idehsr2uzaulfpuv.webp",
+    image: Category6,
   },
   {
     name: "Books & Stationery",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/vijpharenscewn1gf7fk.webp",
+    image: Category8,
   },
   {
     name: "Toy & Baby Items",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/yluer9pbnqp5xjrvvepc.webp",
+    image: Category9,
   },
   {
     name: "Others",
-    image:
-      "https://res.cloudinary.com/dtz0urit6/image/upload/f_webp,q_auto/cloudinary-tools-uploads/csor3nystap9exfgz7br.webp",
+    image: Category10,
   },
 ];
