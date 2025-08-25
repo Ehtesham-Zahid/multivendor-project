@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "../features/auth/authSlice";
 import { ScrollToTop } from "../components";
 import { ToastContainer } from "react-toastify";
+import { ReactLenis } from "lenis/react";
 
 const AppLayout = () => {
   const { user, isInitialized, isLoading } = useSelector((state) => state.auth);
@@ -37,6 +38,7 @@ const AppLayout = () => {
 
   return (
     <>
+      <ReactLenis root />
       <ToastContainer />
       <ScrollToTop />
       <Outlet />
