@@ -70,7 +70,7 @@ const Categories = () => {
         Product Categories
       </p>
       <div className="grid max-[500px]:grid-cols-1 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <div key={category.id} className="border border-transparent p-0">
             <CategoryCard
               key={category.id}
@@ -79,7 +79,7 @@ const Categories = () => {
               image={`${backendUrl}${category.image}`}
               bgColor={category.bgColor}
               textColor={category.textColor}
-              loading="eager"
+              loading={index < 3 ? "eager" : "lazy"}
             />
           </div>
         ))}

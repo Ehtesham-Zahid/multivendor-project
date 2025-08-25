@@ -20,14 +20,14 @@ const CategoryCard = ({
         <p className={`${textColor} font-medium`}>{categoryTitle}</p>
         <p className="uppercase text-3xl text-dark font-bold">{productTitle}</p>
       </div>
-
       <img
         src={image}
         alt={`${categoryTitle} - ${productTitle}`}
         className={`h-48 w-full object-contain transition-opacity duration-500  `}
         loading={loading}
         decoding="async"
-        fetchPriority="high"
+        width={600}
+        height={192}
       />
     </Link>
   );
