@@ -83,7 +83,7 @@ const Categories = () => {
           loading="lazy"
         />
         <CategoryCard
-          categoryTitle="Toy & Baby Items"
+          categoryTitle="Toys & Baby Items"
           productTitle="Train"
           image={Category9}
           bgColor="bg-yellow-100"
