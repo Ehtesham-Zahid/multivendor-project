@@ -15,7 +15,6 @@ const generateToken = (id, expire) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  console.log("🚀 [REGISTER] Starting user registration process");
   console.log("📝 [REGISTER] Request body:", {
     fullname: req.body.fullname,
     email: req.body.email,
@@ -85,7 +84,6 @@ const registerUser = asyncHandler(async (req, res) => {
   console.log("✅ [REGISTER] User saved with verification token");
 
   const tokenLink = `${process.env.FRONTEND_URL}/auth/verify-email/${verifiedToken}`;
-  console.log("🔗 [REGISTER] Verification link generated:", tokenLink);
 
   const emailDetails = {
     to: user.email,
