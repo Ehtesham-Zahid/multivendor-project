@@ -1,6 +1,4 @@
 import { Heart, MessageCirclePlus } from "lucide-react";
-import ProductImage from "../../assets/images/category-1.jpg";
-import Logo from "../../assets/images/logo.png";
 import { Badge } from "../../shadcn/badge";
 import QuantityCounter from "../QuantityCounter";
 import { Button } from "../../shadcn/button";
@@ -14,13 +12,12 @@ import Spinner from "../Spinner";
 import { toast } from "react-toastify";
 import {
   addToWishlist,
-  getWishlist,
   removeFromWishlist,
 } from "../../features/wishlist/wishlistSlice";
 import ProductTabsSection from "../ProductTabsSection";
 import { getProductReviewsThunk } from "../../features/review/reviewSlice";
-import socket from "../../socket";
 import { getOrCreateConversationThunk } from "../../features/chat/chatSlice";
+import RelatedProductsSection from "./RelatedProductsSection";
 
 const SingleProductSection = () => {
   const { singleProduct, isSingleProductLoading } = useSelector(
@@ -331,6 +328,7 @@ const SingleProductSection = () => {
         product={singleProduct}
         shop={singleProduct?.shopId}
       />
+      <RelatedProductsSection category={singleProduct?.category} />
     </>
   );
 };

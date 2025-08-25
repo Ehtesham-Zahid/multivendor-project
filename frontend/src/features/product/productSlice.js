@@ -192,6 +192,19 @@ export const getSearchPageProductsThunk = createAsyncThunk(
     }
   }
 );
+
+export const getRelatedProductsThunk = createAsyncThunk(
+  "product/getRelatedProducts",
+  async ({ category }, thunkAPI) => {
+    try {
+      const res = await getAllProductsApi({ category, limit: 5 });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   error: null,
   searchTerm: "",
@@ -253,6 +266,10 @@ const initialState = {
   adminProducts: [],
   totalAdminProductsPages: 0,
   totalAdminProducts: 0,
+
+  // Related Products
+  isRelatedProductsLoading: false,
+  relatedProducts: [],
 };
 
 const productSlice = createSlice({
@@ -468,6 +485,19 @@ const productSlice = createSlice({
       })
       .addCase(getSearchPageProductsThunk.rejected, (state, action) => {
         state.isSearchPageProductsLoading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getRelatedProductsThunk.pending, (state) => {
+        state.isRelatedProductsLoading = true;
+        state.error = null;
+      })
+      .addCase(getRelatedProductsThunk.fulfilled, (state, action) => {
+        state.isRelatedProductsLoading = false;
+        state.relatedProducts = action.payload.products;
+      })
+      .addCase(getRelatedProductsThunk.rejected, (state, action) => {
+        state.isRelatedProductsLoading = false;
         state.error = action.payload;
       });
   },
