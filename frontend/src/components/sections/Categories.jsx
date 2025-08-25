@@ -83,20 +83,19 @@ const Categories = () => {
           loading="lazy"
         />
         <CategoryCard
+          categoryTitle="Toy & Baby Items"
+          productTitle="Train"
+          image={Category9}
+          bgColor="bg-yellow-100"
+          textColor="text-yellow-500"
+          loading="lazy"
+        />
+        <CategoryCard
           categoryTitle="Others"
           productTitle="Gift Box Set"
           image={Category10}
           bgColor="bg-fuchsia-200"
           textColor="text-fuchsia-500"
-          loading="lazy"
-        />
-        <CategoryCard
-          categoryTitle="Toy & Baby Items"
-          productTitle="Train"
-          image={Category9}
-          bgColor="bg-yellow-100"
-          span={1}
-          textColor="text-yellow-500"
           loading="lazy"
         />
       </div>
