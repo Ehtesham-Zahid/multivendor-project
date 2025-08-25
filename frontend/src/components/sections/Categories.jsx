@@ -76,10 +76,10 @@ const Categories = () => {
               key={category.id}
               categoryTitle={category.name}
               productTitle={category.productTitle}
-              image={`${backendUrl}${category.image}`}
+              image={`${category.image}`}
               bgColor={category.bgColor}
               textColor={category.textColor}
-              loading={index < 3 ? "eager" : "lazy"}
+              loading={"eager"}
             />
           </div>
         ))}
