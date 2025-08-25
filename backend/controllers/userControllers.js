@@ -15,73 +15,39 @@ const generateToken = (id, expire) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  console.log("📝 [REGISTER] Request body:", {
-    fullname: req.body.fullname,
-    email: req.body.email,
-    hasPassword: !!req.body.password,
-  });
-
   const { fullname, email, password } = req.body;
 
   if (!fullname?.trim() || !email?.trim() || !password?.trim()) {
-    console.log("❌ [REGISTER] Validation failed - missing required fields");
     res.status(400);
     throw new Error("Fullname, email, and password are required");
   }
 
-  console.log("✅ [REGISTER] Basic validation passed");
-
   //   Check if user exists
-  console.log(
-    "🔍 [REGISTER] Checking if user already exists with email:",
-    email
-  );
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    console.log("❌ [REGISTER] User already exists with email:", email);
     res.status(400);
     throw new Error("User already Exist");
   }
 
-  console.log("✅ [REGISTER] User doesn't exist, proceeding with creation");
-
-  console.log("🔐 [REGISTER] Generating salt and hashing password");
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
-  console.log("✅ [REGISTER] Password hashed successfully");
 
   // Create User
-  console.log("👤 [REGISTER] Creating user in database");
   const user = await User.create({ fullname, email, password: hashedPassword });
-  console.log("✅ [REGISTER] User created successfully with ID:", user._id);
 
   if (req.file) {
-    console.log("📁 [REGISTER] File upload detected, processing avatar");
-    try {
-      const b64 = Buffer.from(req.file.buffer).toString("base64");
-      const dataURI = `data:${req.file.mimetype};base64,${b64}`;
-      console.log("☁️ [REGISTER] Uploading to Cloudinary...");
-      const { original } = await uploadAvatar(dataURI, user._id, "user_logos");
-      user.imageUrl = original;
-      console.log("✅ [REGISTER] Avatar uploaded successfully:", original);
-    } catch (uploadError) {
-      console.log("⚠️ [REGISTER] Avatar upload failed:", uploadError.message);
-      // Continue without avatar
-    }
-  } else {
-    console.log("ℹ️ [REGISTER] No file upload detected");
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+    const { original } = await uploadAvatar(dataURI, user._id, "user_logos");
+    user.imageUrl = original;
   }
 
-  console.log("🎫 [REGISTER] Generating verification token");
   const verifiedToken = generateToken(user._id, "1h");
   user.verifiedToken = verifiedToken;
   user.verifiedTokenExpires = Date.now() + 60 * 60 * 1000; // 1 hour from now
-  console.log("✅ [REGISTER] Verification token generated");
 
-  console.log("💾 [REGISTER] Saving user with verification token");
   await user.save();
-  console.log("✅ [REGISTER] User saved with verification token");
 
   const tokenLink = `${process.env.FRONTEND_URL}/auth/verify-email/${verifiedToken}`;
 
@@ -100,19 +66,8 @@ const registerUser = asyncHandler(async (req, res) => {
         `,
   };
 
-  console.log("📧 [REGISTER] Sending verification email to:", user.email);
-  try {
-    await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
-    console.log("✅ [REGISTER] Verification email sent successfully");
-  } catch (emailError) {
-    console.log("⚠️ [REGISTER] Email sending failed:", emailError.message);
-    // Continue even if email fails
-  }
+  await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
 
-  console.log(
-    "🎉 [REGISTER] Registration completed successfully for user:",
-    user._id
-  );
   res.status(201).json({
     message: "Account created. Please verify your email address to continue.",
   });
