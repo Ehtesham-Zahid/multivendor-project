@@ -11,7 +11,7 @@ const Categories = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await API.get("/api/categories");
+        const response = await API.get("/categories");
         setCategories(response.data.data);
       } catch (err) {
         setError("Failed to load categories");
