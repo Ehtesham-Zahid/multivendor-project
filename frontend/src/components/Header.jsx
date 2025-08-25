@@ -96,7 +96,7 @@ const Header = () => {
               </li>
               <li>
                 <Link to="/faqs" className="relative inline-block group">
-                  <span className="relative z-10  transition">Faqs</span>
+                  <span className="relative z-10  transition">FAQs</span>
                   <span className="absolute left-0 bottom-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
                 </Link>
               </li>
