@@ -54,6 +54,10 @@ const ProductDialog = ({ product, small }) => {
   // Handle add to cart logic here
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (product?.stock < productQuantity) {
+      toast.error("Not enough stock");
+      return;
+    }
 
     const existingItemIndex = cart.findIndex(
       (item) => item._id === product._id
@@ -219,11 +223,16 @@ const ProductDialog = ({ product, small }) => {
                 <Link to={`/product/${product?._id}`}>View Full Details</Link>
               </Button>
               <Button
-                className=" text-white w-full lg:w-48  text-md cursor-pointer"
+                disabled={product?.stock <= 0}
+                className={` text-white w-full lg:w-48  text-md cursor-pointer ${
+                  product?.stock <= 0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-primary"
+                }`}
                 size={"lg"}
                 onClick={handleAddToCart}
               >
-                Add To Cart
+                {product?.stock <= 0 ? "Out of Stock" : "Add To Cart"}
               </Button>
             </div>
           </div>

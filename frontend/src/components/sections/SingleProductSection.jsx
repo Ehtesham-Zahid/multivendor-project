@@ -65,6 +65,10 @@ const SingleProductSection = () => {
 
   // Handle add to cart logic here
   const handleAddToCart = () => {
+    if (singleProduct?.stock < productQuantity) {
+      toast.error("Not enough stock");
+      return;
+    }
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const existingItemIndex = cart.findIndex(
@@ -315,11 +319,16 @@ const SingleProductSection = () => {
           </div>
           <div>
             <Button
-              className="w-full my-8 text-md text-white cursor-pointer"
+              disabled={singleProduct?.stock <= 0}
+              className={`w-full my-8 text-md text-white cursor-pointer ${
+                singleProduct?.stock <= 0
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-primary"
+              }`}
               size={"lg"}
               onClick={handleAddToCart}
             >
-              Add To Cart
+              {singleProduct?.stock <= 0 ? "Out of Stock" : "Add To Cart"}
             </Button>
           </div>
         </div>

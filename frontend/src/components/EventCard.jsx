@@ -126,11 +126,16 @@ const EventCard = ({ event, small }) => {
             </Button>
           </Link>
           <Button
-            className="w-full bg-primary  text-white text-md  cursor-pointer"
+            disabled={event?.productId?.stock <= 0}
+            className={`w-full bg-primary  text-white text-md  cursor-pointer ${
+              event?.productId?.stock <= 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-primary"
+            }`}
             size={"lg"}
             onClick={handleAddToCart}
           >
-            Add To Cart
+            {event?.productId?.stock <= 0 ? "Out of Stock" : "Add To Cart"}
           </Button>
         </div>
       </div>

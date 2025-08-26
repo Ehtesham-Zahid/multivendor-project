@@ -51,9 +51,9 @@ const createProduct = asyncHandler(async (req, res) => {
   }
 
   const stockNum = Number(stock);
-  if (stockNum < 1) {
+  if (stockNum < 0) {
     res.status(400);
-    throw new Error("Stock cannot be less than 1");
+    throw new Error("Stock cannot be negative");
   }
 
   // Ensure shop exists and is active before creating products
@@ -251,7 +251,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
   const { category, sortBy } = req.query;
 
   // --- Build initial filter ---
-  const filter = { isDeleted: false, isActive: true, stock: { $gt: 0 } };
+  const filter = { isDeleted: false, isActive: true };
   if (search) {
     filter.name = { $regex: search, $options: "i" };
   }

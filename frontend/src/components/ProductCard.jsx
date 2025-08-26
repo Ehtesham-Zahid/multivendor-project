@@ -47,6 +47,10 @@ const ProductCard = ({ product, small }) => {
 
   // Handle add to cart logic here
   const handleAddToCart = () => {
+    if (product?.stock <= 0) {
+      toast.error("Product is out of stock");
+      return;
+    }
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const existingItemIndex = cart.findIndex(
