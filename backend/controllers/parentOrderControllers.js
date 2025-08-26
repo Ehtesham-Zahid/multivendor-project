@@ -89,6 +89,7 @@ const createParentOrder = asyncHandler(async (req, res) => {
       const product = await Product.findById(item.productId);
       if (product) {
         product.sold += item.quantity;
+        product.stock -= item.quantity;
         await product.save();
       }
     }

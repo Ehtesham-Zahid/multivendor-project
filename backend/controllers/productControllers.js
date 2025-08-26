@@ -50,6 +50,12 @@ const createProduct = asyncHandler(async (req, res) => {
     }
   }
 
+  const stockNum = Number(stock);
+  if (stockNum < 1) {
+    res.status(400);
+    throw new Error("Stock cannot be less than 1");
+  }
+
   // Ensure shop exists and is active before creating products
   const shop = await Shop.findById(req.user.shopId);
   if (!shop) {
@@ -136,6 +142,12 @@ const updateProduct = asyncHandler(async (req, res) => {
   if (String(product.shopId) !== String(req.user.shopId)) {
     res.status(403);
     throw new Error("You are not allowed to update this product");
+  }
+
+  const stockNum = Number(stock);
+  if (stockNum < 0) {
+    res.status(400);
+    throw new Error("Stock cannot be negative");
   }
 
   // Validation: prevent invalid updates
@@ -239,7 +251,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
   const { category, sortBy } = req.query;
 
   // --- Build initial filter ---
-  const filter = { isDeleted: false, isActive: true };
+  const filter = { isDeleted: false, isActive: true, stock: { $gt: 0 } };
   if (search) {
     filter.name = { $regex: search, $options: "i" };
   }
