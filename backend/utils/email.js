@@ -28,12 +28,14 @@ const sendMail = async ({ to, subject, html }) => {
       .catch((err) => console.error("SMTP verify error:", err));
 
     console.log("Preparing mail options:", { to, subject });
+
     const mailOptions = {
-      from: `\"SkillStack\" <${process.env.SMTP_MAIL}>`,
+      from: `\"SwiftCart\" <${process.env.SMTP_MAIL}>`,
       to,
       subject,
       html,
     };
+
     console.log("Sending email...");
     const sendResult = await transporter.sendMail(mailOptions);
     console.log("✅ Email sent successfully! Result:", sendResult);
