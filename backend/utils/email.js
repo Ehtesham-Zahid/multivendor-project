@@ -1,8 +1,7 @@
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-dotenv.config();
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
-export const sendMail = async (options) => {
+const sendMail = async ({ to, subject, html }) => {
   console.log("SMTP config:", {
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -28,7 +27,6 @@ export const sendMail = async (options) => {
       .then(() => console.log("SMTP connection verified."))
       .catch((err) => console.error("SMTP verify error:", err));
 
-    const { to, subject, html } = options;
     console.log("Preparing mail options:", { to, subject });
     const mailOptions = {
       from: `\"SkillStack\" <${process.env.SMTP_MAIL}>`,
@@ -44,3 +42,5 @@ export const sendMail = async (options) => {
     throw error;
   }
 };
+
+module.exports = sendMail;

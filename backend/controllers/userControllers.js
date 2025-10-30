@@ -66,7 +66,7 @@ const registerUser = asyncHandler(async (req, res) => {
         `,
   };
 
-  await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
+  await sendMail(emailDetails);
 
   res.status(201).json({
     message: "Account created. Please verify your email address to continue.",
@@ -278,7 +278,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
         `,
   };
 
-  await sendMail(emailDetails.to, emailDetails.subject, emailDetails.html);
+  await sendMail(emailDetails);
 
   res.status(200).json({
     message: "Reset password link sent to your email",
