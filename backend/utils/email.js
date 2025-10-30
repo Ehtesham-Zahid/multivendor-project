@@ -2,8 +2,6 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
 
-import ErrorHandler from "./ErrorHandler.js";
-
 export const sendMail = async (options) => {
   try {
     const transporter = nodemailer.createTransport({
@@ -29,6 +27,7 @@ export const sendMail = async (options) => {
 
     console.log("✅ Email sent successfully!");
   } catch (error) {
-    throw new ErrorHandler(error.message, 500);
+    console.error("❌ Email sending failed:", error);
+    throw error;
   }
 };
