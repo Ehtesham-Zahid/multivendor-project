@@ -26,7 +26,10 @@ const AdminDashboardSection = () => {
         <Spinner />
       ) : (
         <div className="flex gap-5 sm:gap-10 flex-wrap justify-center md:justify-start">
-          <DashboardCard title="Total Revenue" subtitle={`$${totalRevenue}`} />
+          <DashboardCard
+            title="Total Revenue"
+            subtitle={`$${Number(totalRevenue).toFixed(2)}`}
+          />
           <DashboardCard
             title="Total Shops"
             subtitle={`${totalShops}`}

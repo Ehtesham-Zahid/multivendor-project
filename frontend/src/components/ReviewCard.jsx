@@ -7,15 +7,18 @@ const ReviewCard = ({ review }) => {
     <div className="flex items-center gap-4 border-b border-gray-200 pb-4 w-full border shadow-lg p-4 rounded-lg">
       <div>
         <img
-          src={review.userId.imageUrl}
-          alt={review.userId.fullname}
+          src={
+            review.userId?.imageUrl ||
+            "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+          }
+          alt={review.userId?.fullname || "Unknown"}
           className="sm:w-16 sm:h-16 w-12 h-12 rounded-full object-cover"
         />
       </div>
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <p className="text-sm sm:text-md font-bold">
-            {review.userId.fullname}
+            {review.userId?.fullname || "Unknown"}
           </p>
           <p className="text-xs text-gray-500">
             {formatDate(review.createdAt)}
