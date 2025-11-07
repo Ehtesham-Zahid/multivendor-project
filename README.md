@@ -2,7 +2,6 @@
 
 **Year:** 2025  
 **Status:** 🟢 Production Ready  
-**Live Demo:** [View Live](#) | **Code:** [View Repository](#)
 
 SwiftCart is a **full-stack, multi-vendor e-commerce platform** built for scalability, performance, and an engaging shopping experience.  
 It enables **buyers, sellers, and admins** to interact seamlessly with **real-time messaging**, **secure Stripe payments**, and **event-based flash sales** — all within a modern and responsive UI.
