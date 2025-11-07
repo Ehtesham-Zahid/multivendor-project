@@ -98,5 +98,5 @@ Rich, data-driven insights for **sellers** and **admins**, including:
 
 **Ehtesham Zahid**  
 📍 University of Lahore  
-🌐 [Portfolio](https://ehtesham-zahid.vercel.app/)  
+🌐 [Portfolio](https://ehteshamzahid.vercel.app/)  
 💼 MERN Stack Developer  
