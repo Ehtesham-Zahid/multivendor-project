@@ -205,6 +205,9 @@ app.use("/api/messages", messageRouter);
 app.use("/api/bank-accounts", bankAccountRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/withdrawals", withdrawalRouter);
+app.get("/", (req, res) => {
+    res.send("Backend Running Version 2 🚀");
+});
 
 app.use(errorHandler);
 
