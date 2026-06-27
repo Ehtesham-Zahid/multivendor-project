@@ -233,7 +233,7 @@ io.on("connection", (socket) => {
   });
 });
 
-console.log("✅ Server booted, waiting for requests...");
+console.log("✅ Server booted Version 2.0, waiting for requests...");
 
 // Fix: Listen on the server, not app
 server.listen(port, () => {
