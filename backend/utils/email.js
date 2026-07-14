@@ -2,35 +2,31 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const sendMail = async ({ to, subject, html }) => {
-  console.log("SMTP config:", {
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    service: process.env.SMTP_SERVICE,
-    user: process.env.SMTP_MAIL,
+  console.log("Email config:", {
+    user: process.env.EMAIL_USER,
   });
   try {
     console.log("Creating transporter...");
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || "465"),
-      secure: true,
-      service: process.env.SMTP_SERVICE,
+      service: "gmail",
       auth: {
-        user: process.env.SMTP_MAIL,
-        pass: process.env.SMTP_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
     console.log("Transporter created. Verifying connection...");
     // Check connection
-    await transporter
-      .verify()
-      .then(() => console.log("SMTP connection verified."))
-      .catch((err) => console.error("SMTP verify error:", err));
+    try {
+      await transporter.verify();
+      console.log("SMTP connection verified.");
+    } catch (err) {
+      console.error("SMTP verify error:", err);
+    }
 
     console.log("Preparing mail options:", { to, subject });
 
     const mailOptions = {
-      from: `\"SwiftCart\" <${process.env.SMTP_MAIL}>`,
+      from: `"SwiftCart" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html,
