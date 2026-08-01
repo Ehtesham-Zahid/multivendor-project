@@ -10,7 +10,7 @@
 +-----------------------------------------------------------------------------------+
 |                                                                                   |
 |                              🛒 SWIFTCART MARKETPLACE                             |
-|          Modern Multi-Vendor E-Commerce Platform for Buyers, Sellers & Admins        |
+|          Modern Multi-Vendor E-Commerce Platform for Buyers, Sellers & Admins     |
 |                                                                                   |
 +-----------------------------------------------------------------------------------+
 ```
@@ -349,23 +349,10 @@ The database contains 13 key Mongoose collections:
 
 ---
 
-## 🖼️ Screenshots
-
-| View | Placeholder |
-| :--- | :--- |
-| **Landing Page** | `![Landing Page](https://via.placeholder.com/800x450?text=SwiftCart+Landing+Page)` |
-| **Product Page** | `![Product Page](https://via.placeholder.com/800x450?text=SwiftCart+Product+Page)` |
-| **Vendor Dashboard** | `![Vendor Dashboard](https://via.placeholder.com/800x450?text=SwiftCart+Vendor+Dashboard)` |
-| **Admin Panel** | `![Admin Panel](https://via.placeholder.com/800x450?text=SwiftCart+Admin+Panel)` |
-| **Cart & Checkout** | `![Checkout View](https://via.placeholder.com/800x450?text=SwiftCart+Checkout+Page)` |
-| **Real-Time Chat** | `![Real-Time Chat](https://via.placeholder.com/800x450?text=SwiftCart+Real-Time+Chat)` |
-
----
-
 ## 🎥 Demo
 
-- **Live Demo**: [https://swiftcart.vercel.app](https://swiftcart.vercel.app) *(Placeholder)*
-- **Video Walkthrough**: [Watch Project Overview Video](https://youtube.com) *(Placeholder)*
+- **Live Demo**: [https://swiftcart.vercel.app](https://swift-cartt.vercel.app) 
+- **Video Walkthrough**: [Watch Project Overview Video](https://youtu.be/aCY-DYvhoXk?si=ooKrbybUROhYGlFu)
 
 ---
 
